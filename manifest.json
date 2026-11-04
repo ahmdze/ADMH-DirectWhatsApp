@@ -1,0 +1,25 @@
+{
+  "name": "واتساب المباشر - Direct WhatsApp",
+  "short_name": "واتساب المباشر",
+  "description": "راسل أي رقم على واتساب فوراً بدون حفظه في جهات الاتصال",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#25D366",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3670/3670051.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3670/3670051.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
