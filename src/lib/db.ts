@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { Campaign, Destination, HistoryEntry, Reminder, Settings, Target, Template, Workspace } from '../types';
+import type { Campaign, Destination, HistoryEntry, Reminder, Settings, Target, Template, TrashEntry, Workspace } from '../types';
 import { getSettings } from './settings';
 import { uid } from './format';
 
@@ -15,6 +15,7 @@ class AdmhDB extends Dexie {
   history!: Table<HistoryEntry, string>;
   campaigns!: Table<Campaign, string>;
   reminders!: Table<Reminder, string>;
+  trash!: Table<TrashEntry, string>;
   meta!: Table<MetaRow, string>;
 
   constructor() {
@@ -26,6 +27,17 @@ class AdmhDB extends Dexie {
       history: 'id, workspaceId, usedAt, value',
       campaigns: 'id, workspaceId, createdAt',
       reminders: 'id, workspaceId, dueAt, done',
+      meta: 'key'
+    });
+    // Additive v2.4 schema: only adds the trash table, no rows are rewritten.
+    this.version(2).stores({
+      workspaces: 'id, createdAt',
+      destinations: 'id, workspaceId, favorite, lastUsedAt, createdAt, type, *tags',
+      templates: 'id, workspaceId, createdAt, lastUsedAt, *tags',
+      history: 'id, workspaceId, usedAt, value',
+      campaigns: 'id, workspaceId, createdAt',
+      reminders: 'id, workspaceId, dueAt, done',
+      trash: 'id, deletedAt, restoreUntil',
       meta: 'key'
     });
   }

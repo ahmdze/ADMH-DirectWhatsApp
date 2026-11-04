@@ -3,6 +3,27 @@ import { extractCandidateFromText } from './phone';
 
 let pendingDraft: Draft | null = null;
 const draftListeners = new Set<() => void>();
+const DRAFT_STORAGE_KEY = 'admh2_pending_draft_v1';
+
+function readStoredDraft(): Draft | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(DRAFT_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Draft) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredDraft(draft: Draft | null): void {
+  if (typeof window === 'undefined') return;
+  try {
+    if (draft) window.sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    else window.sessionStorage.removeItem(DRAFT_STORAGE_KEY);
+  } catch {
+    /* sessionStorage can be unavailable in private mode */
+  }
+}
 
 /** Fired when a draft is handed to the compose screen after async work. */
 export function subscribeDraft(listener: () => void): () => void {
@@ -12,17 +33,19 @@ export function subscribeDraft(listener: () => void): () => void {
 
 export function setDraft(draft: Draft | null): void {
   pendingDraft = draft;
+  writeStoredDraft(draft);
   draftListeners.forEach((listener) => listener());
 }
 
 export function takeDraft(): Draft | null {
-  const draft = pendingDraft;
+  const draft = pendingDraft ?? readStoredDraft();
   pendingDraft = null;
+  writeStoredDraft(null);
   return draft;
 }
 
 export function peekDraft(): Draft | null {
-  return pendingDraft;
+  return pendingDraft ?? readStoredDraft();
 }
 
 export interface LaunchInfo {

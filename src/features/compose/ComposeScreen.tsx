@@ -67,7 +67,10 @@ export function ComposeScreen() {
   // image decoded asynchronously. Subscribe so late drafts still fill the form.
   useEffect(() => {
     const apply = (draft: Draft) => {
-      if (draft.raw) setRaw(draft.raw);
+      if (draft.workspaceId && draft.workspaceId !== settings.activeWorkspaceId) {
+        updateSettings({ activeWorkspaceId: draft.workspaceId });
+      }
+      if (draft.raw || draft.phone) setRaw(draft.phone || draft.raw);
       if (draft.message) setMessage(draft.message.slice(0, MESSAGE_LIMIT));
       if (draft.origin === 'share') toast(t('تم استلام الوجهة من المشاركة', 'Destination received from the share'), 'success');
       else if (draft.origin === 'scan') toast(t('تم استلام الوجهة من مسح QR', 'Destination received from the QR scan'), 'success');
@@ -83,7 +86,7 @@ export function ComposeScreen() {
       window.clearTimeout(timer);
       unsubscribe();
     };
-  }, [t]);
+  }, [t, settings.activeWorkspaceId]);
 
   // Offer (never auto-fill) a target found in the clipboard on first open.
   useEffect(() => {

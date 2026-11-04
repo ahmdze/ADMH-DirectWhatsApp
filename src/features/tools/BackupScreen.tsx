@@ -194,7 +194,8 @@ export function BackupScreen() {
         { key: 'templates', label: t('قوالب', 'templates'), value: lastImport.result.templates },
         { key: 'history', label: t('سجل', 'history'), value: lastImport.result.history },
         { key: 'campaigns', label: t('حملات', 'campaigns'), value: lastImport.result.campaigns },
-        { key: 'reminders', label: t('تذكيرات', 'reminders'), value: lastImport.result.reminders }
+        { key: 'reminders', label: t('تذكيرات', 'reminders'), value: lastImport.result.reminders },
+        { key: 'trash', label: t('محذوفات', 'trash'), value: lastImport.result.trash }
       ].filter((row) => row.value > 0)
     : [];
 

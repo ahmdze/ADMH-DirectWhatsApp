@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.3.5';
+export const APP_VERSION = '2.4.0-alpha.1';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.0-alpha.1',
+    date: '2026-11-04',
+    items: [
+      { ar: 'تذكيرات متكررة (يومي/أسبوعي/شهري) مع معاينة المواعيد القادمة وإشعارات محلية في تطبيق Android.', en: 'Recurring reminders (daily/weekly/monthly) with next-occurrence preview and local notifications in the Android app.' },
+      { ar: 'فتح Compose من إشعار التذكير مع المساحة والرسالة أو القالب المحفوظ — دون إرسال تلقائي.', en: 'Open Compose from a reminder notification with its workspace and saved message/template — no automatic sending.' },
+      { ar: 'نسخة احتياطية تلقائية قبل ترقية البيانات، قابلة للتنزيل من الإعدادات.', en: 'Automatic pre-upgrade data backup, downloadable from Settings.' },
+      { ar: 'إصدار Alpha تجريبي للاختبار الداخلي فقط.', en: 'Alpha test build for internal testing only.' }
+    ]
+  },
   {
     version: '2.3.5',
     date: '2026-11-04',

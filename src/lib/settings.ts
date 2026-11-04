@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from 'react';
-import type { FontChoice, Locale, Settings, ThemeMode } from '../types';
+import type { FontChoice, Locale, RetentionSettings, Settings, ThemeMode } from '../types';
 import { isIos } from './format';
 
 const STORAGE_KEY = 'admh2_settings';
-export const SETTINGS_VERSION = 2;
+export const SETTINGS_VERSION = 3;
 
 export interface AccentChoice {
   id: string;
@@ -89,6 +89,13 @@ function defaults(): Settings {
     notifications: false,
     onboarded: false,
     lastSeenVersion: '',
+    retention: {
+      historyEnabled: false,
+      retentionDays: 30,
+      keepLatest: null,
+      excludeFavoriteTargets: true,
+      trashDays: 30
+    },
     updatedAt: Date.now()
   };
 }
@@ -120,8 +127,27 @@ function normalize(raw: unknown): Settings {
     // first-run tour again after this update.
     onboarded: typeof value.onboarded === 'boolean' ? value.onboarded : true,
     lastSeenVersion: typeof value.lastSeenVersion === 'string' ? value.lastSeenVersion : '',
+    retention: normalizeRetention(value.retention),
     version: SETTINGS_VERSION,
     updatedAt: typeof value.updatedAt === 'number' ? value.updatedAt : base.updatedAt
+  };
+}
+
+function normalizeRetention(raw: unknown): RetentionSettings {
+  const value = raw && typeof raw === 'object' ? (raw as Partial<RetentionSettings>) : {};
+  const allowedDays = [7, 30, 90, 365, 0] as const;
+  const days = Number(value.retentionDays);
+  const keepLatest = Number(value.keepLatest);
+  const trashDays = Number(value.trashDays);
+  return {
+    historyEnabled: typeof value.historyEnabled === 'boolean' ? value.historyEnabled : false,
+    retentionDays: (allowedDays as readonly number[]).includes(days)
+      ? (days as RetentionSettings['retentionDays'])
+      : 30,
+    keepLatest: Number.isFinite(keepLatest) && keepLatest > 0 ? Math.floor(keepLatest) : null,
+    excludeFavoriteTargets: typeof value.excludeFavoriteTargets === 'boolean' ? value.excludeFavoriteTargets : true,
+    trashDays: Number.isFinite(trashDays) ? Math.min(365, Math.max(1, Math.floor(trashDays))) : 30,
+    lastRunAt: typeof value.lastRunAt === 'number' ? value.lastRunAt : undefined
   };
 }
 

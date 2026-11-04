@@ -55,6 +55,11 @@ export function useReminders(workspaceId: string | undefined): Reminder[] {
   }, [workspaceId], EMPTY as Reminder[]);
 }
 
+/** All reminders across workspaces (used by the reminders filter/pagination). */
+export function useAllReminders(): Reminder[] | undefined {
+  return useLiveQuery(() => db.reminders.orderBy('dueAt').toArray(), [], undefined);
+}
+
 export function useDueReminders(workspaceId: string | undefined): Reminder[] {
   return useLiveQuery(async () => {
     if (!workspaceId) return [];

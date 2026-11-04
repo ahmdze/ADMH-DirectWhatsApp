@@ -83,6 +83,40 @@ export interface Reminder {
   dueAt: number;
   done: boolean;
   createdAt: number;
+
+  /* v2.4 scheduling extensions (optional so old backups restore safely). */
+  message?: string;
+  templateId?: string;
+  templateVars?: Record<string, string>;
+  recurrence?: ReminderRecurrence;
+  notificationIds?: number[];
+  lastScheduledAt?: number;
+  lastNotifiedAt?: number;
+  lastOpenedAt?: number;
+  missedAt?: number;
+  missedCount?: number;
+}
+
+export type ReminderRecurrence =
+  | { kind: 'daily'; interval: number; until?: number }
+  | { kind: 'weekly'; weekdays: number[]; until?: number }
+  | { kind: 'monthly'; day: number; until?: number };
+
+export interface RetentionSettings {
+  historyEnabled: boolean;
+  retentionDays: 7 | 30 | 90 | 365 | 0;
+  keepLatest: number | null;
+  excludeFavoriteTargets: boolean;
+  trashDays: number;
+  lastRunAt?: number;
+}
+
+export interface TrashEntry {
+  id: string;
+  kind: 'history';
+  payload: HistoryEntry;
+  deletedAt: number;
+  restoreUntil: number;
 }
 
 export interface LockSettings {
@@ -108,6 +142,7 @@ export interface Settings {
   notifications: boolean;
   onboarded: boolean;
   lastSeenVersion: string;
+  retention: RetentionSettings;
   updatedAt: number;
 }
 
@@ -121,6 +156,7 @@ export interface BackupFile {
   history: HistoryEntry[];
   campaigns: Campaign[];
   reminders: Reminder[];
+  trash?: TrashEntry[];
   settings?: Settings;
 }
 
@@ -137,5 +173,8 @@ export type ParsedTarget = Target;
 export interface Draft {
   raw: string;
   message?: string;
+  workspaceId?: string;
+  targetId?: string;
+  phone?: string;
   origin?: 'share' | 'shortcut' | 'clipboard' | 'scan';
 }

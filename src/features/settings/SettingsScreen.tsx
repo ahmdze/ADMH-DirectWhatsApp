@@ -29,6 +29,11 @@ import { writeClipboardText } from '../../lib/clipboard';
 import { shareNativeText } from '../../lib/native';
 import { checkForAppUpdate } from '../../lib/appUpdate';
 import { checkForPwaUpdate } from '../../lib/pwa';
+import {
+  downloadPreMigrationBackup,
+  getPreMigrationBackup,
+  type PreMigrationBackup
+} from '../../lib/preMigrationBackup';
 import { workspaceDisplayName } from '../../lib/workspace';
 import { CountrySheet } from './CountrySheet';
 import { WorkspaceSheet } from './WorkspaceSheet';
@@ -83,6 +88,8 @@ export function SettingsScreen() {
   const [bioBusy, setBioBusy] = useState(false);
   const [storage, setStorage] = useState<StorageInfo | null>(null);
   const [storageBusy, setStorageBusy] = useState(false);
+  const [preUpgrade, setPreUpgrade] = useState<PreMigrationBackup | null>(null);
+  const [preUpgradeBusy, setPreUpgradeBusy] = useState(false);
   const [permission, setPermission] = useState<NotificationPermissionState>(() => notificationPermission());
   const [notifBusy, setNotifBusy] = useState(false);
   const [updateBusy, setUpdateBusy] = useState(false);
@@ -132,6 +139,30 @@ export function SettingsScreen() {
       alive = false;
     };
   }, []);
+
+  useEffect(() => {
+    let alive = true;
+    void getPreMigrationBackup().then((record) => {
+      if (alive) setPreUpgrade(record);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const downloadPreUpgrade = async () => {
+    if (preUpgradeBusy || !preUpgrade) return;
+    setPreUpgradeBusy(true);
+    const ok = await downloadPreMigrationBackup();
+    setPreUpgradeBusy(false);
+    if (ok) {
+      if (settings.haptics) hapticSuccess();
+      toast(t('تم تنزيل نسخة ما قبل الترقية.', 'Pre-upgrade backup downloaded.'), 'success');
+    } else {
+      if (settings.haptics) hapticError();
+      toast(t('تعذّر تنزيل النسخة.', 'Could not download the backup.'), 'error');
+    }
+  };
 
   /* ------------------------------------------------------------- handlers */
 
@@ -945,6 +976,30 @@ export function SettingsScreen() {
             </div>
             <Button size="sm" variant="soft" onClick={() => navigate('/tools/backup')}>
               {t('فتح', 'Open')}
+            </Button>
+          </div>
+
+          <div className="list-row" style={{ paddingInline: 2 }}>
+            <span className="avatar" style={{ width: 36, height: 36, borderRadius: 13 }} aria-hidden="true">
+              <Icon name="shield" size={18} />
+            </span>
+            <div className="list-main">
+              <span className="list-title">{t('نسخة ما قبل الترقية', 'Pre-upgrade backup')}</span>
+              <span className="list-sub">
+                {preUpgrade
+                  ? `${preUpgrade.sourceVersion} · ${new Date(preUpgrade.createdAt).toLocaleDateString(locale)}`
+                  : t('ستُنشأ تلقائياً عند أول تشغيل للإصدار الجديد.', 'Created automatically on the first launch of the new version.')}
+              </span>
+            </div>
+            <Button
+              size="sm"
+              variant="soft"
+              loading={preUpgradeBusy}
+              disabled={!preUpgrade}
+              onClick={() => void downloadPreUpgrade()}
+            >
+              <Icon name="download" size={14} />
+              {t('تنزيل', 'Download')}
             </Button>
           </div>
 
