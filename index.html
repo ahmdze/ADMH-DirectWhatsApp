@@ -78,15 +78,17 @@
           return {error:'الرابط المدخل ليس رابط واتساب معروفاً.'};
         }
         const phone = parsed.searchParams.get('phone');
-        raw = phone || decodeURIComponent(parsed.pathname.replace(/^\/+/, '').split('/')[0] || '');
+        raw = phone || decodeURIComponent(parsed.pathname.replace(/^\\/+/, '').split('/')[0] || '');
+        if (raw && !/^\\+?\\d+$/.test(raw)) raw = '@' + raw;
       }
     } catch { return {error:'تعذر قراءة الرابط. تحقق من صحته.'}; }
 
-    if (raw.startsWith('@') || /[a-z]/i.test(raw)) {
-      const username = raw.replace(/^@/, '').trim();
+    if (raw.startsWith('@')) {
+      const username = raw.slice(1).trim();
       if (!/^[a-zA-Z0-9._-]{3,64}$/.test(username)) return {error:'صيغة اسم المستخدم غير صحيحة.'};
       return {type:'username',value:username,display:'@'+username};
     }
+    if (/[a-z]/i.test(raw)) return {error:'اكتب اسم المستخدم مسبوقاً بعلامة @ أو أدخل رقماً صحيحاً.'};
 
     if (/[+]/.test(raw.replace(/^\s*\+/, ''))) return {error:'علامة + يجب أن تكون في بداية الرقم فقط.'};
     let digits = raw.replace(/[\s().-]/g, '');
