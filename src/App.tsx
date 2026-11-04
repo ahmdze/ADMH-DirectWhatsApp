@@ -39,6 +39,9 @@ const StatsScreen = lazy(() => import('./features/tools/StatsScreen').then((modu
 const ImportScreen = lazy(() => import('./features/tools/ImportScreen').then((module) => ({ default: module.ImportScreen })));
 const CampaignsScreen = lazy(() => import('./features/tools/CampaignsScreen').then((module) => ({ default: module.CampaignsScreen })));
 const RemindersScreen = lazy(() => import('./features/tools/RemindersScreen').then((module) => ({ default: module.RemindersScreen })));
+const TransferScreen = lazy(() => import('./features/tools/TransferScreen').then((module) => ({ default: module.TransferScreen })));
+const HealthScreen = lazy(() => import('./features/tools/HealthScreen').then((module) => ({ default: module.HealthScreen })));
+const DiagnosticsScreen = lazy(() => import('./features/tools/DiagnosticsScreen').then((module) => ({ default: module.DiagnosticsScreen })));
 const SettingsScreen = lazy(() => import('./features/settings/SettingsScreen').then((module) => ({ default: module.SettingsScreen })));
 
 function ScreenSkeleton() {
@@ -207,6 +210,12 @@ function renderRoute(path: string[]) {
           return <CampaignsScreen />;
         case 'reminders':
           return <RemindersScreen />;
+        case 'transfer':
+          return <TransferScreen />;
+        case 'health':
+          return <HealthScreen />;
+        case 'diagnostics':
+          return <DiagnosticsScreen />;
         default:
           return <ToolsScreen />;
       }

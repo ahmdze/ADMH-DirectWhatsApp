@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.2.0';
+export const APP_VERSION = '2.3.0';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.3.0',
+    date: '2026-11-04',
+    items: [
+      { ar: 'نقل البيانات بين جهازين عبر ملف أو QR بدون خادم.', en: 'Transfer data between two devices via file or QR, without a server.' },
+      { ar: 'فحص وإصلاح البيانات المحلية (تكرارات، أرقام تالفة، سجلات يتيمة).', en: 'Local data health scan and safe repair (duplicates, invalid numbers, orphan records).' },
+      { ar: 'شاشة تشخيص للجهاز والمتصفح ومصفوفة اختبار للأجهزة الحقيقية.', en: 'Device/browser diagnostics screen and a real-device test matrix.' },
+      { ar: 'تطبيق Android أصلي (APK) مبني عبر Capacitor — بدون متجر أو حساب.', en: 'Native Android app (APK) built with Capacitor — no store or account required.' }
+    ]
+  },
   {
     version: '2.2.0',
     date: '2026-11-04',

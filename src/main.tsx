@@ -10,14 +10,17 @@ import { applyAppearance, getSettings, watchSystemTheme } from './lib/settings';
 import { initInstallPrompt, initOnlineWatcher } from './lib/install';
 import { initPwa } from './lib/pwa';
 import { ensurePersistentStorage } from './lib/storage';
+import { isNative } from './lib/native';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 async function bootstrap(): Promise<void> {
   applyAppearance(getSettings());
   watchSystemTheme();
-  initInstallPrompt();
+  if (!isNative()) {
+    initInstallPrompt();
+    initPwa();
+  }
   initOnlineWatcher();
-  initPwa();
   void ensurePersistentStorage();
 
   try {

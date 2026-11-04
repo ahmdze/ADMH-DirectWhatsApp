@@ -1,10 +1,30 @@
+import { isNative, saveNativeFile, shareNativeFiles } from './native';
+
 export function downloadBlob(blob: Blob, filename: string): void {
+  if (isNative()) {
+    // Write through the native filesystem and open the Android share sheet so the
+    // user can keep the file where they want it.
+    void saveNativeFile(blob, filename, { share: true });
+    return;
+  }
   const url = URL.createObjectURL(blob);
   downloadUrl(url, filename);
   window.setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
 export function downloadUrl(url: string, filename: string): void {
+  if (isNative()) {
+    void (async () => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('native-fetch-failed');
+        await saveNativeFile(await response.blob(), filename, { share: true });
+      } catch {
+        /* Downloading is best-effort on native. */
+      }
+    })();
+    return;
+  }
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
@@ -30,6 +50,7 @@ export async function canvasToBlob(canvas: HTMLCanvasElement, type = 'image/png'
 }
 
 export function canShareFiles(): boolean {
+  if (isNative()) return true;
   if (typeof navigator === 'undefined' || !navigator.canShare) return false;
   try {
     return navigator.canShare({ files: [new File(['x'], 'x.png', { type: 'image/png' })] });
@@ -39,6 +60,10 @@ export function canShareFiles(): boolean {
 }
 
 export async function shareFiles(files: File[], data: ShareData = {}): Promise<boolean> {
+  if (isNative()) {
+    // Filesystem + Share plugin: works with the native share sheet on Android.
+    if (await shareNativeFiles(files, { title: data.title, text: data.text })) return true;
+  }
   if (typeof navigator === 'undefined' || !navigator.share) return false;
   try {
     if (navigator.canShare?.({ files })) {

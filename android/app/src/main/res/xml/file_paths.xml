@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Paths exposed through the app FileProvider (used by @capacitor/share when
+     sharing files written with @capacitor/filesystem). Keep every directory the
+     app may share from, otherwise Android throws "Failed to find configured root". -->
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <cache-path name="my_cache_images" path="." />
+    <files-path name="my_files" path="." />
+    <external-path name="my_images" path="." />
+    <external-files-path name="my_external_files" path="." />
+</paths>

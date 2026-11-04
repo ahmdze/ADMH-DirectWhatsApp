@@ -115,6 +115,37 @@ const GROUPS: ToolGroup[] = [
         descEn: 'Remind yourself to message a target later.'
       }
     ]
+  },
+  {
+    id: 'maintenance',
+    titleAr: 'النقل والصيانة',
+    titleEn: 'Transfer & maintenance',
+    tools: [
+      {
+        path: '/tools/transfer',
+        icon: 'share',
+        titleAr: 'نقل البيانات',
+        titleEn: 'Transfer data',
+        descAr: 'انقل وجهاتك وقوالبك إلى جهاز آخر عبر ملف أو رمز QR.',
+        descEn: 'Move destinations and templates to another device via file or QR.'
+      },
+      {
+        path: '/tools/health',
+        icon: 'shield',
+        titleAr: 'فحص البيانات',
+        titleEn: 'Data health',
+        descAr: 'اكشف التكرارات والأرقام التالفة وأصلحها بأمان.',
+        descEn: 'Find and safely repair duplicates and damaged numbers.'
+      },
+      {
+        path: '/tools/diagnostics',
+        icon: 'info',
+        titleAr: 'تشخيص الجهاز',
+        titleEn: 'Diagnostics',
+        descAr: 'قدرات الجهاز والمتصفح، وتقرير جاهز للنسخ.',
+        descEn: 'Device and browser capabilities with a copyable report.'
+      }
+    ]
   }
 ];
 

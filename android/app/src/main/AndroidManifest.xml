@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Deep links: com.admh.directwhatsapp://... and admh://... -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.admh.directwhatsapp" />
+                <data android:scheme="admh" />
+            </intent-filter>
+
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+    </application>
+
+    <!-- Permissions. Plugins (camera/local-notifications/haptics) declare their
+         own permissions as well; these are the app-level ones we rely on. -->
+
+    <!-- Local WebView content + the WhatsApp chat URLs opened externally. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- QR scanning / image capture (the camera plugin uses this too). -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Haptic feedback (the haptics plugin declares this too). -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Android 13+ local reminder notifications. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Reminders fire at their exact due time. This is a normal permission; if
+         the user revokes it in Android settings the plugin falls back to an
+         inexact alarm instead of failing. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <!-- A camera is useful but not required (image import is a fallback). -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+</manifest>
