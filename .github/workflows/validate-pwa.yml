@@ -37,8 +37,8 @@ jobs:
           from pathlib import Path
 
           manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
-          assert manifest.get("id") == "./?app=admh-direct-whatsapp-v2"
-          assert manifest.get("start_url") == "./?source=pwa-v2"
+          assert manifest.get("id") == "./"
+          assert manifest.get("start_url") == "./"
           icons = manifest.get("icons", [])
           required = {192: "icon-192.png", 512: "icon-512.png"}
           for size, filename in required.items():
