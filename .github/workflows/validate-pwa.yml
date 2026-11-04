@@ -29,19 +29,43 @@ jobs:
           print(f"Extracted {len(scripts)} inline script(s)")
           PY
           for file in /tmp/inline-*.js; do node --check "$file"; done
-      - name: Validate manifest JSON
+      - name: Validate manifest JSON and installability icons
         run: |
-          python3 -m json.tool manifest.json >/dev/null
-          grep -q 'admh-direct-whatsapp-v2' manifest.json
+          python3 - <<'PY'
+          import json
+          import struct
+          from pathlib import Path
+
+          manifest = json.loads(Path("manifest.json").read_text(encoding="utf-8"))
+          assert manifest.get("id") == "./?app=admh-direct-whatsapp-v2"
+          assert manifest.get("start_url") == "./?source=pwa-v2"
+          icons = manifest.get("icons", [])
+          required = {192: "icon-192.png", 512: "icon-512.png"}
+          for size, filename in required.items():
+              matches = [i for i in icons if i.get("src") == f"./{filename}" and
+                         i.get("type") == "image/png" and i.get("sizes") == f"{size}x{size}"]
+              assert matches, f"Manifest is missing {size}x{size} PNG icon entry"
+              data = Path(filename).read_bytes()
+              assert data[:8] == bytes([137, 80, 78, 71, 13, 10, 26, 10]), f"{filename} is not a PNG"
+              width, height = struct.unpack(">II", data[16:24])
+              assert (width, height) == (size, size), f"{filename} has dimensions {width}x{height}"
+              assert len(data) > 100, f"{filename} appears empty or corrupted"
+              print(f"Validated {filename}: {width}x{height}, {len(data)} bytes")
+          svg = [i for i in icons if i.get("src") == "./icon.svg"]
+          assert svg, "SVG fallback icon is missing"
+          PY
       - name: Verify local PWA assets
         run: |
           test -f index.html
           test -f sw.js
           test -f manifest.json
           test -f icon.svg
+          test -f icon-192.png
+          test -f icon-512.png
           test -f vendor/qrcode.min.js
           test -f enhancements.js
           test -f pwa-update.js
           grep -q 'enhancements.js' index.html
           grep -q 'pwa-update.js' index.html
-          grep -q 'admh-direct-whatsapp-v5' sw.js
+          grep -q 'admh-direct-whatsapp-v6' sw.js
+          grep -q 'icon-192.png' index.html
