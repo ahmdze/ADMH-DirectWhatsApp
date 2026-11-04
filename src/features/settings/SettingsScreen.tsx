@@ -624,7 +624,7 @@ export function SettingsScreen() {
           <span className="text-muted" style={{ fontSize: 12 }}>
             {t('المطوّر', 'Developer')}
           </span>
-          <span style={{ fontWeight: 800 }}>ADMH</span>
+          <span style={{ fontWeight: 800 }}>ADMH - احمد زياد | جميع الحقوق محفوظة 2026</span>
         </div>
       </section>
 
