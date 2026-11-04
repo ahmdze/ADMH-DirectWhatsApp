@@ -277,9 +277,6 @@
     help.type='button'; help.className='sr-only'; help.textContent='تعليمات تثبيت الآيفون';
     help.classList.remove('sr-only'); help.classList.add('ios-install-help'); help.addEventListener('click',()=>$('iosModal').hidden=false); document.querySelector('.top-inner').append(help);
   }
-  if('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(error=>console.warn('PWA offline support unavailable',error)));
-  }
 })();
 </script>
 <script src="./enhancements.js"></script><script src="./pwa-update.js"></script>
