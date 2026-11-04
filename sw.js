@@ -1,4 +1,4 @@
-const CACHE_NAME = 'admh-direct-whatsapp-v6';
+const CACHE_NAME = 'admh-direct-whatsapp-v7'; // تم التحديث إلى v7
 const APP_SHELL = [
   './',
   './index.html',
