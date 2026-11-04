@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.0-beta.2';
+export const APP_VERSION = '2.4.0-beta.3';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,13 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.0-beta.3',
+    date: '2026-11-05',
+    items: [
+      { ar: 'تنظيف تلقائي للسجل حسب إعدادات الاحتفاظ، مع سلة محذوفات تسمح بالاستعادة حتى 30 يوماً.', en: 'Automatic history retention with a trash that allows restoring entries for up to 30 days.' }
+    ]
+  },
   {
     version: '2.4.0-beta.2',
     date: '2026-11-05',
