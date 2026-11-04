@@ -109,6 +109,10 @@ PWA عربية (RTL) مصمّمة للهاتف: تفتح محادثة واتسا
 |---|---|
 | ![الواجهة الفارسية](docs/screenshots/compose-persian.png) | ![إعدادات الخط](docs/screenshots/settings-font-persian.png) |
 
+| نقل البيانات | فحص البيانات |
+|---|---|
+| ![نقل البيانات](docs/screenshots/transfer-v23.png) | ![فحص البيانات](docs/screenshots/health-v23.png) |
+
 > لقطات مولّدة من نسخة التطوير ببيانات تجريبية (`?demo=1`).
 
 ---

@@ -4,7 +4,7 @@
 
 An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without saving the number**, with saved destinations, message templates, QR codes, share cards, and printable stickers — all locally on your device, with no server and no account.
 
-> **Version 2.2.0** — Aurora Glass identity, Cairo font for Arabic, and four languages: Arabic, English, Kurdish (Sorani), and Persian.
+> **Version 2.3.0** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
 > The app uses a **PWA install identity** (`id: ./v2`), so anyone who installed the old version (v1) must uninstall it and install v2 once. v1 data is not lost: it migrates automatically on first launch.
 
 ---
@@ -55,6 +55,18 @@ An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without s
 - **(v2.0.0)** Number-list campaigns: open chats sequentially with manual “Sent/Skipped” tracking — **no automatic sending**.
 - **(v2.0.0)** Follow-up reminders that appear when the app opens.
 - **(v2.0.0)** Import contacts from CSV/vCard or the Contact Picker.
+- **(v2.3.0)** **Data transfer** between two devices via file or QR code, with no server.
+- **(v2.3.0)** **Local data check and repair** (duplicates, corrupt numbers, orphaned records) with a preview before repairing.
+- **(v2.3.0)** **Device diagnostics** (browser/camera/notifications/storage capabilities) and report export, plus a [device test matrix](docs/DEVICE-TEST-MATRIX.md).
+- **(v2.3.0)** **Native Android app (APK)** that runs alongside the PWA, with background scheduled notifications and a native badge/icon.
+
+### Android app (APK)
+
+- **(v2.3.0)** An Android build made with Capacitor from the same React code, installed directly **without a store or account**.
+- Downloaded from the releases page: [latest release](https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest).
+- **An APK for testing/direct distribution**, not signed for a store; Play Protect may show a warning when installing it from outside the store.
+- Android data is separate from the PWA (different origin); use **Data transfer** or the backup to move it.
+- Reminder notifications work in the background inside the Android build (their accuracy varies with how precisely the system allows notifications).
 
 ---
 
@@ -97,6 +109,10 @@ The default font is **“Automatic per language”**, and it can be changed manu
 |---|---|
 | ![Persian interface](docs/screenshots/compose-persian.png) | ![Font settings](docs/screenshots/settings-font-persian.png) |
 
+| Transfer data | Data health |
+|---|---|
+| ![Transfer data](docs/screenshots/transfer-v23.png) | ![Data health](docs/screenshots/health-v23.png) |
+
 > Screenshots generated from the development build with demo data (`?demo=1`).
 
 ---
@@ -111,6 +127,7 @@ The default font is **“Automatic per language”**, and it can be changed manu
 | Storage | IndexedDB via Dexie |
 | QR | `qrcode` for generation + `jsqr` for reading (with `BarcodeDetector` when available) |
 | PWA | `vite-plugin-pwa` (injectManifest) + Workbox: precache, Share Target for images, notifications |
+| Android | Capacitor 8 + LocalNotifications/Camera/Share/Filesystem/App/Haptics plugins — APK built in CI |
 | Languages | Custom i18n (ar/en/ckb/fa) + Kurdish and Persian dictionaries loaded on demand |
 | Tests | Vitest |
 
@@ -159,6 +176,13 @@ docs/                     # specs and previews
 
 The project uses `base: './'` and hash routes, so it works under a repository path without any extra configuration.
 
+## Building the Android app (APK)
+
+- Locally (requires JDK 21 + Android SDK): `pnpm android:sync`, then open `android/` in Android Studio and build an APK, or run `cd android && ./gradlew assembleDebug`.
+- Automatically: every push to `main` runs `.github/workflows/android.yml`, builds `app-debug.apk`, and uploads it as an artifact — **with no store or account**.
+- The current APK is a **Debug** build for testing/direct distribution; for long-term updates a stable keystore will be created later (not committed to the repository).
+- Android data is separate from the PWA; use the **Data transfer** screen or a backup.
+
 ## Privacy
 
 - No server, no account, no analytics, and no network requests after loading.
@@ -176,6 +200,7 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
+| **2.3.0** | Data transfer via file/QR, data check and repair, diagnostics and device test matrix, Android APK app (Capacitor) |
 | **2.2.0** | Persian language, a font per language (Cairo/Vazirmatn/Noto Naskh), multilingual README |
 | **2.1.0** | Developer link, autocomplete, onboarding tour and “What's New”, QR from a shared image, reminder notifications, biometrics first, PWA screens, storage protection, Sorani Kurdish |
 | **2.0.0** | Full rebuild: React + PWA, Aurora Glass, Cairo, serverless, Share Target, offline, backup, workspaces |
