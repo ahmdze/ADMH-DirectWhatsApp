@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.0-alpha.1';
+export const APP_VERSION = '2.4.0-beta.1';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,14 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.0-beta.1',
+    date: '2026-11-05',
+    items: [
+      { ar: 'مرفقات محلية للصور والملفات وجهات الاتصال والموقع، تُشارك عبر نافذة النظام ولا تُخزّن في التطبيق.', en: 'Local image, file, contact and location attachments shared through the system sheet; never stored by the app.' },
+      { ar: 'معاينة محلية لنص الرسالة والرابط والمرفقات، وجدولة سريعة للتذكير من Compose.', en: 'Local preview of the message, link and attachments, plus Quick Schedule from Compose.' }
+    ]
+  },
   {
     version: '2.4.0-alpha.1',
     date: '2026-11-04',
