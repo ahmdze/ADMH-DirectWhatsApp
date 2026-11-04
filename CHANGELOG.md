@@ -2,6 +2,13 @@
 
 All notable changes to **ADMH Direct WhatsApp** are documented here. The app is local-first: no server, no account, no telemetry, and no automatic sending.
 
+## v2.4.1 — Maintenance (2026-11-05)
+
+### Fixed
+
+- Restored the **Tools** tab in the bottom navigation; the five-item bar now uses equal-width columns so all tabs remain visible on phones.
+- Manual update checks now bypass intermediary caches (`?t=…`) and always fetch the latest GitHub release immediately. No automatic checks were reintroduced.
+
 ## v2.4.0 — Stable (2026-11-05)
 
 ### Added

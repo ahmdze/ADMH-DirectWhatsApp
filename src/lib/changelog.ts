@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.0';
+export const APP_VERSION = '2.4.1';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,14 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.1',
+    date: '2026-11-05',
+    items: [
+      { ar: 'إعادة زر «الأدوات» إلى شريط التنقل السفلي بخمسة عناصر متساوية.', en: 'Restored the Tools tab in the five-item bottom navigation.' },
+      { ar: 'الفحص اليدوي للتحديثات يتجاوز أي كاش وسيط ويجلب أحدث إصدار من GitHub فوراً.', en: 'Manual update checks bypass intermediary caches and fetch the latest GitHub release immediately.' }
+    ]
+  },
   {
     version: '2.4.0',
     date: '2026-11-05',

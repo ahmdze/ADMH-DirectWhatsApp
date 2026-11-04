@@ -10,7 +10,7 @@ everything local on your device: no server, no account, and no automatic sending
 </p>
 
 <p>
-<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0"><img src="docs/badges/version-2.4.0.svg" height="30" alt="Version 2.4.0" /></a>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.1"><img src="docs/badges/version-2.4.1.svg" height="30" alt="Version 2.4.1" /></a>
 &nbsp;
 <img src="docs/badges/app-langs.svg" height="30" alt="Four languages: Arabic, English, Kurdish, Persian" />
 &nbsp;
@@ -65,7 +65,7 @@ Technical and engineering review by<br />
 - Works fully offline after the first load, with its data in IndexedDB on your device.
 
 > [!IMPORTANT]
-> The latest release is **2.4.0**. The Android app installs directly from a signed APK file, not through a store.
+> The latest release is **2.4.1**. The Android app installs directly from a signed APK file, not through a store.
 > Anyone who installed the old v1 version needs to delete it and install v2 once; v1 data migrates automatically.
 
 > [!NOTE]
@@ -289,6 +289,7 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
+| **2.4.1** | Restored the Tools button in the bottom bar with five items, and bypassed the cache for manual update checks |
 | **2.4.0** | Recurring reminders and notifications, session attachments with full preview, Quick Schedule, safe log cleanup and Trash, and the README in four languages |
 | **2.4.0-beta.3** | Automatic log cleanup, and a Trash bin with restore for up to 30 days |
 | **2.4.0-beta.2** | WhatsApp/card/sticker preview, a Reminders button, and manual-only update checks |

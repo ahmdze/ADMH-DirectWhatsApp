@@ -203,12 +203,14 @@ function parseRelease(payload: unknown): CachedRelease | null {
   };
 }
 
-async function fetchLatestRelease(): Promise<CachedRelease | null> {
+async function fetchLatestRelease(force = false): Promise<CachedRelease | null> {
   if (typeof fetch !== 'function') return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), UPDATE_REQUEST_TIMEOUT_MS);
   try {
-    const response = await fetch(RELEASES_API, {
+    // Manual checks must not accept a CDN/proxy cached response.
+    const url = force ? `${RELEASES_API}?t=${Date.now()}` : RELEASES_API;
+    const response = await fetch(url, {
       method: 'GET',
       headers: { Accept: 'application/vnd.github+json' },
       cache: 'no-store',
@@ -258,7 +260,7 @@ export async function checkForAppUpdate(options: CheckForAppUpdateOptions = {}):
     return toInfo(cached, { cached: true, stale: false });
   }
 
-  const fresh = await fetchLatestRelease();
+  const fresh = await fetchLatestRelease(options.force === true);
   if (fresh) {
     writeCache(fresh);
     return toInfo(fresh, { cached: false, stale: false });
