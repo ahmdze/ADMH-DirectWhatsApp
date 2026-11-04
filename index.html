@@ -78,8 +78,9 @@
           return {error:'الرابط المدخل ليس رابط واتساب معروفاً.'};
         }
         const phone = parsed.searchParams.get('phone');
-        raw = phone || decodeURIComponent(parsed.pathname.replace(/^\\/+/, '').split('/')[0] || '');
-        if (raw && !/^\\+?\\d+$/.test(raw)) raw = '@' + raw;
+        const pathPart = parsed.pathname.split('/').filter(Boolean)[0] || '';
+        raw = phone || decodeURIComponent(pathPart);
+        if (raw && ![...raw].every(ch => ch >= '0' && ch <= '9')) raw = '@' + raw;
       }
     } catch { return {error:'تعذر قراءة الرابط. تحقق من صحته.'}; }
 
