@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.2';
+export const APP_VERSION = '2.4.3';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.3',
+    date: '2026-11-05',
+    items: [
+      { ar: 'استقبال المشاركة الأصلية في Android: نصوص وروابط وصور وملفات من نافذة المشاركة إلى Compose.', en: 'Native Android share target: receive text, links, images and files from the share sheet into Compose.' },
+      { ar: 'اختصارات أيقونة التطبيق: إرسال سريع، مسح QR، والتذكيرات.', en: 'App icon shortcuts: Quick Send, Scan QR and Reminders.' },
+      { ar: 'اسم التطبيق على شاشة Android يتغيّر حسب اللغة المختارة داخل التطبيق (الأيقونة موحّدة).', en: 'The Android launcher name follows the in-app language (the icon stays the same).' },
+      { ar: 'دليل متعدد اللغات على GitHub Pages مع مبدّل لغة داخلي وروابط من README.', en: 'Multilingual GitHub Pages guide with an in-page language switcher and README links.' }
+    ]
+  },
   {
     version: '2.4.2',
     date: '2026-11-05',

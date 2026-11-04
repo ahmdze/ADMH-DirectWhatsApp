@@ -24,6 +24,9 @@ async function bootstrap(): Promise<void> {
   }
   initOnlineWatcher();
   void ensurePersistentStorage();
+  if (isNative()) {
+    void import('./lib/shareTarget').then(({ initShareTarget }) => initShareTarget());
+  }
 
   try {
     await ensureDatabase();

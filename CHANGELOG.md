@@ -2,6 +2,14 @@
 
 All notable changes to **ADMH Direct WhatsApp** are documented here. The app is local-first: no server, no account, no telemetry, and no automatic sending.
 
+## v2.4.3 — Native sharing, shortcuts and guide (2026-11-05)
+
+### Added
+
+- **Native Android share target**: the app now appears in Android's share sheet for text, links, images and PDFs. Received files are copied to the app cache, read by the web layer and attached to Compose for the current session only.
+- **App icon shortcuts**: Quick Send, Scan QR and Reminders, via static Android shortcuts and existing deep links.
+- **Multilingual GitHub Pages guide** at `/guide/?lang=ar|en|fa|ckb`, with an in-page language selector and direction/font switching. README language links now open this guide.
+
 ## v2.4.2 — Location fix (2026-11-05)
 
 ### Fixed

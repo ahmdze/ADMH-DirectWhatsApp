@@ -23,6 +23,7 @@ import { APP_VERSION } from './lib/changelog';
 import { workspaceDisplayName } from './lib/workspace';
 import { toast } from './lib/toast';
 import { consumePreMigrationBackupNotice } from './lib/preMigrationBackup';
+import { syncAppLocale } from './lib/appLocale';
 import { Onboarding } from './components/Onboarding';
 import { WhatsNew } from './components/WhatsNew';
 import { LockScreen } from './features/settings/LockScreen';
@@ -260,6 +261,10 @@ export default function App() {
     const unwatch = watchSystemTheme();
     return unwatch;
   }, [settings]);
+
+  useEffect(() => {
+    void syncAppLocale(settings.locale);
+  }, [settings.locale]);
 
   useEffect(() => {
     if (!consumePreMigrationBackupNotice()) return;

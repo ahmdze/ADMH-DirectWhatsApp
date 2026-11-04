@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">واتساپی ڕاستەوخۆ</string>
+    <string name="title_activity_main">واتساپی ڕاستەوخۆ</string>
+    <string name="package_name">com.admh.directwhatsapp</string>
+    <string name="custom_url_scheme">com.admh.directwhatsapp</string>
+    <string name="shortcut_send_short">ناردنی خێرا</string>
+    <string name="shortcut_send_long">کردنەوەی شاشەی ناردن</string>
+    <string name="shortcut_scan_short">سکانکردنی QR</string>
+    <string name="shortcut_scan_long">سکانکردنی کۆدی QR بە کامێرا</string>
+    <string name="shortcut_reminders_short">بیرخستنەوەکان</string>
+    <string name="shortcut_reminders_long">کردنەوەی بیرخستنەوەکان</string>
+</resources>

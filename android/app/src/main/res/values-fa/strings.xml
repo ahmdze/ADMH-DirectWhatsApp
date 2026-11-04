@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">واتساپ مستقیم</string>
+    <string name="title_activity_main">واتساپ مستقیم</string>
+    <string name="package_name">com.admh.directwhatsapp</string>
+    <string name="custom_url_scheme">com.admh.directwhatsapp</string>
+    <string name="shortcut_send_short">ارسال سریع</string>
+    <string name="shortcut_send_long">باز کردن صفحه ارسال</string>
+    <string name="shortcut_scan_short">اسکن QR</string>
+    <string name="shortcut_scan_long">اسکن کد QR با دوربین</string>
+    <string name="shortcut_reminders_short">یادآوری‌ها</string>
+    <string name="shortcut_reminders_long">باز کردن یادآوری‌ها</string>
+</resources>

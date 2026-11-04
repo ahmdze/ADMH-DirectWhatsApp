@@ -4,4 +4,10 @@
     <string name="title_activity_main">واتساب المباشر</string>
     <string name="package_name">com.admh.directwhatsapp</string>
     <string name="custom_url_scheme">com.admh.directwhatsapp</string>
+    <string name="shortcut_send_short">إرسال سريع</string>
+    <string name="shortcut_send_long">فتح شاشة الإرسال</string>
+    <string name="shortcut_scan_short">مسح QR</string>
+    <string name="shortcut_scan_long">مسح رمز QR بالكاميرا</string>
+    <string name="shortcut_reminders_short">التذكيرات</string>
+    <string name="shortcut_reminders_long">فتح التذكيرات</string>
 </resources>

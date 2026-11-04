@@ -19,6 +19,7 @@ import { buildVCard } from '../../lib/vcard';
 import { canShareFiles, downloadBlob, shareFiles } from '../../lib/image';
 import { prepareMediaFile, releaseMedia, type MediaAttachment } from '../../lib/media';
 import { getCurrentLocation, mapsUrl, type LocationError } from '../../lib/geolocation';
+import { takeSharedFiles, subscribeSharedFiles } from '../../lib/sharedFiles';
 import type { Draft, Target } from '../../types';
 import { CountryPicker } from './CountryPicker';
 import { ComposeMedia } from './ComposeMedia';
@@ -114,6 +115,31 @@ export function ComposeScreen() {
   useEffect(() => {
     mediaRef.current = media;
   }, [media]);
+
+  useEffect(() => {
+    let active = true;
+    const consume = () => {
+      const incoming = takeSharedFiles();
+      if (!incoming.length) return;
+      void (async () => {
+        const prepared: MediaAttachment[] = [];
+        for (const file of incoming) {
+          try {
+            prepared.push(await prepareMediaFile(file));
+          } catch {
+            /* Ignore a file the native share bridge could not prepare. */
+          }
+        }
+        if (active && prepared.length) setMedia((current) => [...current, ...prepared].slice(0, 5));
+      })();
+    };
+    consume();
+    const unsubscribe = subscribeSharedFiles(consume);
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     return () => releaseMedia(mediaRef.current);

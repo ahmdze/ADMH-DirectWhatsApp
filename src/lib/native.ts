@@ -19,8 +19,8 @@ interface CapacitorBridge {
   getPlatform?: () => NativePlatform;
 }
 
-const KNOWN_ROUTE = /^\/(compose|targets|templates|tools|settings)(\/|$)/;
-const ROOT_ROUTES = new Set(['/compose', '/targets', '/templates', '/tools']);
+const KNOWN_ROUTE = /^\/(compose|targets|templates|tools|settings|reminders)(\/|$)/;
+const ROOT_ROUTES = new Set(['/compose', '/targets', '/templates', '/tools', '/reminders']);
 const SHARED_TEXT_KEYS = ['text', 'message', 'url', 'title'] as const;
 
 function bridge(): CapacitorBridge | undefined {

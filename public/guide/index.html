@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-lang="ar">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>واتساب المباشر — دليل التطبيق</title>
+<meta name="theme-color" content="#06110f" />
+<meta name="description" content="واتساب المباشر: افتح محادثة واتساب بدون حفظ الرقم. دليل متعدد اللغات." />
+<style>
+  @font-face { font-family: 'Cairo'; src: url('fonts/cairo-arabic.woff2') format('woff2'); font-weight: 200 900; font-display: swap; }
+  @font-face { font-family: 'Cairo'; src: url('fonts/cairo-latin.woff2') format('woff2'); font-weight: 200 900; font-display: swap; unicode-range: U+0000-00FF; }
+  @font-face { font-family: 'Vazirmatn'; src: url('fonts/vazirmatn-arabic.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: 'Vazirmatn'; src: url('fonts/vazirmatn-latin.woff2') format('woff2'); font-weight: 100 900; font-display: swap; unicode-range: U+0000-00FF; }
+  @font-face { font-family: 'Noto Naskh Arabic'; src: url('fonts/noto-naskh-arabic.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+  @font-face { font-family: 'Noto Naskh Arabic'; src: url('fonts/noto-naskh-latin.woff2') format('woff2'); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF; }
+  :root { --bg:#06110f; --bg2:#0b1b17; --card:rgba(16,38,32,.68); --line:rgba(146,230,202,.16); --text:#f1fff9; --muted:#a4c3b8; --accent:#6EE7B7; --accent2:#2DD4BF; --font:'Cairo','Segoe UI',Tahoma,system-ui,sans-serif; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:0; }
+  body { min-height:100vh; color:var(--text); background:var(--bg); font-family:var(--font); line-height:1.7; overflow-x:hidden; }
+  html[data-lang="fa"] { --font:'Vazirmatn','Cairo',Tahoma,system-ui,sans-serif; }
+  html[data-lang="ckb"] { --font:'Noto Naskh Arabic','Cairo',Tahoma,serif; }
+  .aurora { position:fixed; inset:0; pointer-events:none; z-index:0; background:
+    radial-gradient(55% 45% at 78% 6%, rgba(45,212,191,.19), transparent 65%),
+    radial-gradient(45% 38% at 14% 30%, rgba(110,231,183,.12), transparent 70%),
+    radial-gradient(60% 50% at 55% 100%, rgba(56,189,248,.10), transparent 70%),
+    linear-gradient(160deg,#06110f 0%,#071612 45%,#04100d 100%); }
+  .noise { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.25; background-image:radial-gradient(rgba(255,255,255,.10) 0.5px, transparent 0.5px); background-size:5px 5px; }
+  .wrap { position:relative; z-index:1; width:min(1080px,calc(100% - 32px)); margin-inline:auto; }
+  header { padding:22px 0 8px; }
+  .nav { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+  .brand img { width:40px; height:40px; border-radius:12px; border:1px solid var(--line); }
+  .brand b { font-size:15px; letter-spacing:.2px; }
+  .brand span { display:block; font-size:10px; color:var(--muted); }
+  .langs { display:flex; gap:5px; padding:5px; border:1px solid var(--line); border-radius:14px; background:rgba(5,20,15,.55); }
+  .langs button { border:0; background:transparent; color:var(--muted); font:inherit; font-size:11px; padding:7px 10px; border-radius:9px; cursor:pointer; }
+  .langs button[aria-pressed="true"] { background:var(--accent); color:#06231b; font-weight:800; }
+  .hero { padding:54px 0 28px; display:flex; flex-direction:column; gap:18px; max-width:780px; }
+  .eyebrow { margin:0; color:var(--accent); font-size:12px; font-weight:800; letter-spacing:.6px; }
+  h1 { margin:0; font-size:clamp(30px,6vw,54px); line-height:1.15; letter-spacing:-.5px; }
+  h1 span { color:var(--accent); }
+  .lead { margin:0; color:var(--muted); font-size:clamp(13px,2.4vw,16px); max-width:650px; }
+  .actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:6px; }
+  .btn { display:inline-flex; align-items:center; gap:7px; text-decoration:none; color:#06231b; background:linear-gradient(135deg,#6EE7B7,#2DD4BF); border:1px solid rgba(255,255,255,.14); padding:11px 17px; border-radius:13px; font-size:12px; font-weight:800; }
+  .btn.ghost { background:rgba(12,35,27,.55); color:var(--text); border-color:var(--line); }
+  .meta { display:flex; gap:7px; flex-wrap:wrap; margin-top:4px; }
+  .pill { border:1px solid var(--line); background:rgba(10,28,22,.65); color:var(--muted); border-radius:999px; padding:5px 10px; font-size:10px; }
+  section { margin:26px 0; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+  .card { border:1px solid var(--line); background:var(--card); backdrop-filter:blur(22px); border-radius:18px; padding:17px; }
+  .card .icon { width:34px; height:34px; border-radius:11px; display:grid; place-items:center; background:rgba(110,231,183,.12); color:var(--accent); font-size:17px; margin-bottom:9px; }
+  .card h3 { margin:0 0 4px; font-size:14px; }
+  .card p { margin:0; color:var(--muted); font-size:11.5px; line-height:1.75; }
+  .shots { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .shots a { display:block; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:rgba(10,28,22,.5); }
+  .shots img { display:block; width:100%; height:auto; }
+  .section-title { display:flex; align-items:end; justify-content:space-between; gap:12px; margin-bottom:10px; }
+  .section-title h2 { margin:0; font-size:clamp(19px,3.4vw,27px); }
+  .section-title p { margin:0; color:var(--muted); font-size:11px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .two h3 { margin:0 0 6px; font-size:15px; }
+  .two ul, .privacy ul { margin:0; padding-inline-start:17px; color:var(--muted); font-size:12px; display:grid; gap:5px; }
+  .privacy { border:1px solid var(--line); background:linear-gradient(140deg,rgba(16,38,32,.8),rgba(8,25,19,.7)); border-radius:18px; padding:18px; }
+  .cta { text-align:center; border:1px solid var(--line); background:linear-gradient(150deg,rgba(110,231,183,.14),rgba(45,212,191,.05)); border-radius:20px; padding:26px 16px; }
+  .cta h2 { margin:0 0 5px; font-size:22px; }
+  .cta p { margin:0 0 13px; color:var(--muted); font-size:12px; }
+  footer { margin:28px 0 30px; border-top:1px solid var(--line); padding-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:10.5px; }
+  .credits { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .credits img { height:22px; width:auto; opacity:.9; }
+  .credits b { color:var(--text); font-size:10.5px; }
+  @media (max-width:720px) { .two { grid-template-columns:1fr; } .shots { grid-template-columns:1fr 1fr; } .shots a:last-child { display:none; } .hero { padding-top:38px; } }
+  @media (max-width:420px) { .langs button { padding:6px 7px; font-size:10px; } .brand span { display:none; } }
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="nav">
+      <a class="brand" href="../">
+        <img src="../icons/icon-192.png" alt="" />
+        <span><b data-i18n="brand"></b><span data-i18n="brandSub"></span></span>
+      </a>
+      <div class="langs" role="group" aria-label="Language">
+        <button type="button" data-set-lang="ar">العربية</button>
+        <button type="button" data-set-lang="en">English</button>
+        <button type="button" data-set-lang="fa">فارسی</button>
+        <button type="button" data-set-lang="ckb">کوردی</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow" data-i18n="eyebrow"></p>
+      <h1><span data-i18n="heroA"></span> <span data-i18n="heroB"></span></h1>
+      <p class="lead" data-i18n="lead"></p>
+      <div class="actions">
+        <a class="btn" href="https://ahmdze.github.io/ADMH-DirectWhatsApp/" data-i18n="webBtn"></a>
+        <a class="btn ghost" href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest" data-i18n="apkBtn"></a>
+      </div>
+      <div class="meta">
+        <span class="pill" data-i18n="version"></span>
+        <span class="pill" data-i18n="languages"></span>
+        <span class="pill" data-i18n="platform"></span>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title"><h2 data-i18n="quickTitle"></h2><p data-i18n="quickSub"></p></div>
+      <div class="cards">
+        <article class="card"><div class="icon">💬</div><h3 data-i18n="quick1Title"></h3><p data-i18n="quick1"></p></article>
+        <article class="card"><div class="icon">📇</div><h3 data-i18n="quick2Title"></h3><p data-i18n="quick2"></p></article>
+        <article class="card"><div class="icon">🔳</div><h3 data-i18n="quick3Title"></h3><p data-i18n="quick3"></p></article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title"><h2 data-i18n="shotsTitle"></h2><p data-i18n="shotsSub"></p></div>
+      <div class="shots">
+        <a href="screenshots/compose-dark.png"><img src="screenshots/compose-dark.png" alt="" /></a>
+        <a href="screenshots/targets-dark.png"><img src="screenshots/targets-dark.png" alt="" /></a>
+        <a href="screenshots/qr-dark.png"><img src="screenshots/qr-dark.png" alt="" /></a>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title"><h2 data-i18n="dailyTitle"></h2><p data-i18n="dailySub"></p></div>
+      <div class="cards">
+        <article class="card"><div class="icon">✍️</div><h3 data-i18n="daily1Title"></h3><p data-i18n="daily1"></p></article>
+        <article class="card"><div class="icon">🗂️</div><h3 data-i18n="daily2Title"></h3><p data-i18n="daily2"></p></article>
+        <article class="card"><div class="icon">🧰</div><h3 data-i18n="daily3Title"></h3><p data-i18n="daily3"></p></article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title"><h2 data-i18n="whereTitle"></h2><p data-i18n="whereSub"></p></div>
+      <div class="two">
+        <article class="card"><h3>🌐 <span data-i18n="webTitle"></span></h3><ul data-list="web"></ul></article>
+        <article class="card"><h3>🤖 <span data-i18n="androidTitle"></span></h3><ul data-list="android"></ul></article>
+      </div>
+    </section>
+
+    <section class="privacy">
+      <div class="section-title"><h2 data-i18n="privacyTitle"></h2><p data-i18n="privacySub"></p></div>
+      <ul data-list="privacy"></ul>
+    </section>
+
+    <section class="cta">
+      <h2 data-i18n="ctaTitle"></h2>
+      <p data-i18n="ctaText"></p>
+      <div class="actions" style="justify-content:center">
+        <a class="btn" href="https://ahmdze.github.io/ADMH-DirectWhatsApp/" data-i18n="webBtn"></a>
+        <a class="btn ghost" href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest" data-i18n="apkBtn"></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="credits">
+      <b>ADMH · Ahmed Zeyad</b>
+      <img src="../logos/deepseek-harness.svg" alt="DeepSeek HARNESS" />
+      <img src="../logos/qwen.svg" alt="Qwen" />
+    </div>
+    <span data-i18n="copyright"></span>
+  </footer>
+</div>
+
+<script>
+const LANGS = ['ar', 'en', 'fa', 'ckb'];
+const CONTENT = {
+  ar: {
+    title: 'واتساب المباشر — دليل التطبيق',
+    brand: 'واتساب المباشر', brandSub: 'ADMH Direct WhatsApp',
+    eyebrow: 'دليل التطبيق · أربع لغات',
+    heroA: 'محادثة واتساب،', heroB: 'من دون حفظ الرقم',
+    lead: 'رقم أو اسم مستخدم أو رابط — افتح المحادثة خلال ثوانٍ، واحتفظ بوجهاتك ورسائلك وأدواتك على جهازك.',
+    webBtn: 'استخدم نسخة الويب', apkBtn: 'نزّل تطبيق Android',
+    version: 'الإصدار 2.4.3', languages: 'العربية · English · کوردی · فارسی', platform: 'PWA + Android APK',
+    quickTitle: 'لمحة سريعة', quickSub: 'كل ما تحتاجه في شاشة واحدة',
+    quick1Title: 'افتح محادثة', quick1: 'رقم محلي أو دولي، @اسم مستخدم، أو رابط واتساب، مع تنسيق تلقائي.',
+    quick2Title: 'رتّب جهاتك', quick2: 'وجهات وقوالب وسجل محادثات في مساحات عمل منفصلة.',
+    quick3Title: 'أنشئ وشارك', quick3: 'رموز QR، بطاقات تواصل، ملصقات، ومرفقات جلسة.',
+    shotsTitle: 'شاهد التطبيق', shotsSub: 'لقطات من الواجهة',
+    dailyTitle: 'مصمم للاستخدام اليومي', dailySub: 'بساطة من دون تنازل',
+    daily1Title: 'اكتب وافتح', daily1: 'تنسيق الأرقام، رسالة اختيارية، قالب، ومعاينة قبل فتح واتساب.',
+    daily2Title: 'احفظ ونظّم', daily2: 'أسماء ووسوم وملاحظات ومفضلة، وقوالب بمتغيرات، ومساحات عمل.',
+    daily3Title: 'أدوات عملية', daily3: 'QR، بطاقة، vCard، ملصقات، تذكيرات متكررة، ونسخ احتياطي محلي.',
+    whereTitle: 'الويب أم Android؟', whereSub: 'نفس البيانات، بيئتان',
+    webTitle: 'نسخة الويب (PWA)',
+    androidTitle: 'تطبيق Android (APK)',
+    web: ['افتحه من المتصفح وثبّته من القائمة.', 'يعمل محلياً بعد التحميل الأول.', 'التذكيرات تظهر عند فتح التطبيق.', 'البيانات في IndexedDB داخل المتصفح.'],
+    android: ['ثبّت APK مباشرة من GitHub Releases.', 'إشعارات محلية مجدولة حتى مع إغلاق التطبيق.', 'استقبال النصوص والصور من نافذة المشاركة، واختصارات الأيقونة.', 'فتح Compose من الإشعار، ومشاركة النظام.', 'بيانات منفصلة عن PWA، مع نسخ احتياطي ونقل.'],
+    privacyTitle: 'الخصوصية والبيانات', privacySub: 'محلي بالكامل',
+    privacy: ['لا حساب ولا خادم للتطبيق ولا أدوات تحليل.', 'لا تُرسل الرسائل تلقائياً؛ أنت تراجع وترسل.', 'الكاميرا والموقع بإذن صريح فقط.', 'فحص تحديث Android يدوي فقط.', 'الصور والأرقام لا تُرسل إلى خدمة QR خارجية.'],
+    ctaTitle: 'جاهز للمتابعة؟', ctaText: 'افتح التطبيق أو ثبّت نسخة Android — كل شيء يبقى على جهازك.',
+    copyright: '© 2026 ADMH — جميع الحقوق محفوظة'
+  },
+  en: {
+    title: 'Direct WhatsApp — App guide',
+    brand: 'Direct WhatsApp', brandSub: 'ADMH Direct WhatsApp',
+    eyebrow: 'App guide · four languages',
+    heroA: 'A WhatsApp chat,', heroB: 'without saving the number',
+    lead: 'A phone number, username or link — open the chat in seconds and keep your destinations, messages and tools on your device.',
+    webBtn: 'Use the web app', apkBtn: 'Download Android',
+    version: 'Version 2.4.3', languages: 'Arabic · English · Kurdish · Persian', platform: 'PWA + Android APK',
+    quickTitle: 'At a glance', quickSub: 'Everything on one screen',
+    quick1Title: 'Open a chat', quick1: 'Local or international number, @username, or a WhatsApp link with automatic formatting.',
+    quick2Title: 'Organize contacts', quick2: 'Destinations, templates and history in separate workspaces.',
+    quick3Title: 'Create & share', quick3: 'QR codes, contact cards, labels and session attachments.',
+    shotsTitle: 'See the app', shotsSub: 'Interface screenshots',
+    dailyTitle: 'Designed for daily use', dailySub: 'Simple without compromise',
+    daily1Title: 'Type & open', daily1: 'Number formatting, optional message, template and preview before WhatsApp.',
+    daily2Title: 'Save & organize', daily2: 'Names, tags, notes, favorites, variable templates and workspaces.',
+    daily3Title: 'Useful tools', daily3: 'QR, cards, vCard, labels, recurring reminders and local backup.',
+    whereTitle: 'Web or Android?', whereSub: 'Same data, two environments',
+    webTitle: 'Web app (PWA)',
+    androidTitle: 'Android app (APK)',
+    web: ['Open from a browser and install from its menu.', 'Works locally after the first load.', 'Reminders appear when you open the app.', 'Data lives in browser IndexedDB.'],
+    android: ['Install the APK directly from GitHub Releases.', 'Native scheduled notifications even when closed.', 'Receive text and images from the share sheet, plus icon shortcuts.', 'Open Compose from a notification and use native sharing.', 'Separate data from the PWA, with backup and transfer.'],
+    privacyTitle: 'Privacy & data', privacySub: 'Local by design',
+    privacy: ['No account, no server and no analytics.', 'Messages are never sent automatically; you review and send.', 'Camera and location only with explicit permission.', 'Android update checks are manual only.', 'Images and numbers never go to an external QR service.'],
+    ctaTitle: 'Ready to go?', ctaText: 'Open the web app or install Android — everything stays on your device.',
+    copyright: '© 2026 ADMH — All rights reserved'
+  },
+  fa: {
+    title: 'واتساپ مستقیم — راهنمای برنامه',
+    brand: 'واتساپ مستقیم', brandSub: 'ADMH Direct WhatsApp',
+    eyebrow: 'راهنمای برنامه · چهار زبان',
+    heroA: 'گفت‌وگوی واتساپ،', heroB: 'بدون ذخیره شماره',
+    lead: 'شماره، نام کاربری یا لینک — در چند ثانیه گفتگو را باز کنید و مقصدها، پیام‌ها و ابزارها را روی دستگاه خود نگه دارید.',
+    webBtn: 'استفاده از نسخه وب', apkBtn: 'دانلود اپلیکیشن Android',
+    version: 'نسخه 2.4.3', languages: 'عربی · انگلیسی · کردی · فارسی', platform: 'PWA + Android APK',
+    quickTitle: 'یک نگاه', quickSub: 'همه‌چیز در یک صفحه',
+    quick1Title: 'باز کردن گفتگو', quick1: 'شماره محلی یا بین‌المللی، @نام کاربری یا لینک واتساپ با قالب‌بندی خودکار.',
+    quick2Title: 'سازماندهی مخاطبان', quick2: 'مقصدها، قالب‌ها و تاریخچه در فضاهای کاری جداگانه.',
+    quick3Title: 'ساخت و اشتراک', quick3: 'کد QR، کارت مخاطب، برچسب و پیوست‌های جلسه.',
+    shotsTitle: 'برنامه را ببینید', shotsSub: 'تصاویر رابط کاربری',
+    dailyTitle: 'طراحی برای استفاده روزانه', dailySub: 'سادگی بدون چشم‌پوشی',
+    daily1Title: 'بنویس و باز کن', daily1: 'قالب‌بندی شماره، پیام اختیاری، قالب و پیش‌نمایش قبل از واتساپ.',
+    daily2Title: 'ذخیره و سازماندهی', daily2: 'نام، برچسب، یادداشت، علاقه‌مندی، قالب متغیر و فضای کاری.',
+    daily3Title: 'ابزارهای کاربردی', daily3: 'QR، کارت، vCard، برچسب، یادآوری تکرارشونده و پشتیبان محلی.',
+    whereTitle: 'وب یا Android؟', whereSub: 'همان داده، دو محیط',
+    webTitle: 'نسخه وب (PWA)',
+    androidTitle: 'اپلیکیشن Android (APK)',
+    web: ['از مرورگر باز و از منو نصب کنید.', 'پس از بارگذاری اول به‌صورت محلی کار می‌کند.', 'یادآوری‌ها هنگام باز کردن برنامه نمایش داده می‌شوند.', 'داده‌ها در IndexedDB مرورگر هستند.'],
+    android: ['APK را مستقیم از GitHub Releases نصب کنید.', 'اعلان‌های زمان‌بندی‌شده حتی با بسته بودن برنامه.', 'دریافت متن و تصویر از پنجره اشتراک‌گذاری و میانبرهای آیکون.', 'باز کردن Compose از اعلان و اشتراک‌گذاری سیستمی.', 'داده جدا از PWA، با پشتیبان و انتقال.'],
+    privacyTitle: 'حریم خصوصی و داده‌ها', privacySub: 'کاملاً محلی',
+    privacy: ['بدون حساب، بدون سرور و بدون تحلیل‌گر.', 'پیام‌ها خودکار ارسال نمی‌شوند؛ خودتان بررسی و ارسال می‌کنید.', 'دوربین و موقعیت فقط با اجازه صریح.', 'بررسی به‌روزرسانی Android فقط دستی است.', 'تصاویر و شماره‌ها به سرویس QR خارجی نمی‌روند.'],
+    ctaTitle: 'آماده شروع هستید؟', ctaText: 'نسخه وب را باز کنید یا Android را نصب کنید — همه‌چیز روی دستگاه شما می‌ماند.',
+    copyright: '© 2026 ADMH — کلیه حقوق محفوظ است'
+  },
+  ckb: {
+    title: 'واتساپی ڕاستەوخۆ — ڕێنمایی ئەپ',
+    brand: 'واتساپی ڕاستەوخۆ', brandSub: 'ADMH Direct WhatsApp',
+    eyebrow: 'ڕێنمایی ئەپ · چوار زمان',
+    heroA: 'گفتوگۆی واتساپ،', heroB: 'بەبێ پاشەکەوتکردنی ژمارە',
+    lead: 'ژمارە، ناوی بەکارهێنەر یان لینک — لە چەند چرکەدا گفتوگۆ بکەرەوە و ئامانج و نامە و ئامرازەکانت لەسەر ئامێرەکەت بهێڵەوە.',
+    webBtn: 'بەکارهێنانی وێب', apkBtn: 'داگرتنی ئەپی Android',
+    version: 'وەشانی 2.4.3', languages: 'عەرەبی · ئینگلیزی · کوردی · فارسی', platform: 'PWA + Android APK',
+    quickTitle: 'نگاهێکی خێرا', quickSub: 'هەموو شتێک لە یەک شاشە',
+    quick1Title: 'کردنەوەی گفتوگۆ', quick1: 'ژمارەی ناوخۆیی یان نێودەوڵەتی، @ناوی بەکارهێنەر، یان لینکی واتساپ بە شێوازی خۆکار.',
+    quick2Title: 'ڕێکخستنی پەیوەندی', quick2: 'ئامانج و قاڵب و مێژوو لە شوێنی کاری جیاواز.',
+    quick3Title: 'دروستکردن و هاوبەشکردن', quick3: 'کۆدی QR، کارتی پەیوەندی، لەیبڵ و هاوپێچی دانیشتن.',
+    shotsTitle: 'ئەپەکە ببینە', shotsSub: 'وێنەی ڕووکار',
+    dailyTitle: 'بۆ بەکارهێنانی ڕۆژانە', dailySub: 'سادەیی بەبێ سازش',
+    daily1Title: 'بنووسە و بکەرەوە', daily1: 'ڕێکخستنی ژمارە، نامەی ئارەزوومەندانە، قاڵب و پێشبینین پێش واتساپ.',
+    daily2Title: 'پاشەکەوت و ڕێکخستن', daily2: 'ناو، تاگ، تێبینی، دڵخواز، قاڵبی گۆڕاو و شوێنی کار.',
+    daily3Title: 'ئامرازی بەکارهاتوو', daily3: 'QR، کارت، vCard، لەیبڵ، بیرخستنەوەی دووبارە و پاڵپشتی ناوخۆیی.',
+    whereTitle: 'وێب یان Android؟', whereSub: 'هەمان داتا، دوو ژینگە',
+    webTitle: 'وێب (PWA)',
+    androidTitle: 'ئەپی Android (APK)',
+    web: ['لە وێبگەڕ بیکەرەوە و لە لیستەکەی دایمەزرێنە.', 'دوای یەکەم بارکردن بە شێوەی ناوخۆیی کار دەکات.', 'بیرخستنەوەکان کاتی کردنەوەی ئەپ دەردەکەون.', 'داتا لە IndexedDB ی وێبگەڕدایە.'],
+    android: ['APK ڕاستەوخۆ لە GitHub Releases دابمەزرێنە.', 'ئاگادارکردنەوەی کاتژمێری تەنانەت ئەپ داخرابێت.', 'وەرگرتنی دەق و وێنە لە پەنجەرەی هاوبەشکردن و کورتەڕێکانی ئایکۆن.', 'کردنەوەی Compose لە ئاگادارکردنەوە و هاوبەشکردنی سیستەم.', 'داتا جیاوازە لە PWA، لەگەڵ پاڵپشتی و گواستنەوە.'],
+    privacyTitle: 'تایبەتێتی و داتا', privacySub: 'بە تەواوی ناوخۆیی',
+    privacy: ['بێ هەژمار، بێ سێرڤەر و بێ شیکاری.', 'نامەکان خۆکار نانێردرێن؛ خۆت پێداچوونەوە دەکەیت و دەینێریت.', 'کامێرا و شوێن تەنها بە مۆڵەتی ڕوون.', 'پشکنینی نوێکردنەوەی Android تەنها دەستییە.', 'وێنە و ژمارەکان بۆ خزمەتگوزاری QR ی دەرەکی ناڕۆن.'],
+    ctaTitle: 'ئامادەیت بۆ دەستپێکردن؟', ctaText: 'وێب بکەرەوە یان Android دابمەزرێنە — هەموو شتێک لەسەر ئامێرەکەت دەمێنێتەوە.',
+    copyright: '© 2026 ADMH — هەموو مافەکان پارێزراون'
+  }
+};
+
+const params = new URLSearchParams(location.search);
+const initial = LANGS.includes(params.get('lang')) ? params.get('lang') : 'ar';
+const listKeys = { web: 'web', android: 'android', privacy: 'privacy' };
+
+function render(lang) {
+  const c = CONTENT[lang];
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === 'en' ? 'ltr' : 'rtl';
+  html.dataset.lang = lang;
+  document.title = c.title;
+  document.querySelectorAll('[data-i18n]').forEach((node) => {
+    const key = node.getAttribute('data-i18n');
+    node.textContent = c[key] || '';
+  });
+  document.querySelectorAll('[data-list]').forEach((node) => {
+    const key = node.getAttribute('data-list');
+    node.innerHTML = (c[key] || []).map((item) => `<li>${item}</li>`).join('');
+  });
+  document.querySelectorAll('[data-set-lang]').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.getAttribute('data-set-lang') === lang));
+  });
+}
+render(initial);
+document.querySelectorAll('[data-set-lang]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const lang = button.getAttribute('data-set-lang');
+    const url = new URL(location.href);
+    url.searchParams.set('lang', lang);
+    history.replaceState(null, '', url);
+    render(lang);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,216 +1,192 @@
 <div align="center">
 
-<img src="public/icons/icon-192.png" width="88" alt="لوگوی واتساپ مستقیم" />
+<img src="public/icons/icon-192.png" width="96" alt="لوگوی واتساپ مستقیم" />
 
-<h1>واتساپ مستقیم <sub>ADMH Direct WhatsApp</sub></h1>
+# واتساپ مستقیم
+### گفت‌وگوی واتساپ، بدون ذخیره شماره
 
-<p>
-گفت‌وگوی واتساپ را مستقیماً <strong>بدون ذخیره شماره</strong> باز کنید — مقصدها و قالب‌ها و کدهای QR و کارت‌ها و برچسب‌ها،<br />
-همه چیز به‌صورت محلی روی دستگاه شما: بدون سرور، بدون حساب، و بدون ارسال خودکار.
-</p>
+شماره یا نام کاربری یا پیوند — گفت‌وگو را در چند ثانیه باز کنید، و مقصدها، پیام‌ها و ابزارهایتان را روی دستگاه خود نگه دارید.
 
-<p>
-<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.2"><img src="docs/badges/version-2.4.2.svg" height="30" alt="نسخه 2.4.2" /></a>
-&nbsp;
-<img src="docs/badges/app-langs.svg" height="30" alt="چهار زبان: عربی، انگلیسی، کردی، فارسی" />
-&nbsp;
-<img src="docs/badges/platform.svg" height="30" alt="PWA و Android APK" />
-</p>
+[**نسخه وب را استفاده کنید**](https://ahmdze.github.io/ADMH-DirectWhatsApp/)　·　[**برنامه اندروید را دانلود کنید**](https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest)　·　[پروژه را کاوش کنید](#برای-توسعه-دهندگان)
 
-<p>
-<a href="https://github.com/ahmdze"><strong>ADMH - Ahmed Zeyad</strong></a><br />
-<sub>
-توسعه‌یافته با<br />
-<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
-<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
-<img src="docs/logos/deepseek-harness.svg" height="30" alt="DeepSeek HARNESS" /><br />
-بازبینی فنی و مهندسی توسط<br />
-<strong>Qwen 3.8-Max</strong><br />
-<img src="docs/logos/qwen.svg" height="30" alt="Qwen" />
-</sub>
-</p>
+<br />
 
-<p><strong>این فایل به چهار زبان موجود است:</strong></p>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.3"><img src="docs/badges/version-2.4.3.svg" height="28" alt="نسخه 2.4.3" /></a>
+&nbsp; <img src="docs/badges/platform.svg" height="28" alt="PWA و Android APK" />
+&nbsp; <img src="docs/badges/app-langs.svg" height="28" alt="چهار زبان" />
 
-<table>
-  <tr>
-    <td align="center"><a href="readme.md"><img src="docs/badges/lang-ar.svg" height="58" alt="العربية" /></a></td>
-    <td align="center"><a href="readme.en.md"><img src="docs/badges/lang-en.svg" height="58" alt="English" /></a></td>
-    <td align="center"><a href="readme.ckb.md"><img src="docs/badges/lang-ckb.svg" height="58" alt="کوردی" /></a></td>
-    <td align="center"><a href="readme.fa.md"><img src="docs/badges/lang-fa.svg" height="58" alt="فارسی" /></a></td>
-  </tr>
-</table>
+<p>زبان: <a href="https://ahmdze.github.io/ADMH-DirectWhatsApp/guide/?lang=ar">العربية</a> · <a href="https://ahmdze.github.io/ADMH-DirectWhatsApp/guide/?lang=en">English</a> · <a href="https://ahmdze.github.io/ADMH-DirectWhatsApp/guide/?lang=ckb">کوردی</a> · <strong>فارسی</strong></p>
 
 </div>
 
 ---
 
-## فهرست مطالب
+> **حریم خصوصی شما اولویت دارد:** هیچ حساب و هیچ سروری برای برنامه وجود ندارد. داده‌های شما به‌صورت محلی ذخیره می‌شود، و برنامه پیام‌ها را به‌صورت خودکار ارسال نمی‌کند؛ خودتان گفت‌وگو را بررسی و ارسال می‌کنید.
 
-| شروع | کاوش | فنی | بیشتر |
-|---|---|---|---|
-| [درباره برنامه](#درباره-برنامه) | [امکانات](#امکانات) | [فناوری](#فناوری) | [حریم خصوصی](#حریم-خصوصی) |
-| [شروع کنید](#شروع-کنید) | [تصاویر برنامه](#تصاویر-برنامه) | [اجرای محلی](#اجرای-محلی) | [تاریخچه تغییرات](#تاریخچه-تغییرات) |
-| [برنامه اندروید](#ساخت-برنامه-اندروید-apk) | [زبانها و فونتها](#زبانها-و-فونتها) | [ساخت APK](#ساخت-برنامه-اندروید-apk) | [مستندات](#مستندات) |
+## یک نگاه سریع
 
----
+**💬 گفت‌وگویی باز کنید**　شماره محلی یا بین‌المللی، `@نام کاربری`، یا پیوند واتساپ.  
+**📇 مخاطبین خود را سازماندهی کنید**　مقصدها، قالب‌ها و تاریخچه گفت‌وگوها در فضاهای کاری جداگانه.  
+**🔳 بسازید و به اشتراک بگذارید**　کدهای QR، کارت‌های مخاطب، برچسب‌ها، و پیوست‌های جلسه.
 
-## درباره برنامه
+## برنامه را ببینید
 
-**واتساپ مستقیم** یک اپلیکیشن وب پیشرو (PWA) عربی (RTL) با طراحی موبایل‌محور است، به‌همراه نسخه بومی اندروید ساخته‌شده با Capacitor:
+<p align="center">
+<a href="docs/screenshots/compose-dark.png"><img src="docs/screenshots/compose-dark.png" width="190" alt="صفحه ارسال در حالت تیره" /></a>
+<a href="docs/screenshots/targets-dark.png"><img src="docs/screenshots/targets-dark.png" width="190" alt="فهرست مقصدها" /></a>
+<a href="docs/screenshots/qr-dark.png"><img src="docs/screenshots/qr-dark.png" width="190" alt="ابزار کد QR" /></a>
+</p>
 
-- گفت‌وگوی واتساپ را فوراً با شماره محلی/بین‌المللی، یا `@نام کاربری`، یا پیوند `wa.me` باز می‌کند.
-- مقصدها، قالب‌ها و تاریخچه گفت‌وگوها را در فضاهای کاری جداگانه ذخیره می‌کند.
-- QR تولید می‌کند و از دوربین یا تصویر می‌خواند، و کارت‌های اشتراک‌گذاری و برچسب‌های چاپی می‌سازد.
-- پس از اولین بارگذاری کاملاً بدون اتصال کار می‌کند، و داده‌هایش در IndexedDB روی دستگاه شماست.
+<p align="center"><sub>ارسال　·　مقصدها　·　ابزارهای QR</sub></p>
 
-> [!IMPORTANT]
-> آخرین نسخه **2.4.2** است. برنامه اندروید مستقیماً با فایل APK امضاشده نصب می‌شود، نه از طریق فروشگاه.
-> هر کسی نسخه قدیمی v1 را نصب کرده باشد باید آن را حذف کند و یک بار v2 را نصب کند؛ داده‌های v1 به‌طور خودکار منتقل می‌شوند.
+<details>
+<summary>تصاویر بیشتر ببینید — حالت روشن، زبان‌ها، یادآورها، و انتقال داده</summary>
 
-> [!NOTE]
-> هیچ ارسال خودکار پیام یا باز کردن گفت‌وگو در پس‌زمینه وجود ندارد. این برنامه ابزار میانبر و باز کردن مستقیم است، و فرستنده شما هستید.
+<p align="center">
+<a href="docs/screenshots/compose-light.png"><img src="docs/screenshots/compose-light.png" width="170" alt="صفحه ارسال در حالت روشن" /></a>
+<a href="docs/screenshots/settings-dark.png"><img src="docs/screenshots/settings-dark.png" width="170" alt="تنظیمات" /></a>
+<a href="docs/screenshots/reminders-v24-ar.png"><img src="docs/screenshots/reminders-v24-ar.png" width="170" alt="یادآورها به عربی" /></a>
+</p>
+<p align="center"><sub>حالت روشن　·　تنظیمات　·　یادآورها</sub></p>
 
----
-
-## شروع کنید
-
-| 🌐 نسخه وب (PWA) | 🤖 نسخه اندروید (APK) |
-|---|---|
-| [باز کردن برنامه در مرورگر](https://ahmdze.github.io/ADMH-DirectWhatsApp/) | [دانلود آخرین APK](https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest) |
-| روی اندروید و iOS و دسکتاپ کار می‌کند، و از منوی مرورگر نصب می‌شود. | فایلی امضاشده برای توزیع مستقیم، در کنار PWA کار می‌کند و به‌روزرسانی‌هایش داخلی است. |
-
----
-
-## امکانات
-
-> شماره نسخه‌ای که هر ویژگی در آن افزوده شده، به‌صورت یک بج رنگی در پایان هر خط نمایش داده می‌شود.
-
-### پایه و ارسال
-
-- ورود شماره محلی/بین‌المللی، یا `@نام کاربری`، یا پیوند واتساپ، با قالب‌بندی خودکار و تشخیص کشور. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- تکمیل خودکار مقصدهای ذخیره‌شده هنگام تایپ. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- انتخابگر کشور عربی (بیش از 60 کشور) با جستجو، و کشور پیش‌فرض قابل ذخیره. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- پیام اختیاری با شمارنده نویسه (2000 نویسه)، و قالب‌های سریع. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- باز کردن گفت‌وگو، کپی پیوند، و اشتراک‌گذاری از طریق Web Share API. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- تاریخچه هوشمند آخرین گفت‌وگوها، و مقصدهای ذخیره‌شده با نام، برچسب، یادداشت و علاقه‌مندی‌ها. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- قالب‌های پیام قابل ساخت و ویرایش، با متغیرهای `{الاسم}` `{الجهة}` `{التاريخ}`. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- تولید QR (PNG/SVG) و خواندن QR با دوربین یا از تصویر (با جایگزین jsQR). <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- کارت اشتراک‌گذاری PNG با کیفیت بالا، و کارت مخاطب vCard. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- ظاهر تیره/روشن/خودکار + انتخاب رنگ تأکیدی. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- تور معرفی در اولین اجرا و صفحه «چه چیز جدید است» پس از هر به‌روزرسانی. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- چهار زبان: عربی (پیش‌فرض)، English، کوردی، فارسی — با بارگذاری فرهنگ لغت کردی/فارسی فقط در صورت نیاز. <img src="docs/badges/v2.2.0.svg" alt="v2.2.0" height="19" />
-- فونت خودکار مناسب هر زبان: Cairo برای عربی، Vazirmatn برای فارسی، Noto Naskh برای کردی، با امکان تنظیم دستی فونت. <img src="docs/badges/v2.2.0.svg" alt="v2.2.0" height="19" />
-- چسباندن هوشمند از کلیپ‌بورد بومی در اندروید، و استخراج شماره از متن چسبانده‌شده. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
-- دکمه «اشتراک‌گذاری برنامه» با دو گزینه: اشتراک‌گذاری اپلیکیشن PWA یا لینک دانلود APK. <img src="docs/badges/v2.3.4.svg" alt="v2.3.4" height="19" />
-- **پیوست‌های جلسه محلی**: تصاویر و فایل‌ها و vCard از طریق پنجره اشتراک‌گذاری سیستم به اشتراک گذاشته می‌شوند و در برنامه ذخیره نمی‌شوند، با فشرده‌سازی تصویر WebP و گزینه دانلود جایگزین. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-- **پیش‌نمایش پیش از ارسال** با حال‌وهوای واتساپ، و کارت اشتراک‌گذاری، و برچسب QR — همه به‌صورت محلی و بدون واکشی پیوندها. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-- **زمان‌بندی سریع** (Quick Schedule) برای یادآور از Compose با مقصد و پیام فعلی. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-
-### تجربه موبایل (PWA)
-
-- نوار پیمایش پایین، برگه‌های پایین، انیمیشن‌های سبک، لرزش، و حالت‌های خالی/بارگذاری/خطای طراحی‌شده. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- نصب PWA، کار کامل بدون اتصال، و به‌روزرسانی با تأیید کاربر. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- Share Target برای دریافت متن/پیوند از برنامه دیگر. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- دریافت **تصویر QR اشتراک‌گذاری‌شده** از برنامه دیگر و اسکن خودکار آن (اندروید). <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- میانبرهای آیکون برنامه: «ارسال سریع» و «اسکن QR». <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- قفل اختیاری با PIN یا اثر انگشت (WebAuthn). <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- اثر انگشت به عنوان روش اصلی باز کردن و PIN به عنوان جایگزین. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- اعلان‌های محلی برای یادآورهای پیگیری هنگام باز شدن برنامه. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- بنر نصب هوشمندتر (فقط روی موبایل نمایش داده می‌شود، با تأخیر، و پس از نصب پنهان می‌شود). <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- صفحه‌های پیش‌نمایش در manifest و `handle_links`/`launch_handler` برای باز کردن پیوندها داخل برنامه نصب‌شده. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- صفحه خطای شیک با گزینه تعمیر نسخه برنامه. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- درخواست ذخیره‌سازی دائمی و هشدار هنگام نزدیک شدن به کمبود فضا. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
-- پشتیبان‌گیری/بازیابی JSON، و خروجی CSV. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- انتقال داده بین دو دستگاه از طریق فایل یا QR، بررسی و تعمیر داده‌ها، و عیب‌یابی دستگاه. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
-- دکمه **«بررسی به‌روزرسانی»** فقط به‌صورت دستی در تنظیمات: هیچ بررسی خودکار در پس‌زمینه وجود ندارد، برای حفظ حریم خصوصی و کاهش درخواست‌ها. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-- **دکمه یادآورها** در نوار پیمایش پایین برای دسترسی با یک لمس. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-
-### ابزارها و داده ها
-
-- برچسب‌های QR برای چاپ روی A4 (شبکه 2×4 یا 3×8) — مناسب مغازه‌ها و رستوران‌ها. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- آمار محلی (7 روز اخیر، پرکاربردترین‌ها). <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- فضاهای کاری (شخصی/کاری) با تفکیک کامل داده‌ها. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- کمپین‌های فهرست شماره‌ها: باز کردن گفت‌وگوها به ترتیب با پیگیری دستی «ارسال شد/رد شد» — **بدون ارسال خودکار**. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- یادآورهای پیگیری که هنگام باز شدن برنامه نمایش داده می‌شوند. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- **یادآورهای تکرارشونده** (روزانه/هفتگی/ماهانه) با اعلان‌های محلی و زمان‌بندی در اندروید، و باز شدن Compose از اعلان. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-- **نسخه پشتیبان خودکار پیش از ارتقا**، قابل دانلود از تنظیمات. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-- وارد کردن مخاطبین از CSV/vCard یا Contact Picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
-- **انتقال داده** بین دو دستگاه از طریق فایل یا کد QR، بدون سرور. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
-- **بررسی و تعمیر داده‌های محلی** (تکرارها، شماره‌های معیوب، رکوردهای یتیم) با پیش‌نمایش پیش از تعمیر. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
-- **پاک‌سازی خودکار تاریخچه و سطل زباله**: تاریخچه گفت‌وگوهای قدیمی به‌صورت خودکار پاک می‌شود، و سطل زباله امکان بازیابی موارد حذف‌شده تا 30 روز را فراهم می‌کند. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
-- **عیب‌یابی دستگاه** (قابلیت‌های مرورگر/دوربین/اعلان‌ها/ذخیره‌سازی) و خروجی گزارش، همراه با [ماتریس تست دستگاه‌ها](docs/DEVICE-TEST-MATRIX.md). <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
-- **ارسال به توسعه‌دهنده** از عیب‌یابی: واتساپ را با گزارش کامل باز می‌کند. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
-- **برنامه بومی اندروید (APK)** که در کنار PWA کار می‌کند، با اعلان‌های زمان‌بندی‌شده در پس‌زمینه و نشان/آیکون بومی. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
-- **قفل اثر انگشت بومی** در اندروید، با PIN به‌عنوان جایگزین همیشگی. <img src="docs/badges/v2.3.2.svg" alt="v2.3.2" height="19" />
-- **بررسی‌کننده به‌روزرسانی APK** داخل برنامه، با دانلود داخلی و نوار پیشرفت و سپس دکمه نصب. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
-
----
-
-## زبانها و فونتها
-
-| زبان | جهت | فونت پیشنهادی |
-|---|---|---|
-| عربی | RTL | Cairo |
-| English | LTR | Cairo |
-| کوردی (سورانی) | RTL | Noto Naskh Arabic |
-| فارسی | RTL | Vazirmatn |
-
-فونت پیش‌فرض **«خودکار بر اساس زبان»** است و می‌توان آن را به‌صورت دستی از: **تنظیمات → فونت** تغییر داد. این فونت‌ها طراحی شده‌اند تا حروف کردی و فارسی (ڕ، ڵ، ێ، ۆ، پ، چ، ژ، گ) را به‌درستی نمایش دهند، به جای یک فونت عربی واحد که آن‌ها را پوشش نمی‌دهد.
-
----
-
-## تصاویر برنامه
-
-| ارسال — تیره | مقصدها |
-|---|---|
-| ![صفحه ارسال](docs/screenshots/compose-dark.png) | ![مقصدها](docs/screenshots/targets-dark.png) |
-
-| تولید QR | تنظیمات |
-|---|---|
-| ![تولید QR](docs/screenshots/qr-dark.png) | ![تنظیمات](docs/screenshots/settings-dark.png) |
-
-| ابزارها | ارسال — روشن |
-|---|---|
-| ![ابزارها](docs/screenshots/tools-dark.png) | ![حالت روشن](docs/screenshots/compose-light.png) |
-
-| تور معرفی | چه چیز جدید است |
-|---|---|
-| ![تور معرفی](docs/screenshots/onboarding-dark.png) | ![چه چیز جدید است](docs/screenshots/whatsnew-dark.png) |
-
-| ارسال به کردی | درباره برنامه |
-|---|---|
-| ![رابط کردی](docs/screenshots/compose-kurdish.png) | ![درباره برنامه](docs/screenshots/about-2.1.png) |
-
-| ارسال به فارسی | فونت — فارسی |
-|---|---|
-| ![رابط فارسی](docs/screenshots/compose-persian.png) | ![تنظیمات فونت](docs/screenshots/settings-font-persian.png) |
-
-| انتقال داده | بررسی داده |
-|---|---|
-| ![انتقال داده](docs/screenshots/transfer-v23.png) | ![بررسی داده](docs/screenshots/health-v23.png) |
+<p align="center">
+<a href="docs/screenshots/compose-kurdish.png"><img src="docs/screenshots/compose-kurdish.png" width="170" alt="رابط کردی" /></a>
+<a href="docs/screenshots/compose-persian.png"><img src="docs/screenshots/compose-persian.png" width="170" alt="رابط فارسی" /></a>
+<a href="docs/screenshots/transfer-v23.png"><img src="docs/screenshots/transfer-v23.png" width="170" alt="انتقال داده" /></a>
+</p>
+<p align="center"><sub>کردی　·　فارسی　·　انتقال داده</sub></p>
 
 > تصاویر از نسخه توسعه با داده‌های آزمایشی (`?demo=1`) تولید شده‌اند.
 
+</details>
+
+## برای استفاده روزمره طراحی شده
+
+### بنویسید و باز کنید
+
+- قالب‌بندی خودکار شماره‌ها با انتخاب و تشخیص کشور.
+- یک پیام اختیاری بنویسید، از یک قالب استفاده کنید، سپس پیش‌نمایش را پیش از باز کردن واتساپ بررسی کنید.
+- گفت‌وگو را باز کنید یا پیوندش را کپی کنید یا از دستگاه خود به اشتراک بگذارید.
+
+### ذخیره و سازماندهی کنید
+
+- مقصدها را با نام، برچسب، یادداشت و علاقه‌مندی‌ها نگه دارید.
+- قالب‌هایی با پیام‌های قابل‌تخصیص و متغیرهایی مانند `{الاسم}` و `{التاريخ}` بسازید.
+- داده‌های کاری را از استفاده شخصی از طریق فضاهای کاری جدا کنید.
+
+### ابزارهای کاربردی
+
+- کدهای QR بسازید و با دوربین یا از تصویر بخوانید.
+- کارت اشتراک‌گذاری یا vCard و برچسب‌های QR برای چاپ روی A4 طراحی کنید.
+- یادآورهای پیگیری بسازید، و داده‌هایتان را منتقل کنید یا نسخه پشتیبان بگیرید.
+
+### به زبان و دستگاه شما کار می‌کند
+
+عربی، English، کوردی (سورانی)، فارسی — با جهت و فونت مناسب هر زبان. آن را به‌عنوان برنامه وب پیشرو (PWA) استفاده کنید، یا APK را روی اندروید نصب کنید.
+
+## وب یا اندروید؟
+
+### 🌐 نسخه وب (PWA)
+
+- [برنامه را باز کنید](https://ahmdze.github.io/ADMH-DirectWhatsApp/) و اگر خواستید از منوی مرورگر نصبش کنید.
+- پس از اولین بارگذاری، رابط و داده‌های محلی بدون اتصال در دسترس هستند.
+- یادآورها هنگام باز شدن برنامه نمایش داده می‌شوند، بسته به پشتیبانی مرورگر.
+- داده‌ها در IndexedDB در پروفایل مرورگر ذخیره می‌شوند.
+- برنامه پیش از اعمال به‌روزرسانی PWA موافقت شما را می‌خواهد.
+
+### 🤖 برنامه اندروید (APK)
+
+- [آخرین نسخه را دانلود کنید](https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest) و مستقیماً نصبش کنید.
+- رابط و داده‌های برنامه محلی هستند؛ برای تکمیل گفت‌وگو در واتساپ به اینترنت نیاز است.
+- از اعلان‌های محلی زمان‌بندی‌شده پشتیبانی می‌کند، حتی وقتی برنامه بسته است.
+- داده‌هایش از PWA جدا هستند؛ برای انتقال آن‌ها از پشتیبان یا ابزار انتقال استفاده کنید.
+- به‌روزرسانی را دستی بررسی کنید؛ دانلود یا نصب فقط با موافقت شما شروع می‌شود.
+
+## حریم خصوصی و داده‌ها
+
+- هیچ حساب، هیچ سرور برنامه و هیچ ابزار تحلیلی داخلی وجود ندارد؛ داده‌های شما روی دستگاهتان می‌ماند.
+- پیام‌ها به‌صورت خودکار ارسال نمی‌شوند. برنامه یک مقصد واتساپ را باز می‌کند تا خودتان ارسال را کامل کنید.
+- دوربین فقط با اجازه صریح کار می‌کند، و هنگام خروج از صفحه اسکن متوقف می‌شود.
+- هنگام بررسی به‌روزرسانی اندروید، برنامه با GitHub Releases ارتباط برقرار می‌کند. APK را فقط پس از موافقت شما دانلود می‌کند.
+- تصاویر یا شماره‌ها به سرویس QR خارجی ارسال نمی‌شوند.
+- ذخیره‌سازی PWA و ذخیره‌سازی اندروید جدا هستند. برای جابه‌جایی بین آن‌ها از پشتیبان یا انتقال داده استفاده کنید.
+
+<details>
+<summary>همه ویژگی‌ها با جزئیات</summary>
+
+### پایه و ارسال
+
+> نشان نسخه در ابتدای هر ویژگی نمایش داده می‌شود تا مرور بصری آسان شود و زمان افزوده شدن مشخص باشد.
+
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;ورود شماره محلی/بین‌المللی، یا `@نام کاربری`، یا پیوند واتساپ، با قالب‌بندی خودکار و تشخیص کشور.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;تکمیل خودکار مقصدهای ذخیره‌شده هنگام تایپ.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;انتخابگر کشور عربی (بیش از 60 کشور) با جستجو، و کشور پیش‌فرض قابل ذخیره.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;پیام اختیاری با شمارنده نویسه (2000 نویسه)، و قالب‌های سریع.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;باز کردن گفت‌وگو، کپی پیوند، و اشتراک‌گذاری از طریق Web Share API.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;تاریخچه هوشمند آخرین گفت‌وگوها، و مقصدهای ذخیره‌شده با نام، برچسب، یادداشت و علاقه‌مندی‌ها.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;قالب‌های پیام قابل ساخت و ویرایش، با متغیرهای `{الاسم}` `{الجهة}` `{التاريخ}`.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;تولید QR (PNG/SVG) و خواندن QR با دوربین یا از تصویر (با جایگزین jsQR).
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;کارت اشتراک‌گذاری PNG با کیفیت بالا، و کارت مخاطب vCard.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;ظاهر تیره/روشن/خودکار + انتخاب رنگ تأکیدی.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;تور معرفی در اولین اجرا و صفحه «چه چیز جدید است» پس از هر به‌روزرسانی.
+- <img src="docs/badges/v2.2.0.svg" alt="نسخه v2.2.0" height="18" align="absmiddle" />&nbsp;چهار زبان: عربی (پیش‌فرض)، English، کوردی، فارسی — با بارگذاری فرهنگ لغت کردی/فارسی فقط در صورت نیاز.
+- <img src="docs/badges/v2.2.0.svg" alt="نسخه v2.2.0" height="18" align="absmiddle" />&nbsp;فونت خودکار مناسب هر زبان: Cairo برای عربی، Vazirmatn برای فارسی، Noto Naskh برای کردی، با امکان تنظیم دستی فونت.
+- <img src="docs/badges/v2.3.3.svg" alt="نسخه v2.3.3" height="18" align="absmiddle" />&nbsp;چسباندن هوشمند از کلیپ‌بورد بومی در اندروید، و استخراج شماره از متن چسبانده‌شده.
+- <img src="docs/badges/v2.3.4.svg" alt="نسخه v2.3.4" height="18" align="absmiddle" />&nbsp;دکمه «اشتراک‌گذاری برنامه» با دو گزینه: اشتراک‌گذاری اپلیکیشن PWA یا لینک دانلود APK.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**پیوست‌های جلسه محلی**: تصاویر و فایل‌ها و vCard از طریق پنجره اشتراک‌گذاری سیستم به اشتراک گذاشته می‌شوند و در برنامه ذخیره نمی‌شوند، با فشرده‌سازی تصویر WebP و گزینه دانلود جایگزین.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**پیش‌نمایش پیش از ارسال** با حال‌وهوای واتساپ، و کارت اشتراک‌گذاری، و برچسب QR — همه به‌صورت محلی و بدون واکشی پیوندها.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**زمان‌بندی سریع** (Quick Schedule) برای یادآور از Compose با مقصد و پیام فعلی.
+
+### تجربه موبایل (PWA)
+
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;نوار پیمایش پایین، برگه‌های پایین، انیمیشن‌های سبک، لرزش، و حالت‌های خالی/بارگذاری/خطای طراحی‌شده.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;نصب PWA، کار کامل بدون اتصال، و به‌روزرسانی با تأیید کاربر.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;Share Target برای دریافت متن/پیوند از برنامه دیگر.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;دریافت **تصویر QR اشتراک‌گذاری‌شده** از برنامه دیگر و اسکن خودکار آن (اندروید).
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;میانبرهای آیکون برنامه: «ارسال سریع» و «اسکن QR».
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;قفل اختیاری با PIN یا اثر انگشت (WebAuthn).
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;اثر انگشت به عنوان روش اصلی باز کردن و PIN به عنوان جایگزین.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;اعلان‌های محلی برای یادآورهای پیگیری هنگام باز شدن برنامه.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;بنر نصب هوشمندتر (فقط روی موبایل نمایش داده می‌شود، با تأخیر، و پس از نصب پنهان می‌شود).
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;صفحه‌های پیش‌نمایش در manifest و `handle_links`/`launch_handler` برای باز کردن پیوندها داخل برنامه نصب‌شده.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;صفحه خطای شیک با گزینه تعمیر نسخه برنامه.
+- <img src="docs/badges/v2.1.0.svg" alt="نسخه v2.1.0" height="18" align="absmiddle" />&nbsp;درخواست ذخیره‌سازی دائمی و هشدار هنگام نزدیک شدن به کمبود فضا.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;پشتیبان‌گیری/بازیابی JSON، و خروجی CSV.
+- <img src="docs/badges/v2.3.0.svg" alt="نسخه v2.3.0" height="18" align="absmiddle" />&nbsp;انتقال داده بین دو دستگاه از طریق فایل یا QR، بررسی و تعمیر داده‌ها، و عیب‌یابی دستگاه.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;دکمه **«بررسی به‌روزرسانی»** فقط به‌صورت دستی در تنظیمات: هیچ بررسی خودکار در پس‌زمینه وجود ندارد، برای حفظ حریم خصوصی و کاهش درخواست‌ها.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**دکمه یادآورها** در نوار پیمایش پایین برای دسترسی با یک لمس.
+
+### ابزارها و داده ها
+
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;برچسب‌های QR برای چاپ روی A4 (شبکه 2×4 یا 3×8) — مناسب مغازه‌ها و رستوران‌ها.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;آمار محلی (7 روز اخیر، پرکاربردترین‌ها).
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;فضاهای کاری (شخصی/کاری) با تفکیک کامل داده‌ها.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;کمپین‌های فهرست شماره‌ها: باز کردن گفت‌وگوها به ترتیب با پیگیری دستی «ارسال شد/رد شد» — **بدون ارسال خودکار**.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;یادآورهای پیگیری که هنگام باز شدن برنامه نمایش داده می‌شوند.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**یادآورهای تکرارشونده** (روزانه/هفتگی/ماهانه) با اعلان‌های محلی و زمان‌بندی در اندروید، و باز شدن Compose از اعلان.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**نسخه پشتیبان خودکار پیش از ارتقا**، قابل دانلود از تنظیمات.
+- <img src="docs/badges/v2.0.0.svg" alt="نسخه v2.0.0" height="18" align="absmiddle" />&nbsp;وارد کردن مخاطبین از CSV/vCard یا Contact Picker.
+- <img src="docs/badges/v2.3.0.svg" alt="نسخه v2.3.0" height="18" align="absmiddle" />&nbsp;**انتقال داده** بین دو دستگاه از طریق فایل یا کد QR، بدون سرور.
+- <img src="docs/badges/v2.3.0.svg" alt="نسخه v2.3.0" height="18" align="absmiddle" />&nbsp;**بررسی و تعمیر داده‌های محلی** (تکرارها، شماره‌های معیوب، رکوردهای یتیم) با پیش‌نمایش پیش از تعمیر.
+- <img src="docs/badges/v2.4.0.svg" alt="نسخه v2.4.0" height="18" align="absmiddle" />&nbsp;**پاک‌سازی خودکار تاریخچه و سطل زباله**: تاریخچه گفت‌وگوهای قدیمی به‌صورت خودکار پاک می‌شود، و سطل زباله امکان بازیابی موارد حذف‌شده تا 30 روز را فراهم می‌کند.
+- <img src="docs/badges/v2.3.0.svg" alt="نسخه v2.3.0" height="18" align="absmiddle" />&nbsp;**عیب‌یابی دستگاه** (قابلیت‌های مرورگر/دوربین/اعلان‌ها/ذخیره‌سازی) و خروجی گزارش، همراه با [ماتریس تست دستگاه‌ها](docs/DEVICE-TEST-MATRIX.md).
+- <img src="docs/badges/v2.3.3.svg" alt="نسخه v2.3.3" height="18" align="absmiddle" />&nbsp;**ارسال به توسعه‌دهنده** از عیب‌یابی: واتساپ را با گزارش کامل باز می‌کند.
+- <img src="docs/badges/v2.3.0.svg" alt="نسخه v2.3.0" height="18" align="absmiddle" />&nbsp;**برنامه بومی اندروید (APK)** که در کنار PWA کار می‌کند، با اعلان‌های زمان‌بندی‌شده در پس‌زمینه و نشان/آیکون بومی.
+- <img src="docs/badges/v2.3.2.svg" alt="نسخه v2.3.2" height="18" align="absmiddle" />&nbsp;**قفل اثر انگشت بومی** در اندروید، با PIN به‌عنوان جایگزین همیشگی.
+- <img src="docs/badges/v2.3.3.svg" alt="نسخه v2.3.3" height="18" align="absmiddle" />&nbsp;**بررسی‌کننده به‌روزرسانی APK** داخل برنامه، با دانلود داخلی و نوار پیشرفت و سپس دکمه نصب.
+- <img src="docs/badges/v2.4.3.svg" alt="نسخه v2.4.3" height="18" align="absmiddle" />&nbsp;**Share Target بومی در APK** برای دریافت متن یا پیوند یا تصویر مستقیماً از پنجره اشتراک‌گذاری اندروید.
+- <img src="docs/badges/v2.4.3.svg" alt="نسخه v2.4.3" height="18" align="absmiddle" />&nbsp;**میانبرهای آیکون برنامه**: «ارسال سریع»، «اسکن QR»، و «یادآورها».
+- <img src="docs/badges/v2.4.3.svg" alt="نسخه v2.4.3" height="18" align="absmiddle" />&nbsp;**نام برنامه در صفحه Android** با زبان داخل برنامه تغییر می‌کند (آیکون ثابت می‌ماند).
+
 ---
 
-## فناوری
+</details>
 
-| لایه | انتخاب |
-|---|---|
-| رابط کاربری | React 19 + TypeScript + Vite 6 |
-| استایل‌دهی | Tailwind CSS 4 + سیستم طراحی Aurora Glass |
-| فونت‌ها | Cairo (عربی/انگلیسی)، Vazirmatn (فارسی)، Noto Naskh Arabic (کردی) — جاسازی‌شده به‌صورت محلی |
-| ذخیره‌سازی | IndexedDB از طریق Dexie |
-| QR | `qrcode` برای تولید + `jsqr` برای خواندن (با `BarcodeDetector` در صورت وجود) |
-| PWA | `vite-plugin-pwa` (injectManifest) + Workbox: precache، Share Target، اعلان‌ها |
-| Android | Capacitor 8 + افزونه‌های LocalNotifications/Camera/Clipboard/FileTransfer/FileOpener/Biometric/Share/Filesystem |
-| زبان‌ها | i18n سفارشی (ar/en/ckb/fa) + دو فرهنگ لغت کردی و فارسی که در صورت نیاز بارگذاری می‌شوند |
-| تست‌ها | Vitest |
+## برای توسعه دهندگان
 
----
+### نیازمندی‌ها و اجرا
 
-## اجرای محلی
+به Node.js 22+ و pnpm 9+ نیاز دارد.
 
 ```bash
 pnpm install
@@ -221,108 +197,67 @@ pnpm build      # تولید dist/
 pnpm preview    # پیش‌نمایش نسخه تولید
 ```
 
-> به Node 22+ و pnpm 9+ نیاز دارد.
-> در حالت توسعه می‌توانید با باز کردن `http://127.0.0.1:5173/?demo=1` داده‌های آزمایشی بارگذاری کنید (در نسخه تولید گنجانده نمی‌شود).
+برای بارگذاری داده‌های آزمایشی در حالت توسعه، `http://127.0.0.1:5173/?demo=1` را باز کنید.
 
----
+### فناوری
 
-## ساختار
-
-```
-src/
-├─ App.tsx                # ساختار، پیمایش، قفل، به‌روزرسانی/نصب
-├─ main.tsx
-├─ components/            # اجزای مشترک (ui, icons, nav, banners)
-├─ features/
-│  ├─ compose/            # صفحه ارسال
-│  ├─ targets/            # مقصدها و تاریخچه
-│  ├─ templates/          # قالب‌ها
-│  ├─ tools/              # QR، کارت‌ها، برچسب‌ها، پشتیبان‌گیری، عیب‌یابی…
-│  └─ settings/           # تنظیمات و قفل
-├─ lib/                   # phone, whatsapp, db, qr, scan, backup, i18n, update…
-├─ hooks/                 # کوئری‌های زنده Dexie
-└─ styles/                # سیستم طراحی
-tests/                    # Vitest
-docs/                     # مشخصات و پیش‌نمایش
-android/                  # پروژه Capacitor Android
-```
-
----
-
-## انتشار در GitHub Pages
-
-1. پروژه را روی GitHub بارگذاری کنید.
-2. در **Settings → Pages** گزینه **Source: GitHub Actions** را انتخاب کنید.
-3. هر push به `main` فایل `.github/workflows/deploy.yml` را اجرا می‌کند (بررسی انواع + تست‌ها + ساخت + انتشار).
-
-پروژه از `base: './'` و مسیرهای hash استفاده می‌کند، بنابراین بدون تنظیم اضافی زیر مسیر مخزن کار می‌کند.
-
----
-
-## ساخت برنامه اندروید (APK)
-
-- به‌صورت محلی (نیازمند JDK 21 + Android SDK): `pnpm android:sync` سپس پوشه `android/` را در Android Studio باز کنید، یا `cd android && ./gradlew assembleRelease` را با متغیرهای keystore اجرا کنید.
-- به‌صورت خودکار: هر push به `main` فایل `.github/workflows/android.yml` را اجرا می‌کند و `app-release.apk` امضاشده را می‌سازد و به‌عنوان Artifact بارگذاری می‌کند — **بدون فروشگاه یا حساب**.
-- APK فعلی **Release** و با کلید ثابت امضا شده (خارج از مخزن نگهداری می‌شود)؛ بنابراین به‌روزرسانی‌ها بدون حذف داده روی نسخه فعلی نصب می‌شوند.
-- داده‌های اندروید از PWA جدا هستند؛ از صفحه **انتقال داده** یا پشتیبان‌گیری استفاده کنید.
-
----
-
-## حریم خصوصی
-
-- بدون سرور، بدون حساب، بدون تحلیل، و هیچ داده‌ای از دستگاه خارج نمی‌شود. نسخه اندروید فقط برای بررسی و دانلود به‌روزرسانی با تأیید شما به GitHub Releases متصل می‌شود.
-- شماره‌ها، پیام‌ها، قالب‌ها و تصاویر تولیدشده روی دستگاه شما می‌مانند.
-- دوربین فقط پس از درخواست صریح کار می‌کند و هنگام خروج از صفحه متوقف می‌شود.
-- هیچ شماره یا تصویری به سرویس QR خارجی ارسال نمی‌شود.
-
----
-
-## آزمونها
-
-- آزمون‌های واحد برای نرمال‌سازی و تجزیه شماره‌ها، ساخت پیوند واتساپ، متغیرهای قالب، CSV و vCard، و مقایسه نسخه‌های به‌روزرسانی.
-- ماتریس آزمون دستی: Android Chrome، iOS Safari، Samsung Internet، دسکتاپ.
-- بررسی Lighthouse (Performance/Accessibility ≥ 95 و قابلیت نصب PWA) پس از انتشار.
-
----
-
-## تاریخچه تغییرات
-
-| نسخه | مهم‌ترین افزوده‌ها |
+| حوزه | ابزارها |
 |---|---|
-| **2.4.2** | دکمه موقعیت از طریق Capacitor Geolocation با درخواست مجوز اندروید، پیام‌های خطای دقیق، و جایگزین Google Maps کار می‌کند |
-| **2.4.1** | بازگرداندن دکمه ابزارها به نوار پایین با پنج آیتم، و دور زدن کش برای بررسی دستی به‌روزرسانی‌ها |
-| **2.4.0** | یادآورهای تکرارشونده و اعلان‌ها، پیوست‌های جلسه با پیش‌نمایش کامل، Quick Schedule، پاک‌سازی ایمن تاریخچه و سطل زباله، و README چهارزبانه |
-| **2.4.0-beta.3** | پاک‌سازی خودکار تاریخچه، و سطل زباله با بازیابی تا 30 روز |
-| **2.4.0-beta.2** | پیش‌نمایش واتساپ/کارت/برچسب، دکمه یادآورها، و بررسی به‌روزرسانی فقط به‌صورت دستی |
-| **2.4.0-beta.1** | پیوست‌های جلسه، پیش‌نمایش واتساپ، و Quick Schedule |
-| **2.4.0-alpha.1** | یادآورهای تکرارشونده و اعلان‌های محلی، و نسخه پشتیبان پیش از ارتقا |
-| **2.3.5** | دکمه «بررسی به‌روزرسانی» دستی در تنظیمات، در وب و اندروید |
-| **2.3.4** | دکمه «اشتراک‌گذاری برنامه»: گزینه اشتراک PWA و گزینه لینک دانلود APK |
-| **2.3.3** | چسباندن/کلیپ‌بورد بومی، وضعیت صحیح ذخیره‌سازی دائمی، ارسال گزارش به توسعه‌دهنده با واتساپ، و دانلود APK با نوار پیشرفت و دکمه نصب |
-| **2.3.2** | قفل اثر انگشت بومی اندروید با PIN جایگزین، و بررسی‌کننده به‌روزرسانی APK داخل برنامه |
-| **2.3.1** | اصلاحات اندروید: عیب‌یابی برنامه بومی، اشتراک‌گذاری بومی، و امضای ثابت APK |
-| **2.3.0** | انتقال داده از طریق فایل/QR، بررسی و تعمیر داده‌ها، عیب‌یابی و ماتریس تست دستگاه‌ها، برنامه Android APK (Capacitor) |
-| **2.2.0** | زبان فارسی، فونت برای هر زبان (Cairo/Vazirmatn/Noto Naskh)، README چندزبانه |
-| **2.1.0** | پیوند توسعه‌دهنده، تکمیل خودکار، تور معرفی و «چه چیز جدید است»، QR از تصویر اشتراکی، اعلان‌های یادآور، اثر انگشت اول، صفحه‌های PWA، محافظت از ذخیره‌سازی، کردی سورانی |
-| **2.0.0** | بازسازی کامل: React + PWA، Aurora Glass، Cairo، بدون سرور، Share Target، آفلاین، پشتیبان‌گیری، فضاهای کاری |
-| **1.0.0** | اولین نسخه پایدار (HTML/JS) |
+| رابط کاربری | React 19، TypeScript، Vite 6 |
+| طراحی | Tailwind CSS 4، سیستم Aurora Glass |
+| داده‌ها | IndexedDB از طریق Dexie |
+| PWA | vite-plugin-pwa، Workbox، Service Worker سفارشی |
+| Android | Capacitor 8 و افزونه‌های بومی آن |
+| QR | `qrcode` برای تولید، `jsqr` و `BarcodeDetector` برای خواندن |
+| آزمون‌ها | Vitest |
 
----
+### ساختار پروژه
 
-## مستندات
+```text
+src/
+├─ App.tsx                # ساختار، پیمایش، قفل، و به‌روزرسانی
+├─ components/            # اجزای رابط کاربری مشترک
+├─ features/              # compose, targets, templates, tools, settings
+├─ lib/                   # ذخیره‌سازی، QR، شماره‌ها، پشتیبان، به‌روزرسانی‌ها
+├─ hooks/                 # کوئری‌های Dexie
+└─ styles/                # سیستم طراحی
+android/                  # پروژه Capacitor Android
+tests/                    # آزمون‌های Vitest
+docs/                     # مستندات و تصاویر
+```
 
-- [مشخصات و برنامه ساخت](SPEC.md)
-- [قرارداد توسعه](docs/DEV-CONTRACT.md)
-- [ماتریس تست دستگاه‌ها](docs/DEVICE-TEST-MATRIX.md)
-- [پیش‌نمایش جهت بصری](docs/mockups/design-directions.png)
+### انتشار و ساخت APK
 
----
+- انتشار در GitHub Pages از طریق `.github/workflows/deploy.yml` هنگام push به `main` پس از بررسی انواع و آزمون‌ها و ساخت انجام می‌شود.
+- ساخت APK از طریق `.github/workflows/android.yml` هنگام push به `main` انجام می‌شود. امضای Release به اسرار Android keystore در تنظیمات مخزن نیاز دارد.
+- گردش کار APK امضاشده را به‌عنوان Artifact برای مدت **14 روز** بارگذاری می‌کند. دانلود Artifact با دانلود نسخه منتشرشده در صفحه Releases تفاوت دارد.
+- برای ساخت محلی امضاشده، از JDK 21 و Android SDK استفاده کنید و پیش از `./gradlew assembleRelease` متغیرهای `ANDROID_KEYSTORE_PATH`، `ANDROID_KEYSTORE_PASSWORD`، `ANDROID_KEY_ALIAS` و `ANDROID_KEY_PASSWORD` را تنظیم کنید.
+- کلید امضای ثابت برای نصب به‌روزرسانی APK روی نسخه فعلی با حفظ داده‌هایش ضروری است.
 
-## شخص ثالث
+### آزمون‌ها
 
-فونت‌های Cairo و Vazirmatn و Noto Naskh Arabic (OFL) — `qrcode` (MIT) — `jsQR` (Apache-2.0) — React/Vite/Dexie/Tailwind (MIT) — Capacitor و افزونه‌های آن (MIT) — `@capgo/capacitor-native-biometric` (MPL-2.0). جزئیات در [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+آزمون‌های واحد تجزیه شماره‌ها، پیوندهای واتساپ، متغیرهای قالب، CSV/vCard، پشتیبان‌گیری، انتقال، و زمان‌بندی یادآورها و به‌روزرسانی‌ها را پوشش می‌دهند. [ماتریس آزمون دستی](docs/DEVICE-TEST-MATRIX.md) نیز موجود است.
 
----
+## تاریخچه نسخه‌ها
+
+| نسخه | مهم‌ترین تغییرات |
+|---|---|
+| **2.4.3** | Share Target بومی، میانبرهای برنامه، نام برنامه بر اساس زبان، و صفحه راهنمای چندزبانه |
+| **2.4.2** | باز کردن موقعیت با Capacitor Geolocation و پیام‌های خطای دقیق‌تر |
+| **2.4.1** | بازگرداندن دکمه ابزارها به نوار پیمایش و بهبود بررسی به‌روزرسانی |
+| **2.4.0** | یادآورهای تکرارشونده، پیوست‌ها و پیش‌نمایش، پاک‌سازی تاریخچه و سطل زباله |
+| **2.3.0** | انتقال داده، بررسی داده، عیب‌یابی دستگاه، و انتشار APK |
+| **2.2.0** | افزودن فارسی و فونت‌های مناسب و مستندات چندزبانه |
+| **2.1.0** | کردی، تکمیل خودکار، تور معرفی و اعلان‌های یادآور |
+| **2.0.0** | بازسازی با React و PWA و ذخیره‌سازی محلی و فضاهای کاری |
+| **1.0.0** | اولین نسخه پایدار |
+
+برای تغییرات تفصیلی [CHANGELOG.md](CHANGELOG.md) را ببینید.
+
+## مستندات و مجوزها
+
+- [مشخصات و برنامه ساخت](SPEC.md) · [قرارداد توسعه](docs/DEV-CONTRACT.md) · [ماتریس دستگاه‌ها](docs/DEVICE-TEST-MATRIX.md)
+- فونت‌های Cairo و Vazirmatn و Noto Naskh Arabic با مجوز OFL هستند. جزئیات مجوزهای وابستگی‌ها در [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## توسعه دهنده
 
@@ -332,13 +267,16 @@ android/                  # پروژه Capacitor Android
 
 [GitHub](https://github.com/ahmdze) · [WhatsApp](https://wa.me/9647723064622)
 
+<sub>توسعه‌یافته با Deepseek HARNESS · بازبینی فنی و مهندسی توسط Qwen</sub>
+
 <sub>
 کلیه حقوق محفوظ است 2026<br />
 توسعه‌یافته با<br />
-<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
-<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
-بازبینی فنی و مهندسی توسط<br />
-<strong>Qwen 3.8-Max</strong>
+<strong>Deepseek-V4.1-Flash 1017</strong><br />
+<strong>Deepseek-V4.1-Pro</strong><br />
+<img src="docs/logos/deepseek-harness.svg" height="30" alt="DeepSeek HARNESS" /><br />
+<strong>Qwen 3.8-Max</strong><br />
+<img src="docs/logos/qwen.svg" height="30" alt="Qwen" /><br />
 </sub>
 
 </div>

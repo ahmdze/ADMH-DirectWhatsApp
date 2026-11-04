@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="compose"
+        android:shortcutLongLabel="@string/shortcut_send_long"
+        android:shortcutShortLabel="@string/shortcut_send_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="admh://compose"
+            android:targetClass="com.admh.directwhatsapp.MainActivity"
+            android:targetPackage="com.admh.directwhatsapp" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="scan"
+        android:shortcutLongLabel="@string/shortcut_scan_long"
+        android:shortcutShortLabel="@string/shortcut_scan_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="admh://tools/scan"
+            android:targetClass="com.admh.directwhatsapp.MainActivity"
+            android:targetPackage="com.admh.directwhatsapp" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="reminders"
+        android:shortcutLongLabel="@string/shortcut_reminders_long"
+        android:shortcutShortLabel="@string/shortcut_reminders_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="admh://reminders"
+            android:targetClass="com.admh.directwhatsapp.MainActivity"
+            android:targetPackage="com.admh.directwhatsapp" />
+    </shortcut>
+</shortcuts>

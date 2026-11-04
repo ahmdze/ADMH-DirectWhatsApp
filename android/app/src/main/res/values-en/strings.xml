@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Direct WhatsApp</string>
+    <string name="title_activity_main">Direct WhatsApp</string>
+    <string name="package_name">com.admh.directwhatsapp</string>
+    <string name="custom_url_scheme">com.admh.directwhatsapp</string>
+    <string name="shortcut_send_short">Quick send</string>
+    <string name="shortcut_send_long">Open the send screen</string>
+    <string name="shortcut_scan_short">Scan QR</string>
+    <string name="shortcut_scan_long">Scan a QR code with the camera</string>
+    <string name="shortcut_reminders_short">Reminders</string>
+    <string name="shortcut_reminders_long">Open reminders</string>
+</resources>

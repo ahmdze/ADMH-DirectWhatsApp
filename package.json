@@ -1,7 +1,7 @@
 {
   "name": "admh-direct-whatsapp",
   "private": true,
-  "version": "2.4.2",
+  "version": "2.4.3",
   "type": "module",
   "description": "واتساب المباشر — PWA عربية لفتح محادثة واتساب دون حفظ الرقم",
   "scripts": {
