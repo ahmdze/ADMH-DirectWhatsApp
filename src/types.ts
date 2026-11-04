@@ -173,5 +173,8 @@ export type ParsedTarget = Target;
 export interface Draft {
   raw: string;
   message?: string;
+  workspaceId?: string;
+  targetId?: string;
+  phone?: string;
   origin?: 'share' | 'shortcut' | 'clipboard' | 'scan';
 }
