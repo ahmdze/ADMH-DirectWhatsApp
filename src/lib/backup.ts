@@ -1,4 +1,4 @@
-import type { BackupFile, Campaign, Destination, HistoryEntry, Reminder, Template, Workspace } from '../types';
+import type { BackupFile, Campaign, Destination, HistoryEntry, Reminder, Template, TrashEntry, Workspace } from '../types';
 import { db, ensureDatabase, getMeta, setMeta } from './db';
 import { getSettings, replaceSettingsFromBackup } from './settings';
 import { downloadBlob } from './image';
@@ -65,6 +65,7 @@ export function validateBackup(raw: unknown): BackupValidation {
     history: asArray<HistoryEntry>(raw.history).filter((item) => item && typeof item.id === 'string'),
     campaigns: asArray<Campaign>(raw.campaigns).filter((item) => item && typeof item.id === 'string'),
     reminders: asArray<Reminder>(raw.reminders).filter((item) => item && typeof item.id === 'string'),
+    trash: asArray<TrashEntry>(raw.trash).filter((item) => item && typeof item.id === 'string'),
     settings: raw.settings && isObject(raw.settings) ? (raw.settings as unknown as BackupFile['settings']) : undefined
   };
   if (!data.destinations.length && !data.templates.length && !data.history.length) return { ok: false, error: 'empty' };
@@ -78,6 +79,7 @@ export interface ImportResult {
   history: number;
   campaigns: number;
   reminders: number;
+  trash: number;
 }
 
 export async function importBackup(
@@ -91,7 +93,8 @@ export async function importBackup(
     templates: data.templates.length,
     history: data.history.length,
     campaigns: data.campaigns.length,
-    reminders: data.reminders.length
+    reminders: data.reminders.length,
+    trash: data.trash?.length ?? 0
   };
 
   const write = async () => {
@@ -102,7 +105,8 @@ export async function importBackup(
         db.templates.clear(),
         db.history.clear(),
         db.campaigns.clear(),
-        db.reminders.clear()
+        db.reminders.clear(),
+        db.trash.clear()
       ]);
       await setMeta('seeded-v2', false);
     }
@@ -112,6 +116,7 @@ export async function importBackup(
     if (data.history.length) await db.history.bulkPut(data.history);
     if (data.campaigns.length) await db.campaigns.bulkPut(data.campaigns);
     if (data.reminders.length) await db.reminders.bulkPut(data.reminders);
+    if (data.trash?.length) await db.trash.bulkPut(data.trash);
   };
 
   await write();
