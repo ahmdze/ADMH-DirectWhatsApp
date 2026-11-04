@@ -54,3 +54,15 @@ export function setFeatureEnabled(flag: FeatureFlag, enabled: boolean): void {
 export function getFeatureFlags(): Record<FeatureFlag, boolean> {
   return readAll();
 }
+
+declare global {
+  interface Window {
+    __setFeatureFlag?: (flag: FeatureFlag, enabled: boolean) => void;
+    __getFeatureFlags?: () => Record<FeatureFlag, boolean>;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.__setFeatureFlag = (flag, enabled) => setFeatureEnabled(flag, enabled);
+  window.__getFeatureFlags = () => readAll();
+}
