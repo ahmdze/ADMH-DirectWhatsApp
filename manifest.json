@@ -1,25 +1,17 @@
 {
-  "name": "واتساب المباشر - Direct WhatsApp",
+  "id": "./",
+  "name": "واتساب المباشر - ADMH Direct WhatsApp",
   "short_name": "واتساب المباشر",
-  "description": "راسل أي رقم على واتساب فوراً بدون حفظه في جهات الاتصال",
+  "description": "افتح محادثة واتساب مباشرة دون حفظ رقم الهاتف.",
+  "lang": "ar",
+  "dir": "rtl",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#25D366",
+  "background_color": "#f3f7f6",
+  "theme_color": "#075e54",
   "orientation": "portrait-primary",
   "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3670/3670051.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3670/3670051.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }
