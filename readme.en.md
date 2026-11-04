@@ -4,7 +4,9 @@
 
 An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without saving the number**, with saved destinations, message templates, QR codes, share cards, and printable stickers — all locally on your device, with no server and no account.
 
-> **Version 2.3.4** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> **Version 2.4.0-beta.2** — internal beta: recurring reminders (daily/weekly/monthly) with local Android notifications and Compose launch from a notification, an automatic backup before upgrades that can be downloaded from Settings, local session attachments shared through the system share sheet and never stored, a Reminders button in the bottom navigation bar, and manual-only APK update checks.
+> **Beta notice:** 2.4.0-beta.2 is an internal/test build, **not a stable production release**; its features may change before the final 2.4.0 release.
+> New in 2.3.5: a manual “Check for updates” button in Settings — Service Worker on the web and GitHub Releases inside Android.
 > New in 2.3.4: “Share app” now offers two choices — **share the PWA web app** or **share the APK download link** — instead of the localhost URL inside the native app.
 > New in 2.3.3: native clipboard/paste in the APK, correct persistent-storage status, a **Send to developer** button in Diagnostics, and in-app APK updates with a progress bar and an Install button.
 > New in 2.3.2: **native biometric app lock** on Android with PIN fallback, and an **in-app update checker** reading GitHub Releases.
@@ -16,6 +18,16 @@ An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without s
 ## Features
 
 > Each feature is prefixed with the version it was added in, so you can spot what's new at a glance.
+
+### What's new in 2.4.0-beta.2
+
+> **Internal beta:** this is a test build for trying the new features — not a stable production release; details may change before the final 2.4.0 release.
+
+- **(v2.4.0-beta.2)** **Recurring reminders** (daily/weekly/monthly) with local Android notifications; tapping a notification opens Compose directly.
+- **(v2.4.0-beta.2)** **Automatic backup before an upgrade**, downloadable from Settings.
+- **(v2.4.0-beta.2)** **Local session attachments** (images/files/vCard/location) shared through the system share sheet and never stored, with WhatsApp, card, and sticker previews plus **Quick Schedule** from Compose.
+- **(v2.4.0-beta.2)** A **Reminders button** in the bottom navigation bar.
+- **(v2.4.0-beta.2)** APK update checks are **manual only** — no automatic background checks.
 
 ### Basics & sending
 
@@ -73,6 +85,7 @@ An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without s
 - Reminder notifications work in the background inside the Android build (their accuracy varies with how precisely the system allows notifications).
 - **(v2.3.2)** Native biometric lock, with PIN always available as a fallback.
 - **(v2.3.2)** In-app update checker that reads GitHub Releases and offers the APK download.
+- **(v2.4.0-beta.2)** Update checks are **manual only** — there is no automatic background check.
 
 ---
 
@@ -206,6 +219,8 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
+| **2.4.0-beta.2** | Recurring reminders (daily/weekly/monthly) with Android local notifications and Compose launch from notifications, automatic pre-upgrade backup downloadable from Settings, local session attachments shared via the system sheet and never stored, a Reminders button in the bottom bar, and manual-only APK update checks |
+| **2.3.5** | Manual “Check for updates” button in Settings on the web and in Android |
 | **2.3.4** | “Share app” offers a PWA share option and an APK download-link option |
 | **2.3.3** | Native clipboard/paste, correct persistent storage, send report to developer via WhatsApp, and APK download with progress + install |
 | **2.3.2** | Native Android biometric lock with PIN fallback, and in-app APK update checker |

@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.0-beta.1';
+export const APP_VERSION = '2.4.0-beta.2';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.0-beta.2',
+    date: '2026-11-05',
+    items: [
+      { ar: 'معاينة كاملة قبل الإرسال: واتساب + بطاقة مشاركة + ملصق QR، مع تبويبات داخل شيت واحد.', en: 'Full preview before sending: WhatsApp, share card and QR label in one tabbed sheet.' },
+      { ar: 'زر التذكيرات في شريط التنقل السفلي للوصول بضغطة واحدة.', en: 'A Reminders button in the bottom navigation for one-tap access.' },
+      { ar: 'فحص تحديث APK يدوي فقط — لا فحص تلقائي في الخلفية.', en: 'Manual APK update checks only — no automatic background checks.' }
+    ]
+  },
   {
     version: '2.4.0-beta.1',
     date: '2026-11-05',

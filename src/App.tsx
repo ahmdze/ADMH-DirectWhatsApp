@@ -190,6 +190,8 @@ function renderRoute(path: string[]) {
       return <TargetsScreen />;
     case 'templates':
       return <TemplatesScreen />;
+    case 'reminders':
+      return <RemindersScreen />;
     case 'tools': {
       switch (path[1]) {
         case 'qr':
@@ -243,7 +245,7 @@ export default function App() {
   const [unlocked, setUnlocked] = useState(() => !settings.lock.enabled || isSessionUnlocked());
 
   const first = path[0] || 'compose';
-  const isTab = path.length === 1 && (first === 'compose' || first === 'targets' || first === 'templates' || first === 'tools');
+  const isTab = path.length === 1 && (first === 'compose' || first === 'targets' || first === 'templates' || first === 'reminders' || first === 'tools');
   const tab: TabKey = (isTab ? first : 'compose') as TabKey;
   const workspaceName = workspaceDisplayName(workspace, t, locale);
   const due = useDueReminders(workspace?.id);

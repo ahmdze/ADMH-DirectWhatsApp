@@ -22,9 +22,11 @@ import type { Draft, Target } from '../../types';
 import { CountryPicker } from './CountryPicker';
 import { ComposeMedia } from './ComposeMedia';
 import { ComposePreview } from './ComposePreview';
+import { PreviewSheet } from './PreviewSheet';
 import { QrPreviewSheet } from './QrPreviewSheet';
 import { SaveTargetSheet } from './SaveTargetSheet';
 import { ReminderEditorSheet } from '../tools/ReminderEditorSheet';
+import { workspaceDisplayName } from '../../lib/workspace';
 
 const MESSAGE_LIMIT = 2000;
 
@@ -53,6 +55,7 @@ export function ComposeScreen() {
   const [mediaBusy, setMediaBusy] = useState(false);
   const [mediaError, setMediaError] = useState<string | null>(null);
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [schedulePreset, setSchedulePreset] = useState<{
     workspaceId: string;
     label: string;
@@ -525,6 +528,10 @@ export function ComposeScreen() {
         />
 
         <ComposePreview target={validTarget} message={message} media={media} />
+        <Button variant="ghost" size="sm" block onClick={() => setPreviewOpen(true)}>
+          <Icon name="eye" size={15} />
+          {t('معاينة البطاقة والملصق', 'Preview card and label')}
+        </Button>
 
         {templates.length ? (
           <div className="col" style={{ gap: 8 }}>
@@ -689,6 +696,14 @@ export function ComposeScreen() {
         preset={schedulePreset ?? undefined}
         onClose={() => setScheduleOpen(false)}
         onSaved={() => setScheduleOpen(false)}
+      />
+      <PreviewSheet
+        open={previewOpen}
+        target={validTarget}
+        message={message}
+        media={media}
+        workspaceName={workspace ? workspaceDisplayName(workspace, t, locale) : ''}
+        onClose={() => setPreviewOpen(false)}
       />
     </div>
   );
