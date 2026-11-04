@@ -3,7 +3,7 @@ import { Icon } from '../../components/icons';
 import { Button, EmptyState, Field, HintCard, IconButton, ScreenHeader, Spinner } from '../../components/ui';
 import { useActiveWorkspace } from '../../hooks/useData';
 import { useI18n } from '../../lib/i18n';
-import { useSettings } from '../../lib/settings';
+import { useSettings, fontFamily, resolveFont } from '../../lib/settings';
 import { goBack } from '../../lib/router';
 import { loadImage, qrDataUrl } from '../../lib/qr';
 import { buildChatUrl } from '../../lib/whatsapp';
@@ -83,7 +83,8 @@ const PALETTES: ReadonlyArray<CardPalette> = [
 
 const CARD_WIDTH = 1080;
 const CARD_HEIGHT = 1350;
-const CARD_FONT = '"Cairo Variable", "Cairo", system-ui, sans-serif';
+const DEFAULT_CARD_FONT = '"Cairo Variable", "Cairo", system-ui, sans-serif';
+let cardFontStack = DEFAULT_CARD_FONT;
 const MAX_LOGO_BYTES = 2 * 1024 * 1024;
 
 interface DrawCardOptions {
@@ -98,7 +99,11 @@ interface DrawCardOptions {
 }
 
 function applyFont(ctx: CanvasRenderingContext2D, weight: number, size: number): void {
-  ctx.font = `${weight} ${size}px ${CARD_FONT}`;
+  ctx.font = `${weight} ${size}px ${cardFontStack}`;
+}
+
+function primaryFamily(stack: string): string {
+  return stack.split(',')[0].replace(/["']/g, '').trim();
 }
 
 function ellipsize(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string {
@@ -304,14 +309,19 @@ export function ShareCardScreen() {
     setName(locale === 'en' ? workspace.nameEn : workspace.name);
   }, [workspace, locale, name]);
 
+  const resolvedFont = fontFamily(resolveFont(locale, settings.font));
+  const primaryFont = primaryFamily(resolvedFont);
+
   useEffect(() => {
     let cancelled = false;
+    cardFontStack = resolvedFont;
+    setFontsReady(false);
     const prepare = async () => {
       try {
         await document.fonts.ready;
-        await document.fonts.load('800 78px "Cairo Variable"');
-        await document.fonts.load('700 40px "Cairo Variable"');
-        await document.fonts.load('600 28px "Cairo Variable"');
+        await document.fonts.load(`800 78px "${primaryFont}"`);
+        await document.fonts.load(`700 40px "${primaryFont}"`);
+        await document.fonts.load(`600 28px "${primaryFont}"`);
       } catch {
         /* FontFaceSet may be unavailable — fall back to system fonts */
       }
@@ -321,7 +331,7 @@ export function ShareCardScreen() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [resolvedFont, primaryFont]);
 
   const parsed = useMemo(
     () => (phone.trim() ? parseTarget(phone, { country: settings.defaultCountry }) : null),
@@ -387,7 +397,7 @@ export function ShareCardScreen() {
     return () => {
       cancelled = true;
     };
-  }, [valid, fontsReady, target, displayName, palette, logo, t]);
+  }, [valid, fontsReady, target, displayName, palette, logo, t, resolvedFont]);
 
   const handleLogoFile = async (file: File | undefined) => {
     if (!file) return;

@@ -3,7 +3,17 @@
 ## Cairo (font)
 - **Source:** https://github.com/googlefonts/cairo
 - **License:** SIL Open Font License 1.1
-- **Usage:** bundled via `@fontsource-variable/cairo` (woff2 subsets) as the app typeface.
+- **Usage:** default Arabic/English typeface, bundled via `@fontsource-variable/cairo` (woff2 subsets).
+
+## Vazirmatn (font)
+- **Source:** https://github.com/rastikerdar/vazirmatn
+- **License:** SIL Open Font License 1.1
+- **Usage:** Persian typeface, bundled via `@fontsource-variable/vazirmatn`.
+
+## Noto Naskh Arabic (font)
+- **Source:** https://github.com/notofonts/arabic
+- **License:** SIL Open Font License 1.1
+- **Usage:** Kurdish Sorani typeface, bundled via `@fontsource-variable/noto-naskh-arabic`.
 
 ## qrcode
 - **Source:** https://github.com/soldair/node-qrcode

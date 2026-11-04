@@ -1,4 +1,5 @@
-export type Locale = 'ar' | 'en' | 'ckb';
+export type Locale = 'ar' | 'en' | 'ckb' | 'fa';
+export type FontChoice = 'auto' | 'cairo' | 'vazirmatn' | 'noto-naskh';
 export type ThemeMode = 'dark' | 'light' | 'auto';
 export type TargetType = 'phone' | 'username';
 export type CampaignItemStatus = 'pending' | 'sent' | 'skipped';
@@ -97,6 +98,7 @@ export interface Settings {
   theme: ThemeMode;
   accent: string;
   locale: Locale;
+  font: FontChoice;
   defaultCountry: string;
   haptics: boolean;
   hideNumbers: boolean;

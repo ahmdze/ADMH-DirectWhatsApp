@@ -3,7 +3,7 @@ import { Icon } from '../../components/icons';
 import { Button, EmptyState, Field, HintCard, ScreenHeader, Segmented, Spinner } from '../../components/ui';
 import { useActiveWorkspace, useDestinations } from '../../hooks/useData';
 import { useI18n } from '../../lib/i18n';
-import { useSettings } from '../../lib/settings';
+import { useSettings, fontFamily, resolveFont } from '../../lib/settings';
 import { goBack, navigate } from '../../lib/router';
 import { qrDataUrl } from '../../lib/qr';
 import { parseTarget } from '../../lib/phone';
@@ -33,6 +33,7 @@ interface PrintOptions {
   subtitle: string;
   footer: string;
   dir: 'rtl' | 'ltr';
+  fontFamily: string;
 }
 
 const MAX_LABELS = 40;
@@ -65,7 +66,7 @@ function buildPrintDocument(rows: PrintRow[], columns: number, options: PrintOpt
 <style>
   @page { size: A4 portrait; margin: 8mm; }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: #ffffff; color: #0b141a; font-family: 'Cairo Variable', 'Cairo', 'Segoe UI', system-ui, sans-serif; }
+  html, body { margin: 0; padding: 0; background: #ffffff; color: #0b141a; font-family: ${options.fontFamily}; }
   .sheet { width: 100%; }
   .head { display: flex; align-items: baseline; justify-content: space-between; gap: 6mm; border-bottom: 0.4mm solid #d7e2de; padding-bottom: 2.5mm; margin-bottom: ${gap}; }
   .head h1 { font-size: 13pt; margin: 0; font-weight: 800; }
@@ -241,7 +242,8 @@ export function LabelsScreen() {
         title: t('ملصقات واتساب', 'WhatsApp labels'),
         subtitle: workspace ? (locale === 'en' ? workspace.nameEn : workspace.name) : t('ADMH', 'ADMH'),
         footer: 'ADMH · WhatsApp Direct',
-        dir: isRTL ? 'rtl' : 'ltr'
+        dir: isRTL ? 'rtl' : 'ltr',
+        fontFamily: fontFamily(resolveFont(locale, settings.font))
       });
       win.document.open();
       win.document.write(html);

@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import type { Locale, Settings, ThemeMode } from '../types';
+import type { FontChoice, Locale, Settings, ThemeMode } from '../types';
 import { isIos } from './format';
 
 const STORAGE_KEY = 'admh2_settings';
@@ -21,8 +21,51 @@ export const ACCENTS: AccentChoice[] = [
   { id: 'rose', color: '#FDA4AF', ar: 'وردي', en: 'Rose' }
 ];
 
+export interface FontChoiceInfo {
+  id: FontChoice;
+  ar: string;
+  en: string;
+  family: string;
+}
+
+export const FONTS: FontChoiceInfo[] = [
+  { id: 'auto', ar: 'تلقائي حسب اللغة', en: 'Auto by language', family: '' },
+  {
+    id: 'cairo',
+    ar: 'كايرو',
+    en: 'Cairo',
+    family: "'Cairo Variable', 'Segoe UI', Tahoma, system-ui, sans-serif"
+  },
+  {
+    id: 'vazirmatn',
+    ar: 'فازيرماتن — فارسي',
+    en: 'Vazirmatn — Persian',
+    family: "'Vazirmatn Variable', 'Cairo Variable', Tahoma, system-ui, sans-serif"
+  },
+  {
+    id: 'noto-naskh',
+    ar: 'نوتو نسخ — كردي',
+    en: 'Noto Naskh — Kurdish',
+    family: "'Noto Naskh Arabic Variable', 'Cairo Variable', Tahoma, system-ui, sans-serif"
+  }
+];
+
+const FONT_IDS: FontChoice[] = FONTS.map((font) => font.id);
+
+/** Recommended font per language when the user keeps "auto". */
+export function resolveFont(locale: Locale, choice: FontChoice): FontChoice {
+  if (choice !== 'auto') return choice;
+  if (locale === 'fa') return 'vazirmatn';
+  if (locale === 'ckb') return 'noto-naskh';
+  return 'cairo';
+}
+
+export function fontFamily(choice: FontChoice): string {
+  return FONTS.find((font) => font.id === choice)?.family || FONTS[1].family;
+}
+
 const THEMES: ThemeMode[] = ['dark', 'light', 'auto'];
-const LOCALES: Locale[] = ['ar', 'en', 'ckb'];
+const LOCALES: Locale[] = ['ar', 'en', 'ckb', 'fa'];
 
 function detectLocale(): Locale {
   // Arabic-first product: Arabic is the default; users can switch to English
@@ -36,6 +79,7 @@ function defaults(): Settings {
     theme: 'dark',
     accent: '#6EE7B7',
     locale: detectLocale(),
+    font: 'auto',
     defaultCountry: 'IQ',
     haptics: true,
     hideNumbers: false,
@@ -58,6 +102,7 @@ function normalize(raw: unknown): Settings {
     theme: THEMES.includes(value.theme as ThemeMode) ? (value.theme as ThemeMode) : base.theme,
     accent: typeof value.accent === 'string' && /^#[0-9a-f]{6}$/i.test(value.accent) ? value.accent : base.accent,
     locale: LOCALES.includes(value.locale as Locale) ? (value.locale as Locale) : 'ar',
+    font: FONT_IDS.includes(value.font as FontChoice) ? (value.font as FontChoice) : 'auto',
     defaultCountry: typeof value.defaultCountry === 'string' && /^[A-Z]{2}$/.test(value.defaultCountry) ? value.defaultCountry : base.defaultCountry,
     haptics: typeof value.haptics === 'boolean' ? value.haptics : base.haptics,
     hideNumbers: typeof value.hideNumbers === 'boolean' ? value.hideNumbers : base.hideNumbers,
@@ -134,8 +179,10 @@ export function applyAppearance(settings: Settings): void {
   const root = document.documentElement;
   root.dataset.theme = theme;
   root.dataset.accent = settings.accent;
+  root.dataset.font = resolveFont(settings.locale, settings.font);
   root.lang = settings.locale;
-  root.dir = settings.locale === 'ar' || settings.locale === 'ckb' ? 'rtl' : 'ltr';
+  root.dir = settings.locale === 'en' ? 'ltr' : 'rtl';
+  root.style.setProperty('--app-font', fontFamily(resolveFont(settings.locale, settings.font)));
   root.style.setProperty('--accent', settings.accent);
   root.classList.toggle('hide-numbers', settings.hideNumbers);
   root.classList.toggle('is-ios', isIos());

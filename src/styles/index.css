@@ -6,6 +6,7 @@
 --------------------------------------------------------------------------- */
 
 :root {
+  --app-font: 'Cairo Variable', 'Segoe UI', Tahoma, system-ui, sans-serif;
   --accent: #6ee7b7;
   --accent-2: #34d399;
   --accent-text: #6ee7b7;
@@ -76,7 +77,7 @@ body {
 }
 
 body {
-  font-family: 'Cairo Variable', 'Cairo', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+  font-family: var(--app-font), 'Cairo Variable', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
   color: var(--text);
   font-size: 15px;
   line-height: 1.55;

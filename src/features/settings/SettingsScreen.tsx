@@ -2,7 +2,7 @@ import { useEffect, useState, type CSSProperties } from 'react';
 import { Icon, type IconName } from '../../components/icons';
 import { Button, ConfirmSheet, HintCard, IconButton, ScreenHeader, Segmented, Sheet, Spinner, Switch } from '../../components/ui';
 import { useI18n } from '../../lib/i18n';
-import { ACCENTS, updateSettings, useSettings } from '../../lib/settings';
+import { ACCENTS, FONTS, fontFamily, resolveFont, updateSettings, useSettings } from '../../lib/settings';
 import { useWorkspaces } from '../../hooks/useData';
 import { COUNTRIES, countryByIso } from '../../lib/phone';
 import { clearAllData, removeWorkspace } from '../../lib/db';
@@ -410,14 +410,59 @@ export function SettingsScreen() {
           options={[
             { value: 'ar', label: 'العربية' },
             { value: 'en', label: 'English' },
-            { value: 'ckb', label: 'کوردی' }
+            { value: 'ckb', label: 'کوردی' },
+            { value: 'fa', label: 'فارسی' }
           ]}
           onChange={changeLocale}
         />
         <HintCard icon="globe">
           {t(
-            'يتغيّر اتجاه الواجهة (RTL/LTR) تلقائياً حسب اللغة. الكردية (سوراني) تُعرض من اليمين إلى اليسار مثل العربية.',
-            'The interface direction (RTL/LTR) switches automatically with the language. Kurdish (Sorani) is right-to-left, just like Arabic.'
+            'يتغيّر اتجاه الواجهة (RTL/LTR) تلقائياً حسب اللغة. العربية والكردية والفارسية تُعرض من اليمين إلى اليسار.',
+            'The interface direction (RTL/LTR) switches automatically with the language. Arabic, Kurdish and Persian are right-to-left.'
+          )}
+        </HintCard>
+      </section>
+
+      {/* --------------------------------------------------------------- font */}
+      <section className="glass card" style={SECTION_STYLE} aria-labelledby="settings-font">
+        <h2 className="section-title" id="settings-font">
+          {t('الخط', 'Font')}
+        </h2>
+        <div className="grid-2">
+          {FONTS.map((font) => {
+            const selected = settings.font === font.id;
+            const family = font.id === 'auto' ? fontFamily(resolveFont(settings.locale, 'auto')) : font.family;
+            return (
+              <button
+                key={font.id}
+                type="button"
+                className="glass-soft"
+                aria-pressed={selected}
+                onClick={() => {
+                  updateSettings({ font: font.id });
+                  if (settings.haptics) hapticTap();
+                }}
+                style={{
+                  padding: '11px 12px',
+                  textAlign: 'start',
+                  borderColor: selected ? 'color-mix(in srgb, var(--accent) 45%, transparent)' : undefined,
+                  background: selected ? 'var(--accent-soft)' : undefined
+                }}
+              >
+                <span style={{ display: 'block', fontSize: 11, fontWeight: 800, color: selected ? 'var(--accent-text)' : 'var(--muted)' }}>
+                  {t(font.ar, font.en)}
+                </span>
+                <span style={{ display: 'block', marginTop: 5, fontSize: 15, fontFamily: family }} dir="rtl">
+                  أبجد هوّز ۱۲۳ · ADMH
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <HintCard icon="sparkles">
+          {t(
+            '«تلقائي» يختار الخط المناسب للغة: Cairo للعربية، Vazirmatn للفارسية، Noto Naskh للكردية. يمكنك تثبيت خط يدوياً إن أردت.',
+            '“Auto” picks the right font for the language: Cairo for Arabic, Vazirmatn for Persian, Noto Naskh for Kurdish. You can still pin a font manually.'
           )}
         </HintCard>
       </section>

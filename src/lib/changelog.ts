@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.1.0';
+export const APP_VERSION = '2.2.0';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.2.0',
+    date: '2026-11-04',
+    items: [
+      { ar: 'إضافة اللغة الفارسية إلى جانب العربية والإنجليزية والكردية.', en: 'Added Persian alongside Arabic, English and Kurdish.' },
+      { ar: 'خط تلقائي مناسب لكل لغة: Cairo للعربية، Vazirmatn للفارسية، Noto Naskh للكردية — مع إمكانية تغييره يدوياً.', en: 'A language-aware font: Cairo for Arabic, Vazirmatn for Persian, Noto Naskh for Kurdish — with a manual override.' },
+      { ar: 'README متعدد اللغات: العربية والإنجليزية والكردية والفارسية.', en: 'Multilingual README: Arabic, English, Kurdish and Persian.' }
+    ]
+  },
   {
     version: '2.1.0',
     date: '2026-11-04',
