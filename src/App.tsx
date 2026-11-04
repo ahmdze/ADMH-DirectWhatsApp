@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { BottomNav, type TabKey } from './components/BottomNav';
 import { InstallBanner } from './components/InstallBanner';
 import { UpdateBanner } from './components/UpdateBanner';
+import { UpdateChecker } from './components/UpdateChecker';
 import { Icon, AppLogo } from './components/icons';
 import { Button, IconButton, Sheet, ToastHost } from './components/ui';
 import { useI18n } from './lib/i18n';
@@ -363,6 +364,7 @@ export default function App() {
 
       {isTab ? <BottomNav active={tab} /> : null}
       {needRefresh ? <UpdateBanner /> : <InstallBanner />}
+      <UpdateChecker />
       <ToastHost />
 
       <WorkspaceSheet open={workspaceSheet} onClose={() => setWorkspaceSheet(false)} />

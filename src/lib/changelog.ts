@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.3.1';
+export const APP_VERSION = '2.3.2';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,14 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.3.2',
+    date: '2026-11-04',
+    items: [
+      { ar: 'قفل بالبصمة الأصلية في تطبيق Android مع بقاء PIN بديلاً دائماً.', en: 'Native biometric app lock on Android, with PIN always available as a fallback.' },
+      { ar: 'فاحص تحديث داخل التطبيق يقرأ GitHub Releases ويظهر «يتوفر تحديث» مع رابط APK.', en: 'In-app update checker that reads GitHub Releases and offers the APK download.' }
+    ]
+  },
   {
     version: '2.3.1',
     date: '2026-11-04',

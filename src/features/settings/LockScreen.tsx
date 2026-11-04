@@ -179,7 +179,12 @@ export function LockScreen({ onUnlocked }: LockScreenProps) {
       return;
     }
     if (hapticsOn) hapticError();
-    setError(t('تعذّر التحقق بالبصمة. استخدم رمز PIN.', 'Biometric verification failed. Use your PIN.'));
+    setError(
+      t(
+        'لم يتم التحقق بالبصمة. يمكنك استخدام رمز PIN أو إعادة المحاولة.',
+        'Biometric verification did not complete. You can use your PIN or try again.'
+      )
+    );
     shake();
   };
 

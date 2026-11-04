@@ -54,6 +54,10 @@
     <!-- QR scanning / image capture (the camera plugin uses this too). -->
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Native biometric app lock (fingerprint / face). -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
     <!-- Haptic feedback (the haptics plugin declares this too). -->
     <uses-permission android:name="android.permission.VIBRATE" />
 

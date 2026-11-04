@@ -11,6 +11,9 @@ importers:
       '@capacitor/app':
         specifier: 8.1.2
         version: 8.1.2(@capacitor/core@8.6.0)
+      '@capacitor/browser':
+        specifier: 8.0.0
+        version: 8.0.0(@capacitor/core@8.6.0)
       '@capacitor/camera':
         specifier: 8.2.6
         version: 8.2.6(@capacitor/core@8.6.0)
@@ -29,6 +32,9 @@ importers:
       '@capacitor/share':
         specifier: 8.0.3
         version: 8.0.3(@capacitor/core@8.6.0)
+      '@capgo/capacitor-native-biometric':
+        specifier: 8.9.1
+        version: 8.9.1(@capacitor/core@8.6.0)
       '@fontsource-variable/noto-naskh-arabic':
         specifier: ^5.3.0
         version: 5.3.0
@@ -662,6 +668,11 @@ packages:
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
+  '@capacitor/browser@8.0.0':
+    resolution: {integrity: sha512-xey7maszGABKuStvXDV4vXN+EzIyz0o7zlyzw4JKG6o/1GzqeqHqVuE+8Ux+Hks3DZji4LoriWZVgVF6mR6RGg==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
   '@capacitor/camera@8.2.6':
     resolution: {integrity: sha512-jzvrMrEKs5ACw1/HmcgN5XwSlXYF+/xRKzWtBUESQs5ePf3tTfnR8Nk/p+aSEgay8yZEI0aZQ+2/1xDwMCdV2w==}
     peerDependencies:
@@ -697,6 +708,11 @@ packages:
 
   '@capacitor/synapse@1.0.4':
     resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
+
+  '@capgo/capacitor-native-biometric@8.9.1':
+    resolution: {integrity: sha512-19WZZ5dqykGgRFGgf+4hhJXyB0w6d+Pybj/mmXphIab1x4DsxadVQi8ooMl0qNfU9Jy1fwJk6Ulrg9ZjKBIWUA==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -3927,6 +3943,10 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.6.0
 
+  '@capacitor/browser@8.0.0(@capacitor/core@8.6.0)':
+    dependencies:
+      '@capacitor/core': 8.6.0
+
   '@capacitor/camera@8.2.6(@capacitor/core@8.6.0)':
     dependencies:
       '@capacitor/core': 8.6.0
@@ -3976,6 +3996,10 @@ snapshots:
       '@capacitor/core': 8.6.0
 
   '@capacitor/synapse@1.0.4': {}
+
+  '@capgo/capacitor-native-biometric@8.9.1(@capacitor/core@8.6.0)':
+    dependencies:
+      '@capacitor/core': 8.6.0
 
   '@csstools/color-helpers@5.1.0': {}
 

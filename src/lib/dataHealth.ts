@@ -19,6 +19,7 @@ import type {
 } from '../types';
 import { db } from './db';
 import { uid } from './format';
+import { NATIVE_BIOMETRIC_SENTINEL } from './native-biometric';
 import { countryByIso, parseTarget, validateUsername } from './phone';
 import { FONTS, getSettings, SETTINGS_VERSION, updateSettings } from './settings';
 
@@ -1208,8 +1209,12 @@ async function buildPlan(): Promise<HealthPlan> {
   }
 
   const lock = settings.lock;
+  // Native biometrics store the `native-biometric` sentinel instead of a WebAuthn
+  // credential id — treat it (and any non-empty WebAuthn id) as a valid credential.
+  const hasBiometricCredential =
+    lock.credentialId === NATIVE_BIOMETRIC_SENTINEL || Boolean(lock.credentialId && lock.credentialId.trim());
   const lockBroken =
-    lock.enabled && (lock.method === 'biometric' ? !lock.credentialId : !lock.hash || !lock.salt);
+    lock.enabled && (lock.method === 'biometric' ? !hasBiometricCredential : !lock.hash || !lock.salt);
   if (lockBroken) {
     issues.add('settings:lock-broken');
     settingsPatch.lock = { enabled: false, method: 'pin', hash: undefined, salt: undefined, credentialId: null };

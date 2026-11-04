@@ -13,6 +13,11 @@ import { formatBytes } from '../../lib/image';
 import { isStandalone } from '../../lib/format';
 import { promptInstall } from '../../lib/install';
 import { biometricAvailable, registerBiometric } from '../../lib/webauthn';
+import {
+  getNativeBiometricsInfo,
+  isNativePlatform,
+  type NativeBiometricInfo
+} from '../../lib/native-biometric';
 import { APP_VERSION } from '../../lib/changelog';
 import { getStorageInfo, requestPersistentStorage, type StorageInfo } from '../../lib/storage';
 import {
@@ -70,6 +75,7 @@ export function SettingsScreen() {
   const [clearOpen, setClearOpen] = useState(false);
   const [installOpen, setInstallOpen] = useState(false);
   const [bioSupported, setBioSupported] = useState(false);
+  const [bioInfo, setBioInfo] = useState<NativeBiometricInfo | null>(null);
   const [bioBusy, setBioBusy] = useState(false);
   const [storage, setStorage] = useState<StorageInfo | null>(null);
   const [storageBusy, setStorageBusy] = useState(false);
@@ -85,9 +91,25 @@ export function SettingsScreen() {
   const storageTotal = storage && storage.quota > 0 ? formatBytes(storage.quota) : '—';
   const storagePercent = storage?.percent ?? null;
   const notificationsOn = settings.notifications && permission === 'granted';
+  const nativePlatform = isNativePlatform();
+  const biometricTitle = nativePlatform
+    ? t('فتح بالبصمة الأصلية', 'Native biometric unlock')
+    : t('فتح بالبصمة', 'Biometric unlock');
+  const biometryTypeLabel = bioInfo && bioInfo.available ? t(bioInfo.labelAr, bioInfo.labelEn) : null;
 
   useEffect(() => {
     let alive = true;
+    if (isNativePlatform()) {
+      // Native shell: read the actual sensor type for a clearer label.
+      void getNativeBiometricsInfo().then((info) => {
+        if (!alive) return;
+        setBioInfo(info);
+        setBioSupported(info.available);
+      });
+      return () => {
+        alive = false;
+      };
+    }
     void biometricAvailable().then((available) => {
       if (alive) setBioSupported(available);
     });
@@ -236,7 +258,9 @@ export function SettingsScreen() {
     if (settings.haptics) hapticTap();
     toast(
       method === 'biometric'
-        ? t('أصبحت البصمة طريقة الفتح الأساسية. يبقى PIN بديلاً.', 'Biometrics is now the primary unlock method. PIN stays as a fallback.')
+        ? nativePlatform
+          ? t('أصبحت البصمة الأصلية طريقة الفتح الأساسية. يبقى PIN بديلاً.', 'Native biometrics is now the primary unlock method. PIN stays as a fallback.')
+          : t('أصبحت البصمة طريقة الفتح الأساسية. يبقى PIN بديلاً.', 'Biometrics is now the primary unlock method. PIN stays as a fallback.')
         : t('أصبح رمز PIN طريقة الفتح الأساسية.', 'PIN is now the primary unlock method.'),
       'success'
     );
@@ -280,17 +304,27 @@ export function SettingsScreen() {
       if (!credentialId) {
         if (settings.haptics) hapticError();
         toast(
-          t(
-            'تعذّر تفعيل البصمة. تأكد من دعم الجهاز ومن فتح التطبيق عبر اتصال آمن.',
-            'Could not enable biometrics. Make sure the device supports it and the app is served over a secure connection.'
-          ),
+          nativePlatform
+            ? t(
+                'لم يكتمل التحقق بالبصمة الأصلية. أعد المحاولة، أو تأكد من تسجيل بصمة أو وجه في إعدادات الجهاز.',
+                'Native biometric verification did not complete. Try again, or make sure a fingerprint or face is enrolled in your device settings.'
+              )
+            : t(
+                'تعذّر تفعيل البصمة. تأكد من دعم الجهاز ومن فتح التطبيق عبر اتصال آمن.',
+                'Could not enable biometrics. Make sure the device supports it and the app is served over a secure connection.'
+              ),
           'error'
         );
         return;
       }
       updateSettings({ lock: { ...settings.lock, credentialId, method: 'biometric' } });
       if (settings.haptics) hapticSuccess();
-      toast(t('تم تفعيل الفتح بالبصمة.', 'Biometric unlock enabled.'), 'success');
+      toast(
+        nativePlatform
+          ? t('تم تفعيل الفتح بالبصمة الأصلية.', 'Native biometric unlock enabled.')
+          : t('تم تفعيل الفتح بالبصمة.', 'Biometric unlock enabled.'),
+        'success'
+      );
     } finally {
       setBioBusy(false);
     }
@@ -635,7 +669,17 @@ export function SettingsScreen() {
           label={t('قفل التطبيق', 'App lock')}
           description={
             settings.lock.enabled
-              ? t('يُطلب رمز PIN عند كل فتح للتطبيق.', 'A PIN is required every time the app opens.')
+              ? settings.lock.credentialId
+                ? nativePlatform
+                  ? t(
+                      'يُطلب التحقق بالبصمة الأصلية أو رمز PIN عند كل فتح للتطبيق.',
+                      'Native biometrics or your PIN is required every time the app opens.'
+                    )
+                  : t(
+                      'يُطلب التحقق بالبصمة أو رمز PIN عند كل فتح للتطبيق.',
+                      'Biometrics or your PIN is required every time the app opens.'
+                    )
+                : t('يُطلب رمز PIN عند كل فتح للتطبيق.', 'A PIN is required every time the app opens.')
               : t('اطلب رمز PIN عند فتح التطبيق.', 'Require a PIN when the app opens.')
           }
         />
@@ -659,16 +703,24 @@ export function SettingsScreen() {
             <Segmented
               value={settings.lock.method}
               options={[
-                { value: 'biometric', label: t('البصمة', 'Biometrics') },
+                {
+                  value: 'biometric',
+                  label: nativePlatform ? t('البصمة الأصلية', 'Native biometrics') : t('البصمة', 'Biometrics')
+                },
                 { value: 'pin', label: t('رمز PIN', 'PIN') }
               ]}
               onChange={changeLockMethod}
             />
             <p className="page-sub" style={{ margin: 0, fontSize: 11.5 }}>
-              {t(
-                'يبقى رمز PIN بديلاً دائماً حتى لو كانت البصمة طريقة الفتح الأساسية.',
-                'Your PIN always remains a fallback even when biometrics is the primary method.'
-              )}
+              {nativePlatform
+                ? t(
+                    'تُطلب بصمة الجهاز الأصلية كطريقة أساسية، ويبقى رمز PIN بديلاً دائماً.',
+                    'The device’s native biometrics is requested by default, and your PIN always remains a fallback.'
+                  )
+                : t(
+                    'يبقى رمز PIN بديلاً دائماً حتى لو كانت البصمة طريقة الفتح الأساسية.',
+                    'Your PIN always remains a fallback even when biometrics is the primary method.'
+                  )}
             </p>
           </div>
         ) : null}
@@ -682,11 +734,15 @@ export function SettingsScreen() {
                   <Icon name="user" size={18} />
                 </span>
                 <div className="col" style={{ minWidth: 0 }}>
-                  <span className="list-title">{t('فتح بالبصمة', 'Biometric unlock')}</span>
+                  <span className="list-title">{biometricTitle}</span>
                   <span className="list-sub">
                     {settings.lock.credentialId
-                      ? t('مفعّل على هذا الجهاز', 'Enabled on this device')
-                      : t('متاح على هذا الجهاز', 'Available on this device')}
+                      ? nativePlatform
+                        ? t('مفعّل عبر البصمة الأصلية', 'Enabled via native biometrics')
+                        : t('مفعّل على هذا الجهاز', 'Enabled on this device')
+                      : nativePlatform && biometryTypeLabel
+                        ? t(`متاح (${biometryTypeLabel})`, `Available (${biometryTypeLabel})`)
+                        : t('متاح على هذا الجهاز', 'Available on this device')}
                   </span>
                 </div>
               </div>
@@ -704,10 +760,15 @@ export function SettingsScreen() {
         ) : null}
 
         <HintCard icon="shield">
-          {t(
-            'يُحفظ رمز PIN كبصمة مشفّرة (PBKDF2) على جهازك فقط؛ لا خادم ولا يمكن استعادته. عند نسيانه يمكنك مسح بيانات التطبيق يدوياً.',
-            'The PIN is stored only as a PBKDF2 hash on your device; there is no server and it cannot be recovered. If forgotten, you can clear the app data manually.'
-          )}
+          {nativePlatform
+            ? t(
+                'يُتحقق من البصمة عبر نظام الجهاز مباشرة ولا يُخزَّن أي سر. يُحفظ رمز PIN كبصمة مشفّرة (PBKDF2) على جهازك فقط؛ لا خادم ولا يمكن استعادته.',
+                'Biometrics is verified by the operating system itself and no secret is stored. Your PIN is stored only as a PBKDF2 hash on this device; there is no server and it cannot be recovered.'
+              )
+            : t(
+                'يُحفظ رمز PIN كبصمة مشفّرة (PBKDF2) على جهازك فقط؛ لا خادم ولا يمكن استعادته. عند نسيانه يمكنك مسح بيانات التطبيق يدوياً.',
+                'The PIN is stored only as a PBKDF2 hash on your device; there is no server and it cannot be recovered. If forgotten, you can clear the app data manually.'
+              )}
         </HintCard>
       </section>
 

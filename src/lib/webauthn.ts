@@ -1,3 +1,11 @@
+import {
+  NATIVE_BIOMETRIC_SENTINEL,
+  isNativeBiometricsAvailable,
+  isNativePlatform,
+  registerNativeBiometric,
+  verifyNativeBiometric
+} from './native-biometric';
+
 function randomChallenge(): Uint8Array {
   return crypto.getRandomValues(new Uint8Array(32));
 }
@@ -15,7 +23,13 @@ function base64UrlToBuffer(value: string): Uint8Array {
   return Uint8Array.from(atob(padded), (char) => char.charCodeAt(0));
 }
 
+/**
+ * Biometric availability.
+ * Native (Capacitor Android/iOS): enrolled biometrics through the OS prompt.
+ * Web: a platform authenticator through WebAuthn.
+ */
 export async function biometricAvailable(): Promise<boolean> {
+  if (isNativePlatform()) return isNativeBiometricsAvailable();
   try {
     if (typeof PublicKeyCredential === 'undefined') return false;
     if (!(await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())) return false;
@@ -25,7 +39,13 @@ export async function biometricAvailable(): Promise<boolean> {
   }
 }
 
+/**
+ * Register biometric unlock.
+ * Native returns the `native-biometric` sentinel (the OS prompt is the gate; no
+ * secret is stored). Web returns the WebAuthn credential id.
+ */
 export async function registerBiometric(label: string): Promise<string | null> {
+  if (isNativePlatform()) return registerNativeBiometric();
   try {
     if (!(await biometricAvailable())) return null;
     const credential = (await navigator.credentials.create({
@@ -56,7 +76,15 @@ export async function registerBiometric(label: string): Promise<string | null> {
   }
 }
 
+/**
+ * Verify biometric unlock.
+ * Native ignores the credential id and asks the OS BiometricPrompt; the web
+ * keeps using the stored WebAuthn credential. The native sentinel is never sent
+ * to WebAuthn.
+ */
 export async function verifyBiometric(credentialId: string): Promise<boolean> {
+  if (isNativePlatform()) return verifyNativeBiometric();
+  if (credentialId === NATIVE_BIOMETRIC_SENTINEL) return false;
   try {
     if (!(await biometricAvailable())) return false;
     const assertion = await navigator.credentials.get({

@@ -16,6 +16,7 @@ import { FONTS, getSettings, resolveFont } from '../../lib/settings';
 import { getStorageInfo, type StorageInfo } from '../../lib/storage';
 import { toast } from '../../lib/toast';
 import { biometricAvailable } from '../../lib/webauthn';
+import { getNativeBiometricsInfo } from '../../lib/native-biometric';
 
 /* ------------------------------------------------------------------ types */
 
@@ -151,18 +152,21 @@ function cameraValue(permission: CameraPermission): { ar: string; en: string; st
 
 async function collectDiagnostics(): Promise<DiagnosticsData> {
   const settings = getSettings();
-  const [storage, swRegistered, biometric, camera] = await Promise.all([
-    getStorageInfo(),
-    serviceWorkerRegistered(),
-    biometricAvailable(),
-    cameraPermission()
-  ]);
-
-  const nav = navigator;
-  const clipboardSupported = typeof nav.clipboard?.writeText === 'function';
   const bridge = (window as unknown as { Capacitor?: CapacitorBridge }).Capacitor;
   const native = Boolean(bridge?.isNativePlatform?.());
   const platformName = native ? bridge?.getPlatform?.() ?? 'native' : 'web';
+  const [storage, swRegistered, biometric, camera, nativeBiometrics] = await Promise.all([
+    getStorageInfo(),
+    serviceWorkerRegistered(),
+    native ? Promise.resolve(false) : biometricAvailable(),
+    cameraPermission(),
+    getNativeBiometricsInfo()
+  ]);
+  const nativeBiometric = native && nativeBiometrics.available;
+  const nativeBiometryLabel = { ar: nativeBiometrics.labelAr, en: nativeBiometrics.labelEn };
+
+  const nav = navigator;
+  const clipboardSupported = typeof nav.clipboard?.writeText === 'function';
   const standalone = isStandalone();
   const permissions = notificationPermission();
   const notifications = notificationValue(permissions);
@@ -190,6 +194,48 @@ async function collectDiagnostics(): Promise<DiagnosticsData> {
   const touch = nav.maxTouchPoints > 0;
   const percent = storage.percent;
   const storageStatus: DiagnosticStatus = percent === null ? 'info' : percent >= 95 ? 'no' : percent >= 85 ? 'warn' : 'ok';
+
+  // Native builds use the OS biometric prompt instead of WebAuthn; never show a
+  // misleading "WebAuthn unsupported" warning inside the Android app.
+  const biometricRows: DiagnosticRow[] = native
+    ? [
+        row(
+          'native-biometric',
+          'مصادقة حيوية أصلية',
+          'Native biometrics',
+          nativeBiometric ? `مدعومة (${nativeBiometryLabel.ar})` : 'غير مدعومة',
+          nativeBiometric ? `Supported (${nativeBiometryLabel.en})` : 'Unsupported',
+          nativeBiometric ? 'ok' : 'warn',
+          nativeBiometric
+            ? 'تُستخدم بصمة الجهاز لفتح التطبيق، ويبقى رمز PIN بديلاً دائماً.'
+            : 'لم نعثر على بصمة مسجّلة؛ يمكنك فتح التطبيق برمز PIN.',
+          nativeBiometric
+            ? 'The device biometrics unlocks the app; your PIN always remains a fallback.'
+            : 'No enrolled biometrics were found; you can unlock the app with your PIN.'
+        )
+      ]
+    : [
+        row(
+          'webauthn',
+          'WebAuthn (البصمة)',
+          'WebAuthn (biometrics)',
+          typeof PublicKeyCredential === 'undefined' ? 'غير مدعوم' : 'مدعوم',
+          typeof PublicKeyCredential === 'undefined' ? 'Unsupported' : 'Supported',
+          typeof PublicKeyCredential === 'undefined' ? 'warn' : 'ok',
+          typeof PublicKeyCredential === 'undefined' ? 'يمكن استخدام PIN بدلاً من البصمة.' : undefined,
+          typeof PublicKeyCredential === 'undefined' ? 'PIN can be used instead of biometrics.' : undefined
+        ),
+        row(
+          'biometric',
+          'مستشعر البصمة',
+          'Platform authenticator',
+          biometric ? 'متاح' : 'غير متاح',
+          biometric ? 'Available' : 'Unavailable',
+          biometric ? 'ok' : 'warn',
+          biometric ? undefined : 'يُستخدم PIN لفتح التطبيق.',
+          biometric ? undefined : 'A PIN is used to unlock the app.'
+        )
+      ];
 
   const sections: DiagnosticSection[] = [
     {
@@ -285,32 +331,25 @@ async function collectDiagnostics(): Promise<DiagnosticsData> {
           'لا تُفتح الكاميرا إلا بعد زر صريح.',
           'The camera opens only after an explicit tap.'
         ),
-        row(
-          'webauthn',
-          'WebAuthn (البصمة)',
-          'WebAuthn (biometrics)',
-          typeof PublicKeyCredential === 'undefined' ? 'غير مدعوم' : 'مدعوم',
-          typeof PublicKeyCredential === 'undefined' ? 'Unsupported' : 'Supported',
-          typeof PublicKeyCredential === 'undefined' ? 'warn' : 'ok',
-          typeof PublicKeyCredential === 'undefined' ? 'يمكن استخدام PIN بدلاً من البصمة.' : undefined,
-          typeof PublicKeyCredential === 'undefined' ? 'PIN can be used instead of biometrics.' : undefined
-        ),
-        row(
-          'biometric',
-          'مستشعر البصمة',
-          'Platform authenticator',
-          biometric ? 'متاح' : 'غير متاح',
-          biometric ? 'Available' : 'Unavailable',
-          biometric ? 'ok' : 'warn',
-          biometric ? undefined : 'يُستخدم PIN لفتح التطبيق.',
-          biometric ? undefined : 'A PIN is used to unlock the app.'
-        ),
+        ...biometricRows,
         row(
           'lock',
           'قفل التطبيق',
           'App lock',
-          settings.lock.enabled ? (settings.lock.method === 'biometric' ? 'مفعّل (بصمة)' : 'مفعّل (PIN)') : 'غير مفعّل',
-          settings.lock.enabled ? (settings.lock.method === 'biometric' ? 'Enabled (biometric)' : 'Enabled (PIN)') : 'Disabled',
+          settings.lock.enabled
+            ? settings.lock.method === 'biometric'
+              ? native
+                ? 'مفعّل (بصمة أصلية)'
+                : 'مفعّل (بصمة)'
+              : 'مفعّل (PIN)'
+            : 'غير مفعّل',
+          settings.lock.enabled
+            ? settings.lock.method === 'biometric'
+              ? native
+                ? 'Enabled (native biometrics)'
+                : 'Enabled (biometric)'
+              : 'Enabled (PIN)'
+            : 'Disabled',
           'info'
         )
       ]
@@ -533,7 +572,9 @@ async function collectDiagnostics(): Promise<DiagnosticsData> {
     webShare: typeof nav.share === 'function',
     webShareFiles: canShareFiles(),
     webAuthn: typeof PublicKeyCredential !== 'undefined',
-    platformAuthenticator: biometric,
+    nativeBiometric,
+    biometryType: native ? nativeBiometrics.biometryType : null,
+    platformAuthenticator: native ? nativeBiometric : biometric,
     indexedDB: typeof indexedDB !== 'undefined',
     clipboard: clipboardSupported,
     print: typeof window.print === 'function',
