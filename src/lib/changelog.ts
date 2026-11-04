@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.3.0';
+export const APP_VERSION = '2.3.1';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.3.1',
+    date: '2026-11-04',
+    items: [
+      { ar: 'إصلاح تشخيص نسخة Android: وضع التطبيق الأصلي، Service Worker غير المطلوب، والمشاركة الأصلية.', en: 'Android diagnostics fixes: native display mode, service worker not required, and native sharing.' },
+      { ar: 'زر المشاركة في شاشة الإرسال يستخدم نافذة المشاركة الأصلية في تطبيق Android.', en: 'The share button in Compose uses the native Android share sheet.' },
+      { ar: 'توقيع APK بمفتاح ثابت لتمكين التحديثات المستقبلية دون إعادة تثبيت.', en: 'APK signed with a stable key so future versions can update in place.' }
+    ]
+  },
   {
     version: '2.3.0',
     date: '2026-11-04',

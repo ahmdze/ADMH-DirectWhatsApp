@@ -210,11 +210,11 @@ async function collectDiagnostics(): Promise<DiagnosticsData> {
           'standalone',
           'وضع العرض',
           'Display mode',
-          standalone ? 'مثبّت كتطبيق' : 'داخل المتصفح',
-          standalone ? 'Installed app' : 'In browser',
-          standalone ? 'ok' : 'warn',
-          standalone ? undefined : 'ثبّت التطبيق من قائمة المتصفح لتجربة أفضل.',
-          standalone ? undefined : 'Install the app from the browser menu for a better experience.'
+          native ? 'تطبيق أصلي (WebView)' : standalone ? 'مثبّت كتطبيق' : 'داخل المتصفح',
+          native ? 'Native app (WebView)' : standalone ? 'Installed app' : 'In browser',
+          native || standalone ? 'ok' : 'warn',
+          native ? undefined : standalone ? undefined : 'ثبّت التطبيق من قائمة المتصفح لتجربة أفضل.',
+          native ? undefined : standalone ? undefined : 'Install the app from the browser menu for a better experience.'
         ),
         row(
           'online',
@@ -240,11 +240,23 @@ async function collectDiagnostics(): Promise<DiagnosticsData> {
           'sw',
           'Service Worker',
           'Service worker',
-          !('serviceWorker' in nav) ? 'غير مدعوم' : swRegistered ? 'مسجّل' : 'غير مسجّل',
-          !('serviceWorker' in nav) ? 'Unsupported' : swRegistered ? 'Registered' : 'Not registered',
-          !('serviceWorker' in nav) ? 'no' : swRegistered ? 'ok' : 'warn',
-          swRegistered ? undefined : 'قد لا يعمل التطبيق دون اتصال حتى أول تحميل ناجح.',
-          swRegistered ? undefined : 'Offline use may not work until the first successful load.'
+          native
+            ? 'غير مطلوب في التطبيق الأصلي'
+            : !('serviceWorker' in nav)
+              ? 'غير مدعوم'
+              : swRegistered
+                ? 'مسجّل'
+                : 'غير مسجّل',
+          native
+            ? 'Not needed in the native app'
+            : !('serviceWorker' in nav)
+              ? 'Unsupported'
+              : swRegistered
+                ? 'Registered'
+                : 'Not registered',
+          native ? 'ok' : !('serviceWorker' in nav) ? 'no' : swRegistered ? 'ok' : 'warn',
+          native ? 'ملفات التطبيق مضمّنة داخل الـAPK.' : swRegistered ? undefined : 'قد لا يعمل التطبيق دون اتصال حتى أول تحميل ناجح.',
+          native ? 'App assets are bundled inside the APK.' : swRegistered ? undefined : 'Offline use may not work until the first successful load.'
         )
       ]
     },
@@ -322,11 +334,11 @@ async function collectDiagnostics(): Promise<DiagnosticsData> {
           'share',
           'مشاركة النظام',
           'Web Share',
-          typeof nav.share === 'function' ? 'مدعوم' : 'غير مدعوم',
-          typeof nav.share === 'function' ? 'Supported' : 'Unsupported',
-          typeof nav.share === 'function' ? 'ok' : 'warn',
-          typeof nav.share === 'function' ? undefined : 'ستُستبدل المشاركة بنسخ الرابط.',
-          typeof nav.share === 'function' ? undefined : 'Sharing falls back to copying the link.'
+          native || typeof nav.share === 'function' ? 'مدعوم' : 'غير مدعوم',
+          native || typeof nav.share === 'function' ? 'Supported' : 'Unsupported',
+          native || typeof nav.share === 'function' ? 'ok' : 'warn',
+          native ? 'تُستخدم نافذة المشاركة الأصلية في Android.' : undefined,
+          native ? 'The native Android share sheet is used.' : undefined
         ),
         row(
           'share-files',

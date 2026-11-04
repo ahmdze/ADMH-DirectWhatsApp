@@ -6,6 +6,7 @@ import { readClipboardText, writeClipboardText } from '../../lib/clipboard';
 import { recordTargetUse } from '../../lib/db';
 import { hapticError, hapticSuccess, hapticTap } from '../../lib/haptics';
 import { useI18n } from '../../lib/i18n';
+import { shareNativeText } from '../../lib/native';
 import { takeDraft, subscribeDraft } from '../../lib/launch';
 import { COUNTRIES, countryByIso, extractCandidateFromText, formatPhone, normalizeDigits, parseTarget } from '../../lib/phone';
 import { initials } from '../../lib/format';
@@ -151,6 +152,10 @@ export function ComposeScreen() {
     const target = resolveTarget();
     if (!target) return;
     const url = buildChatUrl(target, message);
+    if (await shareNativeText(url, t('واتساب المباشر', 'Direct WhatsApp'))) {
+      hapticSuccess();
+      return;
+    }
     if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
       try {
         await navigator.share({ title: t('واتساب المباشر', 'Direct WhatsApp'), text: message || undefined, url });

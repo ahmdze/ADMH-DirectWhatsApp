@@ -9,6 +9,7 @@ import { useActiveWorkspace, useDestinations, useTemplates } from '../../hooks/u
 import { buildBackup, importBackup, validateBackup, type ImportResult } from '../../lib/backup';
 import { downloadBlob, readFileAsText, shareFiles } from '../../lib/image';
 import { writeClipboardText } from '../../lib/clipboard';
+import { shareNativeText } from '../../lib/native';
 import { decodeImageFile, startCameraScanner, type CameraScanner } from '../../lib/scan';
 import { qrDataUrl } from '../../lib/qr';
 import { formatPhone } from '../../lib/phone';
@@ -269,6 +270,10 @@ export function TransferScreen() {
 
   const sharePayload = async () => {
     if (!qrPayloadText) return;
+    if (await shareNativeText(qrPayloadText, t('نقل بيانات ADMH', 'ADMH data transfer'))) {
+      hapticSuccess();
+      return;
+    }
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share({ title: t('نقل بيانات ADMH', 'ADMH data transfer'), text: qrPayloadText });

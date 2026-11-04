@@ -4,7 +4,8 @@
 
 An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without saving the number**, with saved destinations, message templates, QR codes, share cards, and printable stickers — all locally on your device, with no server and no account.
 
-> **Version 2.3.0** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> **Version 2.3.1** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> 2.3.1 fixes: native Android diagnostics, native system sharing, and stable APK signing for future updates.
 > The app uses a **PWA install identity** (`id: ./v2`), so anyone who installed the old version (v1) must uninstall it and install v2 once. v1 data is not lost: it migrates automatically on first launch.
 
 ---
@@ -200,6 +201,7 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
+| **2.3.1** | Android fixes: native app diagnostics, native sharing, and stable APK signing |
 | **2.3.0** | Data transfer via file/QR, data check and repair, diagnostics and device test matrix, Android APK app (Capacitor) |
 | **2.2.0** | Persian language, a font per language (Cairo/Vazirmatn/Noto Naskh), multilingual README |
 | **2.1.0** | Developer link, autocomplete, onboarding tour and “What's New”, QR from a shared image, reminder notifications, biometrics first, PWA screens, storage protection, Sorani Kurdish |
