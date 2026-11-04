@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.0-beta.3';
+export const APP_VERSION = '2.4.0';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,13 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.0',
+    date: '2026-11-05',
+    items: [
+      { ar: 'الإصدار المستقر v2.4.0: تذكيرات متكررة وإشعارات محلية، مرفقات جلسة ومعاينة كاملة، Quick Schedule، وسلة محذوفات مع استعادة.', en: 'v2.4.0 stable: recurring reminders with local notifications, session media with full preview, Quick Schedule, and a restorable trash.' }
+    ]
+  },
   {
     version: '2.4.0-beta.3',
     date: '2026-11-05',
