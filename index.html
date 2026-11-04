@@ -1,284 +1,40 @@
 <!doctype html>
-<html lang="ar" dir="rtl" class="light">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#075e54">
-<meta name="description" content="افتح محادثة واتساب مباشرة دون حفظ رقم الهاتف في جهات الاتصال.">
-<meta name="color-scheme" content="light dark">
-<title>واتساب المباشر | ADMH</title>
-<link rel="manifest" href="./manifest.json">
-<link rel="icon" href="./icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<style>
-:root{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;color-scheme:light;--bg:#f3f7f6;--surface:#fff;--surface-2:#edf3f1;--text:#172b27;--muted:#667873;--line:#dce7e3;--green:#128c7e;--green-2:#075e54;--green-soft:#e4f5ef;--danger:#c2413b;--shadow:0 14px 40px #12352b0c}
-:root.dark{color-scheme:dark;--bg:#0e1917;--surface:#172522;--surface-2:#20312d;--text:#edf7f3;--muted:#a2b5ae;--line:#2c403a;--green:#25d366;--green-2:#128c7e;--green-soft:#173c31;--danger:#ff8178;--shadow:none}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);display:flex;flex-direction:column;transition:background .2s,color .2s}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #25d36680;outline-offset:2px}.topbar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.top-inner{max-width:760px;margin:auto;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:42px;height:42px;border-radius:15px;background:var(--green-soft);display:grid;place-items:center;color:var(--green)}.brand-mark svg{width:25px;height:25px;fill:currentColor}.brand h1{font-size:16px;margin:0 0 3px;font-weight:800}.brand p{font-size:11px;color:var(--muted);margin:0}.icon-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text);width:40px;height:40px;border-radius:13px;font-size:17px}.page{width:min(100% - 28px,620px);margin:28px auto 24px;flex:1}.intro{text-align:center;margin:0 auto 22px}.intro h2{font-size:clamp(22px,5vw,29px);margin:0 0 7px;letter-spacing:-.5px}.intro p{color:var(--muted);font-size:13px;margin:0}.panel{background:var(--surface);border:1px solid var(--line);border-radius:25px;padding:clamp(17px,4vw,25px);box-shadow:var(--shadow)}.field{margin-bottom:18px}.field-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.field label{font-size:12px;font-weight:750;color:var(--muted)}.hint{font-size:11px;color:var(--muted);line-height:1.7;margin:7px 1px 0}.default-tag{font-size:10px;color:var(--green);background:var(--green-soft);padding:5px 9px;border-radius:20px;font-weight:750}.control{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px 14px;background:var(--surface-2);color:var(--text);font-size:14px;min-height:48px}.phone-wrap{position:relative}.phone-wrap .control{padding-left:75px;text-align:center;direction:ltr;font-weight:700;letter-spacing:.3px}.paste{position:absolute;left:7px;top:7px;border:0;border-radius:10px;background:var(--surface);color:var(--muted);padding:8px 10px;font-size:11px;font-weight:700}.clear-phone{position:absolute;right:7px;top:7px;border:0;border-radius:10px;background:var(--surface);color:var(--muted);padding:8px 10px;font-size:11px;font-weight:700}.phone-wrap .control{padding-right:75px}.network-status{font-size:11px;color:var(--muted);margin:9px 0 0;display:flex;align-items:center;justify-content:center;gap:6px}.network-status:before{content:'';width:7px;height:7px;border-radius:50%;background:#16a34a}.network-status.offline:before{background:#dc6b45}.ios-install-help{border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:11px;padding:8px 10px;font-size:10px;font-weight:700}.textarea{resize:vertical;min-height:90px;line-height:1.7}.counter{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}.templates{display:flex;flex-wrap:wrap;gap:7px}.chip{border:1px solid var(--line);background:var(--surface-2);color:var(--text);padding:8px 11px;border-radius:11px;font-size:11px;font-weight:650}.chip:hover{border-color:var(--green);color:var(--green)}.actions{display:grid;gap:9px;margin-top:22px}.primary{border:0;border-radius:15px;background:var(--green);color:#fff;padding:15px;font-size:15px;font-weight:800;box-shadow:0 7px 18px #128c7e30}.primary:hover{background:var(--green-2)}.secondary-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.secondary{border:1px solid var(--line);border-radius:13px;padding:11px 8px;background:var(--surface-2);color:var(--text);font-size:11px;font-weight:750}.secondary:hover{border-color:var(--green)}.status{font-size:11px;color:var(--muted);min-height:17px;margin:9px 0 0;text-align:center}.qr-panel{margin-top:16px;padding:17px;border:1px solid var(--line);border-radius:18px;text-align:center}.qr-panel[hidden]{display:none}.qr-panel p{font-size:12px;color:var(--muted)}#qrCode{width:220px;max-width:100%;margin:12px auto;padding:10px;background:#fff;border-radius:12px;display:grid;place-items:center}#qrCode svg{width:100%;height:auto;display:block}.qr-actions{display:flex;justify-content:center;gap:8px}.history{margin-top:15px;background:var(--surface);border:1px solid var(--line);border-radius:21px;padding:16px}.history[hidden]{display:none}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.section-head h3{font-size:13px;margin:0}.text-btn{border:0;background:none;color:var(--danger);font-size:11px;font-weight:700}.history-list{display:grid;gap:7px}.history-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border-radius:13px;background:var(--surface-2)}.history-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:700;direction:ltr;text-align:left}.history-actions{display:flex;gap:5px;flex-shrink:0}.mini-btn{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:6px 9px;border-radius:9px;font-size:10px;font-weight:700}.mini-btn.go{color:var(--green);border-color:#128c7e50}.empty{color:var(--muted);text-align:center;padding:14px;font-size:12px}.footer{text-align:center;color:var(--muted);font-size:10px;padding:12px 16px 22px;line-height:1.9}.footer a{color:var(--green);text-decoration:none;font-weight:750}.toast{position:fixed;z-index:20;top:15px;left:50%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;background:var(--text);color:var(--surface);padding:11px 16px;border-radius:13px;font-size:12px;font-weight:700;box-shadow:var(--shadow);transition:.2s;max-width:calc(100% - 30px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.modal{position:fixed;inset:0;z-index:15;background:#0009;display:grid;place-items:center;padding:18px}.modal[hidden]{display:none}.modal-card{width:min(100%,390px);background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px}.modal-card h3{margin:0 0 12px}.modal-card p{font-size:13px;line-height:1.8;color:var(--muted)}.modal-card .primary{width:100%;margin-top:10px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(min-width:700px){.page{margin-top:38px}.panel{padding:27px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-</style>
-
-<style id="admh-enhancements-style">
-.extra-panel{margin-top:15px;background:var(--surface);border:1px solid var(--line);border-radius:21px;padding:17px}
-.extra-panel h3{font-size:14px;margin:0 0 7px}.extra-panel .sub{font-size:11px;color:var(--muted);line-height:1.7;margin:0 0 13px}
-.extra-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.extra-action{border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:12px;padding:11px 9px;font-size:11px;font-weight:750}
-.extra-action.primary-extra{background:var(--green);color:white;border-color:var(--green)}
-.extra-input{width:100%;min-width:0;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:11px;padding:11px;font:inherit;font-size:12px;margin:5px 0 9px}
-.extra-list{display:grid;gap:7px;margin-top:10px}.extra-row{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface-2);border-radius:11px;padding:9px}.extra-row strong{font-size:12px;overflow-wrap:anywhere}.extra-row small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
-.extra-row-actions{display:flex;gap:5px;flex-shrink:0}.extra-row button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:6px 8px;font-size:10px}
-.scanner-video{width:100%;max-height:260px;object-fit:cover;border-radius:12px;background:#111;margin-top:10px}.extra-note{font-size:10px;color:var(--muted);line-height:1.7;margin-top:9px}
-.update-banner{position:fixed;z-index:30;bottom:18px;left:14px;right:14px;margin:auto;max-width:480px;background:var(--text);color:var(--surface);padding:13px;border-radius:16px;box-shadow:0 12px 35px #0003;display:flex;align-items:center;gap:10px}
-.update-banner[hidden]{display:none}.update-banner span{font-size:12px;line-height:1.5;flex:1}.update-banner button{border:0;border-radius:10px;background:#25d366;color:#073b2c;padding:9px 12px;font-weight:800;font-size:11px}
-@media(max-width:420px){.extra-grid{grid-template-columns:1fr 1fr}.extra-panel{padding:14px}}
-</style>
-</head>
-<body>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-<header class="topbar"><div class="top-inner"><div class="brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.04 2a9.8 9.8 0 0 0-8.4 14.86L2.3 22l5.27-1.38A9.9 9.9 0 1 0 12.04 2Zm0 17.9a8 8 0 0 1-4.08-1.12l-.3-.18-3.13.82.84-3.05-.2-.32A8.05 8.05 0 1 1 12.04 19.9Zm4.42-6.03c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.46-.4-.4-.54-.4h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.26 1.04.4 1.4.52.58.18 1.1.16 1.52.1.46-.06 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg></div><div><h1>واتساب المباشر من ADMH</h1><p>ابدأ المحادثة دون حفظ الرقم</p></div></div><button id="themeToggle" class="icon-btn" type="button" aria-label="تبديل المظهر">☀</button></div></header>
-<main class="page">
-<section class="intro"><h2>محادثتك تبدأ من هنا</h2><p>أدخل رقم الهاتف أو اسم المستخدم، واكتب رسالتك إن رغبت.</p><p id="networkStatus" class="network-status" role="status" aria-live="polite">جارٍ التحقق من الاتصال…</p></section>
-<section class="panel" aria-label="إنشاء رابط واتساب">
-<div class="field"><div class="field-head"><label for="countryCode">الدولة / مفتاح الاتصال</label><span class="default-tag">العراق افتراضياً +964</span></div><select id="countryCode" class="control"><option value="964" selected>🇮🇶 العراق (+964)</option><option value="966">🇸🇦 السعودية (+966)</option><option value="971">🇦🇪 الإمارات (+971)</option><option value="965">🇰🇼 الكويت (+965)</option><option value="974">🇶🇦 قطر (+974)</option><option value="968">🇴🇲 عُمان (+968)</option><option value="973">🇧🇭 البحرين (+973)</option><option value="962">🇯🇴 الأردن (+962)</option><option value="20">🇪🇬 مصر (+20)</option><option value="963">🇸🇾 سوريا (+963)</option><option value="961">🇱🇧 لبنان (+961)</option><option value="970">🇵🇸 فلسطين (+970)</option><option value="90">🇹🇷 تركيا (+90)</option><option value="1">🇺🇸 أمريكا / كندا (+1)</option><option value="44">🇬🇧 المملكة المتحدة (+44)</option><option value="49">🇩🇪 ألمانيا (+49)</option></select></div>
-<div class="field"><div class="field-head"><label for="phoneNumber">رقم الهاتف أو اسم المستخدم</label></div><div class="phone-wrap"><input id="phoneNumber" class="control" type="text" inputmode="tel" autocomplete="tel" autocapitalize="off" spellcheck="false" placeholder="07701234567 أو +964... أو @username" aria-describedby="phoneHint"><button id="pasteBtn" class="paste" type="button">لصق</button><button id="clearPhone" class="clear-phone" type="button" aria-label="مسح رقم الهاتف">مسح</button></div><p id="phoneHint" class="hint">يدعم الأرقام المحلية والدولية وروابط واتساب. عند إدخال رقم عراقي محلي، احذف الصفر الأول تلقائياً.</p></div>
-<div class="field"><div class="field-head"><label for="messageText">الرسالة (اختيارية)</label><span id="charCount" class="counter">0 حرف</span></div><textarea id="messageText" class="control textarea" rows="3" maxlength="2000" placeholder="اكتب الرسالة التي ستظهر جاهزة في المحادثة..."></textarea></div>
-<div class="field"><div class="field-head"><label>رسائل سريعة</label></div><div class="templates"><button class="chip" type="button" data-message="السلام عليكم ورحمة الله وبركاته">السلام عليكم</button><button class="chip" type="button" data-message="مرحباً، أود الاستفسار عن التفاصيل والأسعار.">استفسار</button><button class="chip" type="button" data-message="مرحباً، أين موقعكم بالتحديد؟">طلب الموقع</button><button class="chip" type="button" id="clearMessage">مسح الرسالة</button></div></div>
-<div class="actions"><button id="openBtn" class="primary" type="button">مراسلة عبر واتساب <span aria-hidden="true">↗</span></button><div class="secondary-row"><button id="copyBtn" class="secondary" type="button">نسخ رابط المحادثة</button><button id="qrBtn" class="secondary" type="button">إنشاء QR Code</button></div></div>
-<p id="status" class="status" aria-live="polite"></p>
-<div id="qrPanel" class="qr-panel" hidden><p>امسح الرمز لفتح رابط المحادثة</p><div id="qrCode" aria-label="رمز QR"></div><div class="qr-actions"><button id="downloadQr" class="mini-btn go" type="button">تنزيل QR بصيغة SVG</button><button id="hideQr" class="mini-btn" type="button">إخفاء</button></div></div>
-</section>
-<section id="historySection" class="history" hidden><div class="section-head"><h3>آخر الوجهات</h3><button id="clearHistory" class="text-btn" type="button">مسح السجل</button></div><div id="historyList" class="history-list"></div></section>
-</main>
-
-<section id="admhExtras" class="extra-panel">
-  <h3>أدوات إضافية</h3><p class="sub">إدارة وجهاتك وقوالبك، وقراءة رموز واتساب وإنشاء بطاقة مشاركة.</p>
-  <div class="extra-grid">
-    <button id="saveFavorite" class="extra-action" type="button">☆ إضافة إلى المفضلة</button>
-    <button id="showScanner" class="extra-action" type="button">▦ قراءة QR</button>
-    <button id="showCard" class="extra-action" type="button">▣ بطاقة مشاركة</button>
-    <button id="addTemplate" class="extra-action" type="button">＋ إضافة قالب رسالة</button>
-  </div>
-  <div id="favoritesWrap" hidden><div class="section-head" style="margin-top:17px"><h3>المفضلة</h3><button id="clearFavorites" class="text-btn" type="button">مسح الكل</button></div><div id="favoritesList" class="extra-list"></div></div>
-  <div id="templatesWrap" hidden><div class="section-head" style="margin-top:17px"><h3>قوالبي</h3></div><div id="customTemplates" class="templates"></div></div>
-  <div id="scannerPanel" hidden style="margin-top:16px"><div class="field-head"><label>قراءة رمز QR</label><button id="closeScanner" class="text-btn" type="button">إغلاق</button></div><div class="extra-grid"><button id="cameraScan" class="extra-action" type="button">استخدام الكاميرا</button><label class="extra-action" style="text-align:center">اختيار صورة QR<input id="qrImage" type="file" accept="image/*" hidden></label></div><video id="scannerVideo" class="scanner-video" playsinline muted hidden></video><p id="scannerStatus" class="extra-note">تتطلب القراءة دعم BarcodeDetector في المتصفح. يمكنك تجربة الكاميرا أو اختيار صورة.</p></div>
-  <div id="cardPanel" hidden style="margin-top:16px"><div class="field-head"><label for="cardName">بطاقة مشاركة</label><button id="closeCard" class="text-btn" type="button">إغلاق</button></div><input id="cardName" class="extra-input" maxlength="60" placeholder="اسم الشخص أو الجهة"><button id="generateCard" class="extra-action primary-extra" type="button" style="width:100%">إنشاء وتنزيل البطاقة SVG</button><p class="extra-note">تتضمن البطاقة الاسم والرقم ورمز QR. لا يتم رفع البيانات إلى أي خادم.</p></div>
-  <p class="extra-note">المفضلة والقوالب تحفظ محلياً على هذا الجهاز فقط.</p>
-</section>
-<div id="pwaUpdateBanner" class="update-banner" hidden role="status" aria-live="polite"><span>يتوفر إصدار جديد من التطبيق.</span><button id="applyPwaUpdate" type="button">تحديث الآن</button></div>
-
-<footer class="footer">أداة مستقلة لفتح روابط واتساب. لا ترسل رسائل تلقائياً ولا تتصل بخوادم ADMH.<br>تطوير <a href="https://wa.me/9647723064622" target="_blank" rel="noopener noreferrer">احمد زياد</a> · ADMH © 2026</footer>
-<div id="iosModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="iosTitle"><div class="modal-card"><h3 id="iosTitle">تثبيت التطبيق على الآيفون</h3><p>افتح هذه الصفحة في Safari، ثم اضغط زر المشاركة واختر «إضافة إلى الشاشة الرئيسية».</p><button id="closeIos" class="primary" type="button">فهمت</button></div></div>
-<script src="./vendor/qrcode.min.js"></script>
-<script>
-'use strict';
-(() => {
-  const $ = (id) => document.getElementById(id);
-  const STORAGE = Object.freeze({theme:'admh_wa_theme_v3',history:'admh_wa_history_v3'});
-  const MAX_HISTORY = 10;
-  const NATIONAL_LENGTHS = {964:[10],966:[9],971:[9],965:[8],974:[8],968:[8],973:[8],962:[9],20:[10],963:[9],961:[7,8],970:[9],90:[10],1:[10],44:[10],49:[10,11]};
-  let toastTimer;
-  let currentUrl = '';
-  let qrInstance = null;
-
-  function notify(message) {
-    const toast = $('toast');
-    toast.textContent = message;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
-  }
-  function safeReadHistory() {
-    try {
-      const value = JSON.parse(localStorage.getItem(STORAGE.history) || '[]');
-      if (!Array.isArray(value)) return [];
-      return value.filter(item => item && typeof item.value === 'string' &&
-        typeof item.display === 'string' && ['number','username'].includes(item.type)).slice(0, MAX_HISTORY);
-    } catch { return []; }
-  }
-  function writeHistory(items) {
-    try { localStorage.setItem(STORAGE.history, JSON.stringify(items.slice(0, MAX_HISTORY))); }
-    catch { notify('تعذر حفظ السجل على هذا الجهاز'); }
-  }
-  function extractTarget(input) {
-    let raw = String(input || '').trim();
-    if (!raw) return {error:'أدخل رقم الهاتف أو اسم المستخدم أولاً.'};
-    if (raw.length > 300) return {error:'المدخل طويل أكثر من اللازم.'};
-
-    try {
-      if (/^https?:\/\//i.test(raw)) {
-        const parsed = new URL(raw);
-        const host = parsed.hostname.toLowerCase();
-        if (!['wa.me','www.wa.me','api.whatsapp.com','www.whatsapp.com','whatsapp.com'].includes(host)) {
-          return {error:'الرابط المدخل ليس رابط واتساب معروفاً.'};
-        }
-        const phone = parsed.searchParams.get('phone');
-        const pathPart = parsed.pathname.split('/').filter(Boolean)[0] || '';
-        raw = phone || decodeURIComponent(pathPart);
-        if (raw && ![...raw].every(ch => ch >= '0' && ch <= '9')) raw = '@' + raw;
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#06110f" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="واتساب المباشر من ADMH — افتح محادثة واتساب دون حفظ الرقم، مع رموز QR وقوالب ووجهات محفوظة. يعمل دون اتصال." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="واتساب المباشر" />
+    <link rel="icon" href="./icons/monochrome.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <title>واتساب المباشر — ADMH</title>
+    <style>
+      html, body { margin: 0; background: #06110f; }
+      #root { min-height: 100dvh; }
+      .boot-splash {
+        position: fixed; inset: 0; display: grid; place-items: center;
+        background: radial-gradient(120% 80% at 80% 0%, #0f3b33 0%, #081d1a 45%, #06110f 100%);
+        color: #e8f8f1; font-family: 'Cairo', system-ui, sans-serif;
+        transition: opacity .3s ease; z-index: 999;
       }
-    } catch { return {error:'تعذر قراءة الرابط. تحقق من صحته.'}; }
-
-    if (raw.startsWith('@')) {
-      const username = raw.slice(1).trim();
-      if (!/^[a-zA-Z0-9._-]{3,64}$/.test(username)) return {error:'صيغة اسم المستخدم غير صحيحة.'};
-      return {type:'username',value:username,display:'@'+username};
-    }
-    if (/[a-z]/i.test(raw)) return {error:'اكتب اسم المستخدم مسبوقاً بعلامة @ أو أدخل رقماً صحيحاً.'};
-
-    if (/[+]/.test(raw.replace(/^\s*\+/, ''))) return {error:'علامة + يجب أن تكون في بداية الرقم فقط.'};
-    let digits = raw.replace(/[\s().-]/g, '');
-    if (!/^\+?\d+$/.test(digits)) return {error:'استخدم أرقاماً فقط مع مفتاح الدولة.'};
-    let country = $('countryCode').value;
-    if (digits.startsWith('+')) {
-      digits = digits.slice(1);
-      country = '';
-    } else if (digits.startsWith('00')) {
-      digits = digits.slice(2);
-      country = '';
-    }
-    if (!country) {
-      const known = Object.keys(NATIONAL_LENGTHS).sort((a,b)=>b.length-a.length).find(code => digits.startsWith(code));
-      if (!known) return {error:'لم نتمكن من تحديد مفتاح الدولة. اختر الدولة أو أدخل الرقم بصيغة + دولية.'};
-      country = known;
-    } else if (digits.startsWith(country) && digits.length > (NATIONAL_LENGTHS[country]?.[0] || 7)) {
-      // A selected country prefix already included in the number.
-    } else {
-      if (digits.startsWith('0')) digits = digits.slice(1);
-      digits = country + digits;
-    }
-    const national = digits.slice(country.length);
-    const lengths = NATIONAL_LENGTHS[country];
-    if (!lengths) return {error:'الدولة غير مدعومة للتحقق حالياً.'};
-    if (!lengths.includes(national.length)) return {error:'طول الرقم لا يطابق صيغة الدولة المختارة.'};
-    if (country === '964' && !national.startsWith('7')) return {error:'رقم الهاتف العراقي يجب أن يبدأ بعد مفتاح الدولة بالرقم 7.'};
-    if (digits.length < 8 || digits.length > 15) return {error:'الرقم خارج نطاق الطول الدولي المسموح.'};
-    return {type:'number',value:digits,display:'+'+digits};
-  }
-  function makeUrl(target) {
-    const text = $('messageText').value.trim();
-    return 'https://wa.me/' + target.value + (text ? '?text=' + encodeURIComponent(text) : '');
-  }
-  function recordTarget(target) {
-    const history = safeReadHistory().filter(item => !(item.type === target.type && item.value === target.value));
-    history.unshift({type:target.type,value:target.value,display:target.display});
-    writeHistory(history);
-    renderHistory();
-  }
-  function openTarget(target, includeMessage = true) {
-    const url = includeMessage ? makeUrl(target) : 'https://wa.me/' + target.value;
-    window.open(url, '_blank', 'noopener,noreferrer');
-    recordTarget(target);
-  }
-  function getTarget() {
-    const result = extractTarget($('phoneNumber').value);
-    if (result.error) { notify(result.error); $('status').textContent = result.error; return null; }
-    $('status').textContent = 'الوجهة: ' + result.display;
-    return result;
-  }
-  function renderHistory() {
-    const items = safeReadHistory();
-    const section = $('historySection');
-    const list = $('historyList');
-    list.replaceChildren();
-    section.hidden = items.length === 0;
-    for (const item of items) {
-      const row = document.createElement('div'); row.className = 'history-item';
-      const label = document.createElement('span'); label.className = 'history-value';
-      label.textContent = (item.type === 'username' ? '@' : '+') + item.value;
-      const actions = document.createElement('div'); actions.className = 'history-actions';
-      const open = document.createElement('button'); open.type='button'; open.className='mini-btn go'; open.textContent='مراسلة';
-      open.textContent='تحميل'; open.addEventListener('click', () => { $('phoneNumber').value = item.type === 'username' ? '@' + item.value : '+' + item.value; $('phoneNumber').focus(); notify('تم تحميل الوجهة في الحقل'); });
-      const remove = document.createElement('button'); remove.type='button'; remove.className='mini-btn'; remove.textContent='حذف';
-      remove.setAttribute('aria-label','حذف '+item.display+' من السجل');
-      remove.addEventListener('click', () => { writeHistory(safeReadHistory().filter(x => !(x.type===item.type && x.value===item.value))); renderHistory(); });
-      actions.append(open,remove); row.append(label,actions); list.append(row);
-    }
-  }
-  function setTheme(theme) {
-    const dark = theme === 'dark';
-    document.documentElement.classList.toggle('dark', dark);
-    document.documentElement.classList.toggle('light', !dark);
-    $('themeToggle').textContent = dark ? '☀' : '☾';
-    $('themeToggle').setAttribute('aria-label', dark ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن');
-    try { localStorage.setItem(STORAGE.theme, dark ? 'dark' : 'light'); } catch {}
-  }
-
-  $('themeToggle').addEventListener('click', () => setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark'));
-  $('messageText').addEventListener('input', () => $('charCount').textContent = $('messageText').value.length + ' حرف');
-  document.querySelectorAll('[data-message]').forEach(button => button.addEventListener('click', () => {
-    $('messageText').value = button.dataset.message;
-    $('messageText').dispatchEvent(new Event('input'));
-  }));
-  $('clearMessage').addEventListener('click', () => { $('messageText').value=''; $('messageText').dispatchEvent(new Event('input')); });
-  $('pasteBtn').addEventListener('click', async () => {
-    try {
-      if (!navigator.clipboard?.readText) throw new Error('unavailable');
-      $('phoneNumber').value = await navigator.clipboard.readText();
-      notify('تم لصق النص');
-      $('phoneNumber').focus();
-    } catch { notify('تعذر الوصول إلى الحافظة. الصق الرقم يدوياً.'); }
-  });
-  $('openBtn').addEventListener('click', () => { const target=getTarget(); if(target) openTarget(target); });
-  $('copyBtn').addEventListener('click', async () => {
-    const target=getTarget(); if(!target) return;
-    const url=makeUrl(target);
-    try {
-      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(url);
-      else {
-        const area=document.createElement('textarea'); area.value=url; area.style.position='fixed'; area.style.opacity='0';
-        document.body.append(area); area.select();
-        const copied=document.execCommand('copy'); area.remove();
-        if(!copied) throw new Error('copy failed');
-      }
-      notify('تم نسخ رابط المحادثة');
-    } catch { notify('تعذر النسخ. تحقق من صلاحية الحافظة.'); }
-  });
-  $('qrBtn').addEventListener('click', () => {
-    const target=getTarget(); if(!target) return;
-    if (typeof QRCode !== 'function') { notify('تعذر تحميل مولّد QR المحلي'); return; }
-    currentUrl=makeUrl(target);
-    const container=$('qrCode'); container.replaceChildren();
-    try {
-      qrInstance=new QRCode(container,{text:currentUrl,width:220,height:220,colorDark:'#10201c',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-      $('qrPanel').hidden=false;
-    } catch { notify('تعذر إنشاء الرمز. اختصر نص الرسالة وحاول مجدداً.'); }
-  });
-  $('hideQr').addEventListener('click', () => $('qrPanel').hidden=true);
-  $('downloadQr').addEventListener('click', () => {
-    const matrix=qrInstance && qrInstance._oQRCode;
-    if(!matrix) { notify('أنشئ رمز QR أولاً'); return; }
-    const count=matrix.getModuleCount(), quiet=4, size=count+quiet*2;
-    let path='';
-    for(let row=0;row<count;row++) for(let col=0;col<count;col++) {
-      if(matrix.isDark(row,col)) path += 'M'+(col+quiet)+' '+(row+quiet)+'h1v1h-1z';
-    }
-    const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+size+' '+size+'" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="'+path+'" fill="#10201c"/></svg>';
-    const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const link=document.createElement('a'); link.href=url; link.download='admh-whatsapp-qr.svg'; link.click();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
-  });
-  $('clearHistory').addEventListener('click', () => {
-    if(!safeReadHistory().length) return;
-    if(!window.confirm('هل تريد مسح سجل الوجهات المحفوظ على هذا الجهاز؟')) return;
-    try { localStorage.removeItem(STORAGE.history); } catch {}
-    renderHistory(); notify('تم مسح السجل من هذا الجهاز');
-  });
-  $('phoneNumber').addEventListener('keydown', event => { if(event.key==='Enter') $('openBtn').click(); });
-  $('closeIos').addEventListener('click', () => $('iosModal').hidden=true);
-  $('iosModal').addEventListener('click', event => { if(event.target===$('iosModal')) $('iosModal').hidden=true; });
-
-  let savedTheme='light';
-  try { savedTheme=localStorage.getItem(STORAGE.theme) || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); } catch {}
-  setTheme(savedTheme);
-  renderHistory();
-
-  const isIos=/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone;
-  if(isIos && !window.matchMedia('(display-mode: standalone)').matches) {
-    const help=document.createElement('button');
-    help.type='button'; help.className='sr-only'; help.textContent='تعليمات تثبيت الآيفون';
-    help.classList.remove('sr-only'); help.classList.add('ios-install-help'); help.addEventListener('click',()=>$('iosModal').hidden=false); document.querySelector('.top-inner').append(help);
-  }
-})();
-</script>
-<script src="./enhancements.js"></script><script src="./pwa-update.js"></script>
-</body>
+      .boot-splash img { width: 84px; height: 84px; border-radius: 24px; }
+      .boot-splash p { margin: 16px 0 0; font-size: 14px; opacity: .7; }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="boot-splash">
+        <div style="text-align:center">
+          <img src="./icons/icon-192.png" alt="" />
+          <p>واتساب المباشر · ADMH</p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
 </html>
