@@ -26,6 +26,7 @@ import {
   type NotificationPermissionState
 } from '../../lib/notifications';
 import { writeClipboardText } from '../../lib/clipboard';
+import { shareNativeText } from '../../lib/native';
 import { workspaceDisplayName } from '../../lib/workspace';
 import { CountrySheet } from './CountrySheet';
 import { WorkspaceSheet } from './WorkspaceSheet';
@@ -74,6 +75,7 @@ export function SettingsScreen() {
   const [deleteTarget, setDeleteTarget] = useState<Workspace | null>(null);
   const [clearOpen, setClearOpen] = useState(false);
   const [installOpen, setInstallOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [bioSupported, setBioSupported] = useState(false);
   const [bioInfo, setBioInfo] = useState<NativeBiometricInfo | null>(null);
   const [bioBusy, setBioBusy] = useState(false);
@@ -219,14 +221,21 @@ export function SettingsScreen() {
     );
   };
 
-  const shareApp = async () => {
-    const url = typeof window !== 'undefined' ? `${window.location.origin}${import.meta.env.BASE_URL}` : '';
-    const title = t('واتساب المباشر — ADMH', 'Direct WhatsApp — ADMH');
+  const PWA_SHARE_URL = 'https://ahmdze.github.io/ADMH-DirectWhatsApp/';
+  const APK_SHARE_URL = `https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/download/v${APP_VERSION}/ADMH-DirectWhatsApp-${APP_VERSION}.apk`;
+
+  const shareLink = async (url: string, title: string) => {
+    if (await shareNativeText(url, title)) {
+      if (settings.haptics) hapticSuccess();
+      setShareOpen(false);
+      return;
+    }
     const shareFn = typeof navigator !== 'undefined' ? (navigator as ShareCapableNavigator).share : undefined;
-    if (url && typeof shareFn === 'function') {
+    if (typeof shareFn === 'function') {
       try {
         await shareFn.call(navigator, { title, url });
         if (settings.haptics) hapticSuccess();
+        setShareOpen(false);
         return;
       } catch (error) {
         if ((error as { name?: string } | null)?.name === 'AbortError') return;
@@ -235,11 +244,17 @@ export function SettingsScreen() {
     const copied = await writeClipboardText(url);
     if (copied) {
       if (settings.haptics) hapticSuccess();
-      toast(t('تم نسخ رابط التطبيق.', 'App link copied.'), 'success');
+      setShareOpen(false);
+      toast(t('تم نسخ الرابط.', 'Link copied.'), 'success');
       return;
     }
     if (settings.haptics) hapticError();
-    toast(t('تعذّر نسخ رابط التطبيق.', 'Could not copy the app link.'), 'error');
+    toast(t('تعذّر نسخ الرابط.', 'Could not copy the link.'), 'error');
+  };
+
+  const shareApp = () => {
+    if (settings.haptics) hapticTap();
+    setShareOpen(true);
   };
 
   const restartTour = () => {
@@ -992,6 +1007,38 @@ export function SettingsScreen() {
       />
 
       <WorkspaceSheet open={workspaceOpen} onClose={() => setWorkspaceOpen(false)} onCreated={handleWorkspaceCreated} />
+
+      <Sheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title={t('شارك التطبيق', 'Share app')}
+        subtitle={t('اختر النسخة التي تريد مشاركتها.', 'Choose which version to share.')}
+      >
+        <div className="col" style={{ gap: 10 }}>
+          <Button
+            variant="soft"
+            block
+            onClick={() => void shareLink(PWA_SHARE_URL, t('واتساب المباشر — تطبيق الويب', 'Direct WhatsApp — Web app'))}
+          >
+            <Icon name="globe" size={16} />
+            {t('شارك تطبيق PWA', 'Share PWA app')}
+          </Button>
+          <p className="page-sub" style={{ margin: 0, fontSize: 11.5 }}>
+            {t('رابط يعمل من المتصفح على أي جهاز دون تثبيت.', 'A link that works in any browser without installing.')}
+          </p>
+          <Button
+            variant="soft"
+            block
+            onClick={() => void shareLink(APK_SHARE_URL, t('واتساب المباشر — تطبيق Android', 'Direct WhatsApp — Android app'))}
+          >
+            <Icon name="download" size={16} />
+            {t('شارك تطبيق APK', 'Share APK app')}
+          </Button>
+          <p className="page-sub" style={{ margin: 0, fontSize: 11.5 }}>
+            {t('رابط تنزيل تطبيق Android (APK) مباشرة.', 'A direct download link for the Android app (APK).')}
+          </p>
+        </div>
+      </Sheet>
 
       <PinSheet open={pinMode !== null} mode={pinMode ?? 'set'} onClose={() => setPinMode(null)} />
 

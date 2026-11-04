@@ -4,7 +4,8 @@
 
 An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without saving the number**, with saved destinations, message templates, QR codes, share cards, and printable stickers — all locally on your device, with no server and no account.
 
-> **Version 2.3.3** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> **Version 2.3.4** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> New in 2.3.4: “Share app” now offers two choices — **share the PWA web app** or **share the APK download link** — instead of the localhost URL inside the native app.
 > New in 2.3.3: native clipboard/paste in the APK, correct persistent-storage status, a **Send to developer** button in Diagnostics, and in-app APK updates with a progress bar and an Install button.
 > New in 2.3.2: **native biometric app lock** on Android with PIN fallback, and an **in-app update checker** reading GitHub Releases.
 > 2.3.1 fixes: native Android diagnostics, native system sharing, and stable APK signing for future updates.
@@ -205,6 +206,7 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
+| **2.3.4** | “Share app” offers a PWA share option and an APK download-link option |
 | **2.3.3** | Native clipboard/paste, correct persistent storage, send report to developer via WhatsApp, and APK download with progress + install |
 | **2.3.2** | Native Android biometric lock with PIN fallback, and in-app APK update checker |
 | **2.3.1** | Android fixes: native app diagnostics, native sharing, and stable APK signing |

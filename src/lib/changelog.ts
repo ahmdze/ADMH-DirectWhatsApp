@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.3.3';
+export const APP_VERSION = '2.3.4';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,13 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.3.4',
+    date: '2026-11-04',
+    items: [
+      { ar: 'زر «شارك التطبيق» يعرض خيارين: مشاركة تطبيق الويب PWA أو رابط تنزيل APK، بدل رابط localhost داخل التطبيق الأصلي.', en: '“Share app” now offers two choices: share the PWA web app or the APK download link, instead of the localhost URL inside the native app.' }
+    ]
+  },
   {
     version: '2.3.3',
     date: '2026-11-04',
