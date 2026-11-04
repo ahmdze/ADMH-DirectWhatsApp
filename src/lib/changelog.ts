@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.3.4';
+export const APP_VERSION = '2.3.5';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,13 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.3.5',
+    date: '2026-11-04',
+    items: [
+      { ar: 'زر «فحص التحديثات» يدوي في الإعدادات: يعمل على الويب عبر Service Worker، وداخل Android عبر GitHub Releases.', en: 'A manual “Check for updates” button in Settings: uses the service worker on the web and GitHub Releases in the Android app.' }
+    ]
+  },
   {
     version: '2.3.4',
     date: '2026-11-04',

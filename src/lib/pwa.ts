@@ -23,6 +23,7 @@ function snapshot(): PwaState {
 }
 
 let applyUpdate: (reloadPage?: boolean) => Promise<void> = async () => undefined;
+let registrationRef: ServiceWorkerRegistration | null = null;
 
 export function initPwa(): void {
   if (typeof window === 'undefined') return;
@@ -39,6 +40,7 @@ export function initPwa(): void {
       },
       onRegisteredSW(_swUrl, registration) {
         if (!registration) return;
+        registrationRef = registration;
         window.setInterval(() => {
           void registration.update();
         }, 60 * 60 * 1000);
@@ -46,6 +48,21 @@ export function initPwa(): void {
     });
   } catch {
     /* PWA not available (e.g. dev without plugin) */
+  }
+}
+
+/**
+ * Manual "Check for updates" for the web/PWA build. Asks the active service
+ * worker registration to check now; a waiting worker means a new version is
+ * ready and the normal update banner is shown through `onNeedRefresh`.
+ */
+export async function checkForPwaUpdate(): Promise<boolean> {
+  if (!registrationRef) return false;
+  try {
+    await registrationRef.update();
+    return Boolean(registrationRef.waiting || registrationRef.installing);
+  } catch {
+    return false;
   }
 }
 

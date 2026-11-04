@@ -27,6 +27,8 @@ import {
 } from '../../lib/notifications';
 import { writeClipboardText } from '../../lib/clipboard';
 import { shareNativeText } from '../../lib/native';
+import { checkForAppUpdate } from '../../lib/appUpdate';
+import { checkForPwaUpdate } from '../../lib/pwa';
 import { workspaceDisplayName } from '../../lib/workspace';
 import { CountrySheet } from './CountrySheet';
 import { WorkspaceSheet } from './WorkspaceSheet';
@@ -83,6 +85,7 @@ export function SettingsScreen() {
   const [storageBusy, setStorageBusy] = useState(false);
   const [permission, setPermission] = useState<NotificationPermissionState>(() => notificationPermission());
   const [notifBusy, setNotifBusy] = useState(false);
+  const [updateBusy, setUpdateBusy] = useState(false);
 
   const country = countryByIso(settings.defaultCountry) ?? COUNTRIES[0];
   const countryName = t(country.ar, country.en);
@@ -255,6 +258,44 @@ export function SettingsScreen() {
   const shareApp = () => {
     if (settings.haptics) hapticTap();
     setShareOpen(true);
+  };
+
+  const checkUpdates = async () => {
+    if (updateBusy) return;
+    setUpdateBusy(true);
+    try {
+      if (nativePlatform) {
+        const info = await checkForAppUpdate({ force: true });
+        if (info?.updateAvailable) {
+          window.dispatchEvent(new CustomEvent('admh-update-available', { detail: info }));
+          if (settings.haptics) hapticSuccess();
+          toast(
+            t(
+              'يتوفر تحديث — اضغط «تحميل» في شريط التحديث.',
+              'An update is available — tap Download in the update banner.'
+            ),
+            'success'
+          );
+        } else {
+          if (settings.haptics) hapticSuccess();
+          toast(t('أنت على أحدث إصدار.', 'You are on the latest version.'), 'success');
+        }
+        return;
+      }
+      const found = await checkForPwaUpdate();
+      if (found) {
+        if (settings.haptics) hapticSuccess();
+        toast(t('يتوفر تحديث — اضغط «تحديث الآن».', 'An update is available — tap Update now.'), 'success');
+      } else {
+        if (settings.haptics) hapticSuccess();
+        toast(t('أنت على أحدث إصدار.', 'You are on the latest version.'), 'success');
+      }
+    } catch {
+      if (settings.haptics) hapticError();
+      toast(t('تعذّر فحص التحديثات. تحقّق من الاتصال.', 'Could not check for updates. Check your connection.'), 'error');
+    } finally {
+      setUpdateBusy(false);
+    }
   };
 
   const restartTour = () => {
@@ -986,6 +1027,11 @@ export function SettingsScreen() {
         </div>
 
         <div className="divider" />
+
+        <Button variant="soft" block loading={updateBusy} onClick={() => void checkUpdates()}>
+          <Icon name="refresh" size={16} />
+          {t('فحص التحديثات', 'Check for updates')}
+        </Button>
 
         <Button variant="soft" block onClick={() => void shareApp()}>
           <Icon name="share" size={16} />

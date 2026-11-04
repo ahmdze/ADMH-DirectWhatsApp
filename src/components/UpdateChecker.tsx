@@ -70,10 +70,18 @@ export function UpdateChecker() {
     const onOnline = () => {
       void check(false);
     };
+    const onManualCheck = (event: Event) => {
+      const detail = (event as CustomEvent<AppUpdateInfo>).detail;
+      if (!detail) return;
+      setDismissedVersion(null);
+      setInfo(detail);
+    };
     window.addEventListener('online', onOnline);
+    window.addEventListener('admh-update-available', onManualCheck);
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener('online', onOnline);
+      window.removeEventListener('admh-update-available', onManualCheck);
     };
   }, [check]);
 
