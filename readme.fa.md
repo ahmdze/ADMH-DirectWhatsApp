@@ -10,7 +10,7 @@
 </p>
 
 <p>
-<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.2"><img src="docs/badges/version-2.4.0-beta.2.svg" height="30" alt="نسخه 2.4.0-beta.2" /></a>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.3"><img src="docs/badges/version-2.4.0-beta.3.svg" height="30" alt="نسخه 2.4.0-beta.3" /></a>
 &nbsp;
 <img src="docs/badges/app-langs.svg" height="30" alt="چهار زبان: عربی، انگلیسی، کردی، فارسی" />
 &nbsp;
@@ -23,8 +23,10 @@
 توسعه‌یافته با<br />
 <strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
 <strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+<img src="docs/logos/deepseek-harness.svg" height="30" alt="DeepSeek HARNESS" /><br />
 بازبینی فنی و مهندسی توسط<br />
-<strong>Qwen 3.8-Max</strong>
+<strong>Qwen 3.8-Max</strong><br />
+<img src="docs/logos/qwen.svg" height="30" alt="Qwen" />
 </sub>
 </p>
 
@@ -63,7 +65,7 @@
 - پس از اولین بارگذاری کاملاً بدون اتصال کار می‌کند، و داده‌هایش در IndexedDB روی دستگاه شماست.
 
 > [!IMPORTANT]
-> آخرین نسخه **2.4.0-beta.2** است (بتای داخلی برای آزمایش). برنامه اندروید مستقیماً با فایل APK امضاشده نصب می‌شود، نه از طریق فروشگاه.
+> آخرین نسخه **2.4.0-beta.3** است (بتای داخلی برای آزمایش). برنامه اندروید مستقیماً با فایل APK امضاشده نصب می‌شود، نه از طریق فروشگاه.
 > هر کسی نسخه قدیمی v1 را نصب کرده باشد باید آن را حذف کند و یک بار v2 را نصب کند؛ داده‌های v1 به‌طور خودکار منتقل می‌شوند.
 
 > [!NOTE]
@@ -136,6 +138,7 @@
 - وارد کردن مخاطبین از CSV/vCard یا Contact Picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - **انتقال داده** بین دو دستگاه از طریق فایل یا کد QR، بدون سرور. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **بررسی و تعمیر داده‌های محلی** (تکرارها، شماره‌های معیوب، رکوردهای یتیم) با پیش‌نمایش پیش از تعمیر. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **پاک‌سازی خودکار تاریخچه و سطل زباله**: تاریخچه گفت‌وگوهای قدیمی به‌صورت خودکار پاک می‌شود، و سطل زباله امکان بازیابی موارد حذف‌شده تا 30 روز را فراهم می‌کند. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 - **عیب‌یابی دستگاه** (قابلیت‌های مرورگر/دوربین/اعلان‌ها/ذخیره‌سازی) و خروجی گزارش، همراه با [ماتریس تست دستگاه‌ها](docs/DEVICE-TEST-MATRIX.md). <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **ارسال به توسعه‌دهنده** از عیب‌یابی: واتساپ را با گزارش کامل باز می‌کند. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
 - **برنامه بومی اندروید (APK)** که در کنار PWA کار می‌کند، با اعلان‌های زمان‌بندی‌شده در پس‌زمینه و نشان/آیکون بومی. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
@@ -286,7 +289,10 @@ android/                  # پروژه Capacitor Android
 
 | نسخه | مهم‌ترین افزوده‌ها |
 |---|---|
-| **2.4.0-beta.2** | یادآورهای تکرارشونده و اعلان‌های محلی، پیوست‌ها و پیش‌نمایش کارت/برچسب، Quick Schedule، دکمه یادآورها، و بررسی به‌روزرسانی فقط به‌صورت دستی (بتای داخلی) |
+| **2.4.0-beta.3** | پاک‌سازی خودکار تاریخچه، و سطل زباله با بازیابی تا 30 روز |
+| **2.4.0-beta.2** | پیش‌نمایش واتساپ/کارت/برچسب، دکمه یادآورها، و بررسی به‌روزرسانی فقط به‌صورت دستی |
+| **2.4.0-beta.1** | پیوست‌های جلسه، پیش‌نمایش واتساپ، و Quick Schedule |
+| **2.4.0-alpha.1** | یادآورهای تکرارشونده و اعلان‌های محلی، و نسخه پشتیبان پیش از ارتقا |
 | **2.3.5** | دکمه «بررسی به‌روزرسانی» دستی در تنظیمات، در وب و اندروید |
 | **2.3.4** | دکمه «اشتراک‌گذاری برنامه»: گزینه اشتراک PWA و گزینه لینک دانلود APK |
 | **2.3.3** | چسباندن/کلیپ‌بورد بومی، وضعیت صحیح ذخیره‌سازی دائمی، ارسال گزارش به توسعه‌دهنده با واتساپ، و دانلود APK با نوار پیشرفت و دکمه نصب |
@@ -323,6 +329,13 @@ android/                  # پروژه Capacitor Android
 
 [GitHub](https://github.com/ahmdze) · [WhatsApp](https://wa.me/9647723064622)
 
-<sub>کلیه حقوق محفوظ است 2026 — توسعه‌یافته با Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</sub>
+<sub>
+کلیه حقوق محفوظ است 2026<br />
+توسعه‌یافته با<br />
+<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
+<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+بازبینی فنی و مهندسی توسط<br />
+<strong>Qwen 3.8-Max</strong>
+</sub>
 
 </div>

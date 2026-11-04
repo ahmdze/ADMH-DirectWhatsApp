@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="42" viewBox="0 0 150 42" role="img" aria-label="Qwen">
+  <defs>
+    <linearGradient id="q" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6d5dfc"/>
+      <stop offset="1" stop-color="#d56bf5"/>
+    </linearGradient>
+  </defs>
+  <rect width="150" height="42" rx="10" fill="#181126"/>
+  <circle cx="23" cy="21" r="11" fill="url(#q)" opacity="0.9"/>
+  <path d="M23 12v18M14 21h18M17 14l12 14M29 14 17 28" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" opacity="0.9"/>
+  <text x="42" y="27" font-family="Segoe UI, Tahoma, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Qwen</text>
+  <text x="96" y="27" font-family="Segoe UI, Tahoma, sans-serif" font-size="10" font-weight="600" fill="#d8b4fe">3.8-Max</text>
+</svg>

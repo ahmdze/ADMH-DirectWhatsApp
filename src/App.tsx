@@ -42,6 +42,7 @@ const ImportScreen = lazy(() => import('./features/tools/ImportScreen').then((mo
 const CampaignsScreen = lazy(() => import('./features/tools/CampaignsScreen').then((module) => ({ default: module.CampaignsScreen })));
 const RemindersScreen = lazy(() => import('./features/tools/RemindersScreen').then((module) => ({ default: module.RemindersScreen })));
 const TransferScreen = lazy(() => import('./features/tools/TransferScreen').then((module) => ({ default: module.TransferScreen })));
+const TrashScreen = lazy(() => import('./features/tools/TrashScreen').then((module) => ({ default: module.TrashScreen })));
 const HealthScreen = lazy(() => import('./features/tools/HealthScreen').then((module) => ({ default: module.HealthScreen })));
 const DiagnosticsScreen = lazy(() => import('./features/tools/DiagnosticsScreen').then((module) => ({ default: module.DiagnosticsScreen })));
 const SettingsScreen = lazy(() => import('./features/settings/SettingsScreen').then((module) => ({ default: module.SettingsScreen })));
@@ -214,6 +215,8 @@ function renderRoute(path: string[]) {
           return <CampaignsScreen />;
         case 'reminders':
           return <RemindersScreen />;
+        case 'trash':
+          return <TrashScreen />;
         case 'transfer':
           return <TransferScreen />;
         case 'health':

@@ -10,7 +10,7 @@ everything local on your device: no server, no account, and no automatic sending
 </p>
 
 <p>
-<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.2"><img src="docs/badges/version-2.4.0-beta.2.svg" height="30" alt="Version 2.4.0-beta.2" /></a>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.3"><img src="docs/badges/version-2.4.0-beta.3.svg" height="30" alt="Version 2.4.0-beta.3" /></a>
 &nbsp;
 <img src="docs/badges/app-langs.svg" height="30" alt="Four languages: Arabic, English, Kurdish, Persian" />
 &nbsp;
@@ -23,8 +23,10 @@ everything local on your device: no server, no account, and no automatic sending
 Developed using<br />
 <strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
 <strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+<img src="docs/logos/deepseek-harness.svg" height="30" alt="DeepSeek HARNESS" /><br />
 Technical and engineering review by<br />
-<strong>Qwen 3.8-Max</strong>
+<strong>Qwen 3.8-Max</strong><br />
+<img src="docs/logos/qwen.svg" height="30" alt="Qwen" />
 </sub>
 </p>
 
@@ -63,7 +65,7 @@ Technical and engineering review by<br />
 - Works fully offline after the first load, with its data in IndexedDB on your device.
 
 > [!IMPORTANT]
-> The latest release is **2.4.0-beta.2** (an internal Beta for testing). The Android app installs directly from a signed APK file, not through a store.
+> The latest release is **2.4.0-beta.3** (an internal Beta for testing). The Android app installs directly from a signed APK file, not through a store.
 > Anyone who installed the old v1 version needs to delete it and install v2 once; v1 data migrates automatically.
 
 > [!NOTE]
@@ -136,6 +138,7 @@ Technical and engineering review by<br />
 - Import contacts from CSV/vCard or the Contact Picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - **Data transfer** between two devices via file or QR code, with no server. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **Local data check and repair** (duplicates, corrupt numbers, orphaned records) with a preview before repairing. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **Automatic log cleanup and Trash**: old chat history is cleaned up automatically, and a Trash bin keeps removed items restorable for up to 30 days. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 - **Device diagnostics** (browser/camera/notifications/storage capabilities) and report export, plus a [device test matrix](docs/DEVICE-TEST-MATRIX.md). <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **Send to developer** from Diagnostics: opens WhatsApp with the full report. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
 - **Native Android app (APK)** that runs alongside the PWA, with background scheduled notifications and a native badge/icon. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
@@ -286,7 +289,10 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
-| **2.4.0-beta.2** | Recurring reminders and local notifications, attachments and card/sticker preview, Quick Schedule, a Reminders button, and manual-only update checks (internal Beta) |
+| **2.4.0-beta.3** | Automatic log cleanup, and a Trash bin with restore for up to 30 days |
+| **2.4.0-beta.2** | WhatsApp/card/sticker preview, a Reminders button, and manual-only update checks |
+| **2.4.0-beta.1** | Session attachments, WhatsApp preview, and Quick Schedule |
+| **2.4.0-alpha.1** | Recurring reminders and local notifications, and a backup before upgrading |
 | **2.3.5** | Manual “Check for updates” button in Settings on the web and in Android |
 | **2.3.4** | “Share the app” button: a PWA share option and an APK download-link option |
 | **2.3.3** | Native clipboard/paste, correct persistent-storage status, sending the report to the developer via WhatsApp, and APK download with a progress bar and an install button |
@@ -323,6 +329,13 @@ The Cairo, Vazirmatn, and Noto Naskh Arabic fonts (OFL) — `qrcode` (MIT) — `
 
 [GitHub](https://github.com/ahmdze) · [WhatsApp](https://wa.me/9647723064622)
 
-<sub>All rights reserved 2026 — Developed using Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</sub>
+<sub>
+All rights reserved 2026<br />
+Developed using<br />
+<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
+<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+Technical and engineering review by<br />
+<strong>Qwen 3.8-Max</strong>
+</sub>
 
 </div>

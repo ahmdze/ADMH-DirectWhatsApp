@@ -6,6 +6,7 @@ import { ACCENTS, FONTS, fontFamily, resolveFont, updateSettings, useSettings } 
 import { useWorkspaces } from '../../hooks/useData';
 import { COUNTRIES, countryByIso } from '../../lib/phone';
 import { clearAllData, removeWorkspace } from '../../lib/db';
+import { runRetention } from '../../lib/retention';
 import { goBack, navigate } from '../../lib/router';
 import { toast } from '../../lib/toast';
 import { hapticError, hapticSuccess, hapticTap } from '../../lib/haptics';
@@ -448,6 +449,23 @@ export function SettingsScreen() {
     } catch {
       if (settings.haptics) hapticError();
       toast(t('تعذّر مسح البيانات. حاول مجدداً.', 'Could not clear data. Please try again.'), 'error');
+    }
+  };
+
+  const cleanHistoryNow = async () => {
+    try {
+      const result = await runRetention(Date.now(), true);
+      if (settings.haptics) hapticSuccess();
+      toast(
+        t(
+          `تم نقل ${result.moved} عنصراً إلى السلة، وحُذف ${result.purged} منتهياً.`,
+          `${result.moved} items moved to trash, ${result.purged} expired items purged.`
+        ),
+        'success'
+      );
+    } catch {
+      if (settings.haptics) hapticError();
+      toast(t('تعذّر تنظيف السجل.', 'Could not clean the history.'), 'error');
     }
   };
 
@@ -962,6 +980,82 @@ export function SettingsScreen() {
                 )}
               </HintCard>
             ) : null}
+          </div>
+
+          <div className="divider" />
+
+          <div className="col" style={{ gap: 10 }}>
+            <div className="section-head">
+              <span className="section-title">{t('السجل والاحتفاظ', 'History & retention')}</span>
+              <Button size="sm" variant="ghost" onClick={() => void cleanHistoryNow()}>
+                {t('تنظيف الآن', 'Clean now')}
+              </Button>
+            </div>
+            <Switch
+              checked={settings.retention.historyEnabled}
+              onChange={(checked) =>
+                updateSettings({ retention: { ...settings.retention, historyEnabled: checked } })
+              }
+              label={t('تنظيف السجل تلقائياً', 'Clean history automatically')}
+              description={t(
+                'ينقل السجل القديم إلى السلة، ولا يحذف شيئاً نهائياً قبل انتهاء مدة السلة.',
+                'Moves old history to trash; nothing is deleted permanently until the trash period ends.'
+              )}
+            />
+            {settings.retention.historyEnabled ? (
+              <>
+                <div className="col" style={{ gap: 5 }}>
+                  <span className="field-label">{t('الاحتفاظ بسجل آخر', 'Keep history for')}</span>
+                  <Segmented
+                    value={String(settings.retention.retentionDays)}
+                    options={[
+                      { value: '7', label: t('7 أيام', '7 days') },
+                      { value: '30', label: t('30 يوماً', '30 days') },
+                      { value: '90', label: t('90 يوماً', '90 days') },
+                      { value: '365', label: t('سنة', '1 year') },
+                      { value: '0', label: t('بلا حد', 'No limit') }
+                    ]}
+                    onChange={(value) =>
+                      updateSettings({
+                        retention: {
+                          ...settings.retention,
+                          retentionDays: Number(value) as 7 | 30 | 90 | 365 | 0
+                        }
+                      })
+                    }
+                  />
+                </div>
+                <div className="row" style={{ gap: 8, alignItems: 'center' }}>
+                  <span style={{ fontSize: 12 }}>{t('واحتفظ بآخر', 'and keep the latest')}</span>
+                  <input
+                    className="control"
+                    type="number"
+                    min={0}
+                    max={500}
+                    value={settings.retention.keepLatest ?? 0}
+                    style={{ width: 82 }}
+                    onChange={(event) => {
+                      const value = Math.max(0, Math.floor(Number(event.target.value) || 0));
+                      updateSettings({
+                        retention: { ...settings.retention, keepLatest: value > 0 ? value : null }
+                      });
+                    }}
+                  />
+                  <span style={{ fontSize: 12 }}>{t('عناصر', 'items')}</span>
+                </div>
+                <Switch
+                  checked={settings.retention.excludeFavoriteTargets}
+                  onChange={(checked) =>
+                    updateSettings({ retention: { ...settings.retention, excludeFavoriteTargets: checked } })
+                  }
+                  label={t('لا تمس سجل الوجهات المفضلة', 'Never clean favorite targets')}
+                />
+              </>
+            ) : null}
+            <Button variant="ghost" size="sm" block onClick={() => navigate('/tools/trash')}>
+              <Icon name="trash" size={16} />
+              {t('فتح سلة المحذوفات', 'Open trash')}
+            </Button>
           </div>
 
           <div className="divider" />

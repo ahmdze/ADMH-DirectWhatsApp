@@ -113,6 +113,14 @@ const GROUPS: ToolGroup[] = [
         titleEn: 'Reminders',
         descAr: 'ذكّر نفسك بمراسلة وجهة في وقت لاحق.',
         descEn: 'Remind yourself to message a target later.'
+      },
+      {
+        path: '/tools/trash',
+        icon: 'trash',
+        titleAr: 'سلة المحذوفات',
+        titleEn: 'Trash',
+        descAr: 'استعد عناصر السجل المحذوفة قبل انتهاء المدة.',
+        descEn: 'Restore deleted history items before they expire.'
       }
     ]
   },

@@ -10,7 +10,7 @@
 </p>
 
 <p>
-<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.2"><img src="docs/badges/version-2.4.0-beta.2.svg" height="30" alt="الإصدار 2.4.0-beta.2" /></a>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.3"><img src="docs/badges/version-2.4.0-beta.3.svg" height="30" alt="الإصدار 2.4.0-beta.3" /></a>
 &nbsp;
 <img src="docs/badges/app-langs.svg" height="30" alt="أربع لغات: العربية، الإنجليزية، الكردية، الفارسية" />
 &nbsp;
@@ -23,8 +23,10 @@
 تم التطوير باستخدام<br />
 <strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
 <strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+<img src="docs/logos/deepseek-harness.svg" height="30" alt="DeepSeek HARNESS" /><br />
 المراجعة التقنية والفنية بواسطة<br />
-<strong>Qwen 3.8-Max</strong>
+<strong>Qwen 3.8-Max</strong><br />
+<img src="docs/logos/qwen.svg" height="30" alt="Qwen" />
 </sub>
 </p>
 
@@ -63,7 +65,7 @@
 - يعمل بالكامل دون اتصال بعد أول تحميل، وبياناته في IndexedDB على جهازك.
 
 > [!IMPORTANT]
-> أحدث إصدار هو **2.4.0-beta.2** (Beta داخلية للتجريب). تطبيق Android يُثبَّت مباشرة بملف APK موقّع، وليس عبر متجر.
+> أحدث إصدار هو **2.4.0-beta.3** (Beta داخلية للتجريب). تطبيق Android يُثبَّت مباشرة بملف APK موقّع، وليس عبر متجر.
 > من ثبّت نسخة v1 القديمة يحتاج حذفها وتثبيت v2 مرة واحدة؛ بيانات v1 تُرحَّل تلقائياً.
 
 > [!NOTE]
@@ -136,6 +138,7 @@
 - استيراد جهات من CSV/vCard أو Contact Picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - **نقل البيانات** بين جهازين عبر ملف أو رمز QR، بدون خادم. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **فحص وإصلاح البيانات** المحلية (تكرارات، أرقام تالفة، سجلات يتيمة) مع معاينة قبل الإصلاح. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **تنظيف تلقائي للسجل وسلة محذوفات**: حذف تلقائي لسجل المحادثات القديم، وسلة محذوفات تتيح استعادة العناصر حتى 30 يوماً. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 - **تشخيص الجهاز** (قدرات المتصفح/الكاميرا/الإشعارات/التخزين) وتصدير تقرير، مع [مصفوفة اختبار الأجهزة](docs/DEVICE-TEST-MATRIX.md). <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **إرسال إلى المطوّر** من التشخيص: يفتح واتساب مع التقرير الكامل. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
 - **تطبيق Android أصلي (APK)** يعمل بجانب PWA، مع إشعارات مجدولة في الخلفية، وشارة/أيقونة أصلية. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
@@ -286,7 +289,10 @@ android/                  # مشروع Capacitor Android
 
 | الإصدار | أبرز ما أضافه |
 |---|---|
-| **2.4.0-beta.2** | تذكيرات متكررة وإشعارات محلية، مرفقات ومعاينة بطاقة/ملصق، Quick Schedule، زر التذكيرات، وفحص تحديثات يدوي فقط (Beta داخلية) |
+| **2.4.0-beta.3** | تنظيف تلقائي للسجل، وسلة محذوفات واستعادة حتى 30 يوماً |
+| **2.4.0-beta.2** | معاينة واتساب/بطاقة/ملصق، زر التذكيرات، وفحص تحديث يدوي |
+| **2.4.0-beta.1** | مرفقات جلسة، معاينة واتساب، وQuick Schedule |
+| **2.4.0-alpha.1** | تذكيرات متكررة وإشعارات محلية، ونسخة احتياطية قبل الترقية |
 | **2.3.5** | زر «فحص التحديثات» يدوي في الإعدادات على الويب وAndroid |
 | **2.3.4** | زر «شارك التطبيق»: خيار مشاركة PWA وخيار رابط تنزيل APK |
 | **2.3.3** | لصق/حافظة أصلية، حالة تخزين دائم صحيحة، إرسال التقرير للمطوّر عبر واتساب، وتنزيل APK بشريط تقدم وزر تثبيت |
@@ -323,6 +329,13 @@ android/                  # مشروع Capacitor Android
 
 [GitHub](https://github.com/ahmdze) · [WhatsApp](https://wa.me/9647723064622)
 
-<sub>جميع الحقوق محفوظة 2026 — تم التطوير باستخدام Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</sub>
+<sub>
+جميع الحقوق محفوظة 2026<br />
+تم التطوير باستخدام<br />
+<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
+<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+المراجعة التقنية والفنية بواسطة<br />
+<strong>Qwen 3.8-Max</strong>
+</sub>
 
 </div>

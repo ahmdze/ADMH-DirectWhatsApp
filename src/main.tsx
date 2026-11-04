@@ -11,6 +11,7 @@ import { initInstallPrompt, initOnlineWatcher } from './lib/install';
 import { initPwa } from './lib/pwa';
 import { ensurePersistentStorage } from './lib/storage';
 import { ensurePreMigrationBackup } from './lib/preMigrationBackup';
+import { runRetention } from './lib/retention';
 import { isNative } from './lib/native';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
@@ -27,6 +28,7 @@ async function bootstrap(): Promise<void> {
   try {
     await ensureDatabase();
     await ensurePreMigrationBackup();
+    await runRetention().catch(() => undefined);
     if (import.meta.env.DEV && new URLSearchParams(window.location.search).has('demo')) {
       const { seedDemoData } = await import('./lib/demo');
       await seedDemoData();
