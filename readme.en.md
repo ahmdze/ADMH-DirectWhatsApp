@@ -1,91 +1,146 @@
-# Direct WhatsApp — ADMH
+<div align="center">
 
-**Languages:** [العربية](readme.md) · **English** · [کوردی](readme.ckb.md) · [فارسی](readme.fa.md)
+<img src="public/icons/icon-192.png" width="88" alt="Direct WhatsApp logo" />
 
-An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without saving the number**, with saved destinations, message templates, QR codes, share cards, and printable stickers — all locally on your device, with no server and no account.
+<h1>Direct WhatsApp <sub>ADMH Direct WhatsApp</sub></h1>
 
-> **Version 2.4.0-beta.2** — internal beta: recurring reminders (daily/weekly/monthly) with local Android notifications and Compose launch from a notification, an automatic backup before upgrades that can be downloaded from Settings, local session attachments shared through the system share sheet and never stored, a Reminders button in the bottom navigation bar, and manual-only APK update checks.
-> **Beta notice:** 2.4.0-beta.2 is an internal/test build, **not a stable production release**; its features may change before the final 2.4.0 release.
-> New in 2.3.5: a manual “Check for updates” button in Settings — Service Worker on the web and GitHub Releases inside Android.
-> New in 2.3.4: “Share app” now offers two choices — **share the PWA web app** or **share the APK download link** — instead of the localhost URL inside the native app.
-> New in 2.3.3: native clipboard/paste in the APK, correct persistent-storage status, a **Send to developer** button in Diagnostics, and in-app APK updates with a progress bar and an Install button.
-> New in 2.3.2: **native biometric app lock** on Android with PIN fallback, and an **in-app update checker** reading GitHub Releases.
-> 2.3.1 fixes: native Android diagnostics, native system sharing, and stable APK signing for future updates.
-> The app uses a **PWA install identity** (`id: ./v2`), so anyone who installed the old version (v1) must uninstall it and install v2 once. v1 data is not lost: it migrates automatically on first launch.
+<p>
+Open a WhatsApp chat directly <strong>without saving the number</strong> — destinations, templates, QR codes, cards, and stickers,<br />
+everything local on your device: no server, no account, and no automatic sending.
+</p>
+
+<p>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.2"><img src="docs/badges/version-2.4.0-beta.2.svg" height="30" alt="Version 2.4.0-beta.2" /></a>
+&nbsp;
+<img src="docs/badges/app-langs.svg" height="30" alt="Four languages: Arabic, English, Kurdish, Persian" />
+&nbsp;
+<img src="docs/badges/platform.svg" height="30" alt="PWA and Android APK" />
+</p>
+
+<p>
+<a href="https://github.com/ahmdze"><strong>ADMH - Ahmed Zeyad</strong></a><br />
+<sub>
+Developed using<br />
+<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
+<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+Technical and engineering review by<br />
+<strong>Qwen 3.8-Max</strong>
+</sub>
+</p>
+
+<p><strong>This file is available in four languages:</strong></p>
+
+<table>
+  <tr>
+    <td align="center"><a href="readme.md"><img src="docs/badges/lang-ar.svg" height="58" alt="العربية" /></a></td>
+    <td align="center"><a href="readme.en.md"><img src="docs/badges/lang-en.svg" height="58" alt="English" /></a></td>
+    <td align="center"><a href="readme.ckb.md"><img src="docs/badges/lang-ckb.svg" height="58" alt="کوردی" /></a></td>
+    <td align="center"><a href="readme.fa.md"><img src="docs/badges/lang-fa.svg" height="58" alt="فارسی" /></a></td>
+  </tr>
+</table>
+
+</div>
+
+---
+
+## Contents
+
+| Start | Explore | Technical | More |
+|---|---|---|---|
+| [About the app](#about-the-app) | [Features](#features) | [Tech stack](#tech-stack) | [Privacy](#privacy) |
+| [Get started](#get-started) | [Screenshots](#screenshots) | [Running locally](#running-locally) | [Changelog](#changelog) |
+| [Android app](#building-the-android-app-apk) | [Languages & fonts](#languages--fonts) | [Building the APK](#building-the-android-app-apk) | [Documentation](#documentation) |
+
+---
+
+## About the app
+
+**Direct WhatsApp** is an Arabic (RTL), mobile-first progressive web app (PWA), with a native Android version built with Capacitor:
+
+- Opens a WhatsApp chat instantly with a local/international number, or `@username`, or a `wa.me` link.
+- Saves destinations, templates, and chat history in separate workspaces.
+- Generates QR codes and reads them from the camera or from an image, and makes share cards and printable stickers.
+- Works fully offline after the first load, with its data in IndexedDB on your device.
+
+> [!IMPORTANT]
+> The latest release is **2.4.0-beta.2** (an internal Beta for testing). The Android app installs directly from a signed APK file, not through a store.
+> Anyone who installed the old v1 version needs to delete it and install v2 once; v1 data migrates automatically.
+
+> [!NOTE]
+> There is no automatic sending of messages or opening of chats in the background. The app is a shortcut and direct-open tool, and you are the one who sends.
+
+---
+
+## Get started
+
+| 🌐 Web version (PWA) | 🤖 Android version (APK) |
+|---|---|
+| [Open the app in the browser](https://ahmdze.github.io/ADMH-DirectWhatsApp/) | [Download the latest APK](https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest) |
+| Runs on Android, iOS, and desktop, and installs from the browser menu. | A signed file for direct distribution; it runs alongside the PWA and its updates are in-app. |
 
 ---
 
 ## Features
 
-> Each feature is prefixed with the version it was added in, so you can spot what's new at a glance.
-
-### What's new in 2.4.0-beta.2
-
-> **Internal beta:** this is a test build for trying the new features — not a stable production release; details may change before the final 2.4.0 release.
-
-- **(v2.4.0-beta.2)** **Recurring reminders** (daily/weekly/monthly) with local Android notifications; tapping a notification opens Compose directly.
-- **(v2.4.0-beta.2)** **Automatic backup before an upgrade**, downloadable from Settings.
-- **(v2.4.0-beta.2)** **Local session attachments** (images/files/vCard/location) shared through the system share sheet and never stored, with WhatsApp, card, and sticker previews plus **Quick Schedule** from Compose.
-- **(v2.4.0-beta.2)** A **Reminders button** in the bottom navigation bar.
-- **(v2.4.0-beta.2)** APK update checks are **manual only** — no automatic background checks.
+> The version number in which each feature was added appears as a colored badge at the end of each line.
 
 ### Basics & sending
 
-- **(v2.0.0)** Local/international number entry, or `@username`, or a WhatsApp link, with automatic formatting and country detection.
-- **(v2.1.0)** Autocomplete for saved destinations while typing.
-- **(v2.0.0)** Arabic country picker (60+ countries) with search, and a saveable default country.
-- **(v2.0.0)** Optional message with a character counter (2000 characters), plus quick templates.
-- **(v2.0.0)** Open the chat, copy the link, and share via the Web Share API.
-- **(v2.0.0)** Smart history of recent chats, and saved destinations with names, tags, notes, and favorites.
-- **(v2.0.0)** Message templates that can be created and edited, with `{الاسم}` `{الجهة}` `{التاريخ}` variables.
-- **(v2.0.0)** QR generation (PNG/SVG) and QR scanning with the camera or from an image (with a jsQR fallback).
-- **(v2.0.0)** High-resolution PNG share card, and a vCard contact card.
-- **(v2.0.0)** Dark/light/auto appearance + accent color picker.
-- **(v2.1.0)** Onboarding tour on first launch and a “What's New” screen after every update.
-- **(v2.2.0)** Four languages: Arabic (default), English, کوردی, فارسی — with the Kurdish/Persian dictionaries loaded only on demand.
-- **(v2.2.0)** Automatic font suited to each language: Cairo for Arabic, Vazirmatn for Persian, Noto Naskh for Kurdish, with the option to set a font manually.
+- Local/international number entry, or `@username`, or a WhatsApp link, with automatic formatting and country detection. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Autocomplete for saved destinations while typing. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- Arabic country picker (60+ countries) with search, and a saveable default country. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Optional message with a character counter (2000 characters), and quick templates. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Open the chat, copy the link, and share via the Web Share API. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Smart history of recent chats, and saved destinations with names, tags, notes, and favorites. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Message templates that can be created and edited, with `{الاسم}` `{الجهة}` `{التاريخ}` variables. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- QR generation (PNG/SVG) and QR reading with the camera or from an image (with a jsQR fallback). <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- High-resolution PNG share card, and a vCard contact card. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Dark/light/auto appearance + accent color picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Onboarding tour on first launch and a “What's New” screen after every update. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- Four languages: Arabic (default), English, کوردی, فارسی — with the Kurdish/Persian dictionaries loaded only on demand. <img src="docs/badges/v2.2.0.svg" alt="v2.2.0" height="19" />
+- Automatic font suited to each language: Cairo for Arabic, Vazirmatn for Persian, Noto Naskh for Kurdish, with the option to set a font manually. <img src="docs/badges/v2.2.0.svg" alt="v2.2.0" height="19" />
+- Smart paste from the native clipboard on Android, and number extraction from pasted text. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
+- A “Share the app” button with two choices: share the PWA web app or the APK download link. <img src="docs/badges/v2.3.4.svg" alt="v2.3.4" height="19" />
+- **Local session attachments**: images, files, and vCards are shared through the system share sheet and are not stored in the app, with WebP image compression and a download fallback. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **Preview before sending** in WhatsApp style, plus a share card and a QR sticker — all local, without fetching links. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **Quick Schedule** for a reminder from Compose with the current destination and message. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 
 ### Mobile experience (PWA)
 
-- **(v2.0.0)** Bottom navigation bar, bottom sheets, subtle animations, haptics, and designed empty/loading/error states.
-- **(v2.0.0)** PWA install, full offline operation, and updates approved by the user.
-- **(v2.0.0)** Share Target to receive text/links from another app.
-- **(v2.1.0)** Receive a **shared QR image** from another app and scan it automatically (Android).
-- **(v2.0.0)** App icon shortcuts: “Quick send” and “Scan QR”.
-- **(v2.0.0)** Smart paste from the clipboard, and number extraction from pasted text.
-- **(v2.0.0)** Optional lock with a PIN or biometrics (WebAuthn).
-- **(v2.1.0)** Biometrics as the primary unlock method, with the PIN remaining as a fallback.
-- **(v2.1.0)** Local notifications for follow-up reminders when the app opens.
-- **(v2.1.0)** Smarter install banner (shown on mobile only, after a delay, and hidden once installed).
-- **(v2.1.0)** Preview screens in the manifest and `handle_links`/`launch_handler` to open links inside the installed app.
-- **(v2.1.0)** A “Share the app” button via Web Share or link copy.
-- **(v2.1.0)** A polished error screen with an option to repair the app version.
-- **(v2.1.0)** Persistent storage request and a warning when space is running low.
-- **(v2.0.0)** JSON backup/restore, and CSV export.
+- Bottom navigation bar, bottom sheets, subtle animations, haptics, and designed empty/loading/error states. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- PWA install, full offline operation, and updates approved by the user. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Share Target to receive text/links from another app. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Receive a **shared QR image** from another app and scan it automatically (Android). <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- App icon shortcuts: “Quick send” and “Scan QR”. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Optional lock with a PIN or biometrics (WebAuthn). <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Biometrics as the primary unlock method, with the PIN remaining as a fallback. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- Local notifications for follow-up reminders when the app opens. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- Smarter install banner (shown on mobile only, after a delay, and hidden once installed). <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- Preview screens in the manifest and `handle_links`/`launch_handler` to open links inside the installed app. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- A polished error screen with an option to repair the app version. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- Persistent storage request and a warning when space is running low. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
+- JSON backup/restore, and CSV export. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Data transfer between two devices via file or QR, data check and repair, and device diagnostics. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- A **“Check for updates”** button, manual only, in Settings: there is no automatic background check, to protect privacy and reduce requests. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- A **Reminders button** in the bottom navigation bar for one-tap access. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 
-### Extra tools
+### Tools & data
 
-- **(v2.0.0)** QR stickers for A4 printing (2×4 or 3×8 grid) — suitable for shops and restaurants.
-- **(v2.0.0)** Local statistics (last 7 days, most used).
-- **(v2.0.0)** Workspaces (personal/work) with full data separation.
-- **(v2.0.0)** Number-list campaigns: open chats sequentially with manual “Sent/Skipped” tracking — **no automatic sending**.
-- **(v2.0.0)** Follow-up reminders that appear when the app opens.
-- **(v2.0.0)** Import contacts from CSV/vCard or the Contact Picker.
-- **(v2.3.0)** **Data transfer** between two devices via file or QR code, with no server.
-- **(v2.3.0)** **Local data check and repair** (duplicates, corrupt numbers, orphaned records) with a preview before repairing.
-- **(v2.3.0)** **Device diagnostics** (browser/camera/notifications/storage capabilities) and report export, plus a [device test matrix](docs/DEVICE-TEST-MATRIX.md).
-- **(v2.3.0)** **Native Android app (APK)** that runs alongside the PWA, with background scheduled notifications and a native badge/icon.
-
-### Android app (APK)
-
-- **(v2.3.0)** An Android build made with Capacitor from the same React code, installed directly **without a store or account**.
-- Downloaded from the releases page: [latest release](https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest).
-- **An APK for direct distribution**, signed with a private release key (not for store publishing); Play Protect may show a warning when installing it from outside the store.
-- Android data is separate from the PWA (different origin); use **Data transfer** or the backup to move it.
-- Reminder notifications work in the background inside the Android build (their accuracy varies with how precisely the system allows notifications).
-- **(v2.3.2)** Native biometric lock, with PIN always available as a fallback.
-- **(v2.3.2)** In-app update checker that reads GitHub Releases and offers the APK download.
-- **(v2.4.0-beta.2)** Update checks are **manual only** — there is no automatic background check.
+- QR stickers for A4 printing (2×4 or 3×8 grid) — suitable for shops and restaurants. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Local statistics (last 7 days, most used). <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Workspaces (personal/work) with full data separation. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Number-list campaigns: open chats sequentially with manual “Sent/Skipped” tracking — **no automatic sending**. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- Follow-up reminders that appear when the app opens. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- **Recurring reminders** (daily/weekly/monthly) with local notifications and scheduling on Android, and Compose opens from the notification. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **Automatic backup before an upgrade**, downloadable from Settings. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- Import contacts from CSV/vCard or the Contact Picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- **Data transfer** between two devices via file or QR code, with no server. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **Local data check and repair** (duplicates, corrupt numbers, orphaned records) with a preview before repairing. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **Device diagnostics** (browser/camera/notifications/storage capabilities) and report export, plus a [device test matrix](docs/DEVICE-TEST-MATRIX.md). <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **Send to developer** from Diagnostics: opens WhatsApp with the full report. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
+- **Native Android app (APK)** that runs alongside the PWA, with background scheduled notifications and a native badge/icon. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
+- **Native biometric lock** on Android, with PIN always available as a fallback. <img src="docs/badges/v2.3.2.svg" alt="v2.3.2" height="19" />
+- **APK update checker** inside the app, with an in-app download with a progress bar and then an Install button. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
 
 ---
 
@@ -98,7 +153,7 @@ An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without s
 | کوردی (Sorani) | RTL | Noto Naskh Arabic |
 | فارسی | RTL | Vazirmatn |
 
-The default font is **“Automatic per language”**, and it can be changed manually from: **Settings → Font**. These fonts were chosen so that Kurdish and Persian letters (ڕ، ڵ، ێ، ۆ، پ، چ، ژ، گ) display correctly instead of a single Arabic font that does not cover them.
+The default font is **“Automatic per language”**, and it can be changed manually from: **Settings → Font**. These fonts were designed to display Kurdish and Persian letters (ڕ، ڵ، ێ، ۆ، پ، چ، ژ، گ) correctly instead of a single Arabic font that does not cover them.
 
 ---
 
@@ -128,9 +183,9 @@ The default font is **“Automatic per language”**, and it can be changed manu
 |---|---|
 | ![Persian interface](docs/screenshots/compose-persian.png) | ![Font settings](docs/screenshots/settings-font-persian.png) |
 
-| Transfer data | Data health |
+| Data transfer | Data check |
 |---|---|
-| ![Transfer data](docs/screenshots/transfer-v23.png) | ![Data health](docs/screenshots/health-v23.png) |
+| ![Data transfer](docs/screenshots/transfer-v23.png) | ![Data check](docs/screenshots/health-v23.png) |
 
 > Screenshots generated from the development build with demo data (`?demo=1`).
 
@@ -145,8 +200,8 @@ The default font is **“Automatic per language”**, and it can be changed manu
 | Fonts | Cairo (Arabic/English), Vazirmatn (Persian), Noto Naskh Arabic (Kurdish) — bundled locally |
 | Storage | IndexedDB via Dexie |
 | QR | `qrcode` for generation + `jsqr` for reading (with `BarcodeDetector` when available) |
-| PWA | `vite-plugin-pwa` (injectManifest) + Workbox: precache, Share Target for images, notifications |
-| Android | Capacitor 8 + LocalNotifications/Camera/Share/Filesystem/App/Haptics plugins — APK built in CI |
+| PWA | `vite-plugin-pwa` (injectManifest) + Workbox: precache, Share Target, notifications |
+| Android | Capacitor 8 + LocalNotifications/Camera/Clipboard/FileTransfer/FileOpener/Biometric/Share/Filesystem plugins |
 | Languages | Custom i18n (ar/en/ckb/fa) + Kurdish and Persian dictionaries loaded on demand |
 | Tests | Vitest |
 
@@ -164,8 +219,9 @@ pnpm preview    # production preview
 ```
 
 > Requires Node 22+ and pnpm 9+.
->
 > In development mode you can load demo data by opening `http://127.0.0.1:5173/?demo=1` (not included in the production build).
+
+---
 
 ## Structure
 
@@ -178,14 +234,17 @@ src/
 │  ├─ compose/            # sending screen
 │  ├─ targets/            # destinations and history
 │  ├─ templates/          # templates
-│  ├─ tools/              # QR, cards, stickers, backup…
+│  ├─ tools/              # QR, cards, stickers, backup, diagnostics…
 │  └─ settings/           # settings and lock
-├─ lib/                   # phone, whatsapp, db, qr, scan, backup, i18n…
+├─ lib/                   # phone, whatsapp, db, qr, scan, backup, i18n, update…
 ├─ hooks/                 # live Dexie queries
 └─ styles/                # design system
 tests/                    # Vitest
 docs/                     # specs and previews
+android/                  # Capacitor Android project
 ```
+
+---
 
 ## Deploying to GitHub Pages
 
@@ -193,37 +252,45 @@ docs/                     # specs and previews
 2. In **Settings → Pages**, choose **Source: GitHub Actions**.
 3. Every push to `main` runs `.github/workflows/deploy.yml` (type checking + tests + build + deploy).
 
-The project uses `base: './'` and hash routes, so it works under a repository path without any extra configuration.
+The project uses `base: './'` and hash routes, so it works under a repository path without extra configuration.
+
+---
 
 ## Building the Android app (APK)
 
-- Locally (requires JDK 21 + Android SDK): `pnpm android:sync`, then open `android/` in Android Studio and build an APK, or run `cd android && ./gradlew assembleRelease` with the keystore environment variables.
+- Locally (requires JDK 21 + Android SDK): `pnpm android:sync`, then open `android/` in Android Studio, or run `cd android && ./gradlew assembleRelease` with the keystore environment variables.
 - Automatically: every push to `main` runs `.github/workflows/android.yml`, builds a signed `app-release.apk`, and uploads it as an artifact — **with no store or account**.
-- The current APK is a **Release build signed with a stable key** (kept outside the repository); updates install over the current version without removing data.
+- The current APK is a **Release build signed with a stable key** (kept outside the repository); updates therefore install over the current version without deleting data.
 - Android data is separate from the PWA; use the **Data transfer** screen or a backup.
+
+---
 
 ## Privacy
 
-- No server, no account, no analytics, and no user data leaves the device. The Android build contacts GitHub Releases only to check for and download app updates when you approve.
+- No server, no account, no analytics, and your data is not sent anywhere. The Android build contacts GitHub Releases only to check for and download updates with your approval.
 - Numbers, messages, templates, and generated images stay on your device.
 - The camera only runs after an explicit request and stops when you leave the screen.
 - No number or image is sent to an external QR service.
 
+---
+
 ## Tests
 
-- Unit tests for number normalization and parsing, WhatsApp link building, template variables, CSV, and vCard.
+- Unit tests for number normalization and parsing, WhatsApp link building, template variables, CSV and vCard, and update version comparison.
 - Manual test matrix: Android Chrome, iOS Safari, Samsung Internet, desktop.
 - Lighthouse check (Performance/Accessibility ≥ 95 and PWA installable) after deployment.
+
+---
 
 ## Changelog
 
 | Version | Highlights |
 |---|---|
-| **2.4.0-beta.2** | Recurring reminders (daily/weekly/monthly) with Android local notifications and Compose launch from notifications, automatic pre-upgrade backup downloadable from Settings, local session attachments shared via the system sheet and never stored, a Reminders button in the bottom bar, and manual-only APK update checks |
+| **2.4.0-beta.2** | Recurring reminders and local notifications, attachments and card/sticker preview, Quick Schedule, a Reminders button, and manual-only update checks (internal Beta) |
 | **2.3.5** | Manual “Check for updates” button in Settings on the web and in Android |
-| **2.3.4** | “Share app” offers a PWA share option and an APK download-link option |
-| **2.3.3** | Native clipboard/paste, correct persistent storage, send report to developer via WhatsApp, and APK download with progress + install |
-| **2.3.2** | Native Android biometric lock with PIN fallback, and in-app APK update checker |
+| **2.3.4** | “Share the app” button: a PWA share option and an APK download-link option |
+| **2.3.3** | Native clipboard/paste, correct persistent-storage status, sending the report to the developer via WhatsApp, and APK download with a progress bar and an install button |
+| **2.3.2** | Native Android biometric lock with PIN fallback, and an in-app APK update checker |
 | **2.3.1** | Android fixes: native app diagnostics, native sharing, and stable APK signing |
 | **2.3.0** | Data transfer via file/QR, data check and repair, diagnostics and device test matrix, Android APK app (Capacitor) |
 | **2.2.0** | Persian language, a font per language (Cairo/Vazirmatn/Noto Naskh), multilingual README |
@@ -231,16 +298,31 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 | **2.0.0** | Full rebuild: React + PWA, Aurora Glass, Cairo, serverless, Share Target, offline, backup, workspaces |
 | **1.0.0** | First stable release (HTML/JS) |
 
+---
+
 ## Documentation
 
 - [Specifications and build plan](SPEC.md)
 - [Development contract](docs/DEV-CONTRACT.md)
+- [Device test matrix](docs/DEVICE-TEST-MATRIX.md)
 - [Visual direction preview](docs/mockups/design-directions.png)
+
+---
 
 ## Third party
 
-The Cairo, Vazirmatn, and Noto Naskh Arabic fonts (OFL) — `qrcode` (MIT) — `jsQR` (Apache-2.0) — React/Vite/Dexie/Tailwind (MIT). Details in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+The Cairo, Vazirmatn, and Noto Naskh Arabic fonts (OFL) — `qrcode` (MIT) — `jsQR` (Apache-2.0) — React/Vite/Dexie/Tailwind (MIT) — Capacitor and its plugins (MIT) — `@capgo/capacitor-native-biometric` (MPL-2.0). Details in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+
+---
 
 ## Developer
 
-[ADMH - Ahmed Ziad](https://wa.me/9647723064622) · All rights reserved 2026
+<div align="center">
+
+**ADMH - Ahmed Zeyad**
+
+[GitHub](https://github.com/ahmdze) · [WhatsApp](https://wa.me/9647723064622)
+
+<sub>All rights reserved 2026 — Developed using Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</sub>
+
+</div>

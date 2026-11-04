@@ -19,7 +19,13 @@
 
 <p>
 <a href="https://github.com/ahmdze"><strong>ADMH - Ahmed Zeyad</strong></a><br />
-<sub>تم التطوير باستخدام <strong>Deepseek-V4.1-Flash 1017</strong> in <strong>Deepseek HARNESS</strong></sub>
+<sub>
+تم التطوير باستخدام<br />
+<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
+<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+المراجعة التقنية والفنية بواسطة<br />
+<strong>Qwen 3.8-Max</strong>
+</sub>
 </p>
 
 <p><strong>هذا الملف متوفر بأربع لغات:</strong></p>
