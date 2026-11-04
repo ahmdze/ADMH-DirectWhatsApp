@@ -13,12 +13,22 @@ import { formatBytes } from '../../lib/image';
 import { isStandalone } from '../../lib/format';
 import { promptInstall } from '../../lib/install';
 import { biometricAvailable, registerBiometric } from '../../lib/webauthn';
+import { APP_VERSION } from '../../lib/changelog';
+import { getStorageInfo, requestPersistentStorage, type StorageInfo } from '../../lib/storage';
+import {
+  notificationPermission,
+  requestNotificationPermission,
+  type NotificationPermissionState
+} from '../../lib/notifications';
+import { writeClipboardText } from '../../lib/clipboard';
 import { CountrySheet } from './CountrySheet';
 import { WorkspaceSheet } from './WorkspaceSheet';
 import { PinSheet, type PinSheetMode } from './PinSheet';
 import type { Locale, ThemeMode, Workspace } from '../../types';
 
-const APP_VERSION = '2.0.0';
+type ShareCapableNavigator = Navigator & {
+  share?: (data: { title?: string; url?: string }) => Promise<void>;
+};
 
 const SECTION_STYLE: CSSProperties = { display: 'flex', flexDirection: 'column', gap: 13 };
 const LIST_STYLE: CSSProperties = {
@@ -60,17 +70,20 @@ export function SettingsScreen() {
   const [installOpen, setInstallOpen] = useState(false);
   const [bioSupported, setBioSupported] = useState(false);
   const [bioBusy, setBioBusy] = useState(false);
-  const [storage, setStorage] = useState<{ usage: number; quota: number } | null>(null);
+  const [storage, setStorage] = useState<StorageInfo | null>(null);
+  const [storageBusy, setStorageBusy] = useState(false);
+  const [permission, setPermission] = useState<NotificationPermissionState>(() => notificationPermission());
+  const [notifBusy, setNotifBusy] = useState(false);
 
   const country = countryByIso(settings.defaultCountry) ?? COUNTRIES[0];
-  const countryName = locale === 'en' ? country.en : country.ar;
+  const countryName = t(country.ar, country.en);
   const activeWorkspace =
     workspaces.find((workspace) => workspace.id === settings.activeWorkspaceId) ?? workspaces[0] ?? null;
 
   const storageUsed = storage ? formatBytes(storage.usage) : '—';
   const storageTotal = storage && storage.quota > 0 ? formatBytes(storage.quota) : '—';
-  const storagePercent =
-    storage && storage.quota > 0 ? Math.min(100, Math.round((storage.usage / storage.quota) * 100)) : null;
+  const storagePercent = storage?.percent ?? null;
+  const notificationsOn = settings.notifications && permission === 'granted';
 
   useEffect(() => {
     let alive = true;
@@ -84,14 +97,9 @@ export function SettingsScreen() {
 
   useEffect(() => {
     let alive = true;
-    const manager = typeof navigator !== 'undefined' ? navigator.storage : undefined;
-    if (!manager?.estimate) return;
-    manager
-      .estimate()
-      .then((estimate) => {
-        if (alive) setStorage({ usage: estimate.usage ?? 0, quota: estimate.quota ?? 0 });
-      })
-      .catch(() => undefined);
+    void getStorageInfo().then((info) => {
+      if (alive) setStorage(info);
+    });
     return () => {
       alive = false;
     };
@@ -131,6 +139,106 @@ export function SettingsScreen() {
     updateSettings({ hideNumbers: hidden });
     if (settings.haptics) hapticTap();
     toast(hidden ? t('تم إخفاء الأرقام.', 'Numbers are hidden.') : t('تم إظهار الأرقام.', 'Numbers are visible.'), 'success');
+  };
+
+  const toggleNotifications = async (enabled: boolean) => {
+    if (notifBusy) return;
+    if (settings.haptics) hapticTap();
+    if (!enabled) {
+      updateSettings({ notifications: false });
+      toast(t('تم إيقاف إشعارات التذكير.', 'Reminder notifications turned off.'), 'success');
+      return;
+    }
+    setNotifBusy(true);
+    const result = await requestNotificationPermission();
+    setNotifBusy(false);
+    setPermission(result);
+    if (result === 'granted') {
+      updateSettings({ notifications: true });
+      if (settings.haptics) hapticSuccess();
+      toast(t('تم تفعيل إشعارات التذكير.', 'Reminder notifications enabled.'), 'success');
+      return;
+    }
+    updateSettings({ notifications: false });
+    if (settings.haptics) hapticError();
+    toast(
+      result === 'denied'
+        ? t(
+            'رفض المتصفح إذن الإشعارات. يمكنك السماح به من إعدادات الموقع في المتصفح.',
+            'The browser denied notification permission. You can allow it from the browser site settings.'
+          )
+        : result === 'unsupported'
+          ? t('هذا المتصفح لا يدعم الإشعارات.', 'This browser does not support notifications.')
+          : t('لم يُمنح إذن الإشعارات.', 'Notification permission was not granted.'),
+      'error'
+    );
+  };
+
+  const protectStorage = async () => {
+    if (storageBusy) return;
+    setStorageBusy(true);
+    const granted = await requestPersistentStorage();
+    const info = await getStorageInfo();
+    setStorage(info);
+    setStorageBusy(false);
+    if (granted || info.persisted) {
+      if (settings.haptics) hapticSuccess();
+      toast(t('تم تفعيل التخزين الدائم؛ بياناتك أقل عرضة للحذف.', 'Persistent storage enabled; your data is less likely to be evicted.'), 'success');
+      return;
+    }
+    if (settings.haptics) hapticError();
+    toast(
+      t(
+        'تعذّر تفعيل التخزين الدائم على هذا المتصفح. صدّر نسخة احتياطية لحماية بياناتك.',
+        'Could not enable persistent storage in this browser. Export a backup to protect your data.'
+      ),
+      'error'
+    );
+  };
+
+  const shareApp = async () => {
+    const url = typeof window !== 'undefined' ? `${window.location.origin}${import.meta.env.BASE_URL}` : '';
+    const title = t('واتساب المباشر — ADMH', 'Direct WhatsApp — ADMH');
+    const shareFn = typeof navigator !== 'undefined' ? (navigator as ShareCapableNavigator).share : undefined;
+    if (url && typeof shareFn === 'function') {
+      try {
+        await shareFn.call(navigator, { title, url });
+        if (settings.haptics) hapticSuccess();
+        return;
+      } catch (error) {
+        if ((error as { name?: string } | null)?.name === 'AbortError') return;
+      }
+    }
+    const copied = await writeClipboardText(url);
+    if (copied) {
+      if (settings.haptics) hapticSuccess();
+      toast(t('تم نسخ رابط التطبيق.', 'App link copied.'), 'success');
+      return;
+    }
+    if (settings.haptics) hapticError();
+    toast(t('تعذّر نسخ رابط التطبيق.', 'Could not copy the app link.'), 'error');
+  };
+
+  const restartTour = () => {
+    updateSettings({ onboarded: false });
+    if (settings.haptics) hapticSuccess();
+    toast(t('جارٍ فتح الجولة التعريفية…', 'Opening the introduction tour…'));
+  };
+
+  const changeLockMethod = (method: 'pin' | 'biometric') => {
+    if (method === settings.lock.method) return;
+    if (method === 'biometric' && !settings.lock.credentialId) {
+      void enableBiometric();
+      return;
+    }
+    updateSettings({ lock: { ...settings.lock, method } });
+    if (settings.haptics) hapticTap();
+    toast(
+      method === 'biometric'
+        ? t('أصبحت البصمة طريقة الفتح الأساسية. يبقى PIN بديلاً.', 'Biometrics is now the primary unlock method. PIN stays as a fallback.')
+        : t('أصبح رمز PIN طريقة الفتح الأساسية.', 'PIN is now the primary unlock method.'),
+      'success'
+    );
   };
 
   const activateWorkspace = (id: string) => {
@@ -250,7 +358,7 @@ export function SettingsScreen() {
           <div className="grid-3">
             {ACCENTS.map((accent) => {
               const selected = settings.accent.toLowerCase() === accent.color.toLowerCase();
-              const accentName = locale === 'en' ? accent.en : accent.ar;
+              const accentName = t(accent.ar, accent.en);
               return (
                 <button
                   key={accent.id}
@@ -301,12 +409,16 @@ export function SettingsScreen() {
           value={settings.locale}
           options={[
             { value: 'ar', label: 'العربية' },
-            { value: 'en', label: 'English' }
+            { value: 'en', label: 'English' },
+            { value: 'ckb', label: 'کوردی' }
           ]}
           onChange={changeLocale}
         />
         <HintCard icon="globe">
-          {t('يتغيّر اتجاه الواجهة (RTL/LTR) تلقائياً حسب اللغة.', 'The interface direction (RTL/LTR) switches automatically with the language.')}
+          {t(
+            'يتغيّر اتجاه الواجهة (RTL/LTR) تلقائياً حسب اللغة. الكردية (سوراني) تُعرض من اليمين إلى اليسار مثل العربية.',
+            'The interface direction (RTL/LTR) switches automatically with the language. Kurdish (Sorani) is right-to-left, just like Arabic.'
+          )}
         </HintCard>
       </section>
 
@@ -352,6 +464,40 @@ export function SettingsScreen() {
           label={t('إخفاء الأرقام', 'Hide numbers')}
           description={t('تمويه الأرقام الحساسة حتى تلمسها.', 'Blur sensitive numbers until you tap them.')}
         />
+        <div className="divider" />
+        <Switch
+          checked={notificationsOn}
+          onChange={(next) => {
+            void toggleNotifications(next);
+          }}
+          disabled={notifBusy || permission === 'unsupported'}
+          label={t('إشعارات التذكير', 'Reminder notifications')}
+          description={t(
+            'إشعار محلي عند حلول موعد تذكير أثناء فتح التطبيق. يطلب المتصفح الإذن أول مرة.',
+            'A local notification when a reminder is due while the app is open. The browser asks for permission the first time.'
+          )}
+        />
+        <div className="row-between" style={{ gap: 10 }}>
+          <span className="text-muted" style={{ fontSize: 11.5 }}>
+            {t('إذن الإشعارات في المتصفح', 'Browser notification permission')}
+          </span>
+          <span className={`badge ${permission === 'granted' ? 'accent' : ''}`}>
+            <Icon name={permission === 'granted' ? 'check' : 'bell'} size={11} />
+            {permission === 'granted'
+              ? t('ممنوح', 'Granted')
+              : permission === 'denied'
+                ? t('مرفوض', 'Denied')
+                : permission === 'unsupported'
+                  ? t('غير مدعوم', 'Unsupported')
+                  : t('لم يُطلب بعد', 'Not requested yet')}
+          </span>
+        </div>
+        <HintCard icon="bell">
+          {t(
+            'تظهر الإشعارات المحلية أثناء فتح التطبيق أو استخدامه فقط؛ لا نعتمد على إشعارات خلفية في PWA.',
+            'Local notifications appear only while the app is open or in use; background notifications are not reliable in a PWA.'
+          )}
+        </HintCard>
       </section>
 
       {/* -------------------------------------------------------- workspaces */}
@@ -461,6 +607,26 @@ export function SettingsScreen() {
           </div>
         ) : null}
 
+        {settings.lock.credentialId ? (
+          <div className="col" style={{ gap: 8 }}>
+            <span className="section-title">{t('طريقة الفتح الأساسية', 'Primary unlock method')}</span>
+            <Segmented
+              value={settings.lock.method}
+              options={[
+                { value: 'biometric', label: t('البصمة', 'Biometrics') },
+                { value: 'pin', label: t('رمز PIN', 'PIN') }
+              ]}
+              onChange={changeLockMethod}
+            />
+            <p className="page-sub" style={{ margin: 0, fontSize: 11.5 }}>
+              {t(
+                'يبقى رمز PIN بديلاً دائماً حتى لو كانت البصمة طريقة الفتح الأساسية.',
+                'Your PIN always remains a fallback even when biometrics is the primary method.'
+              )}
+            </p>
+          </div>
+        ) : null}
+
         {bioSupported || settings.lock.credentialId ? (
           <>
             <div className="divider" />
@@ -531,7 +697,19 @@ export function SettingsScreen() {
           <div className="divider" />
 
           <div className="col" style={{ gap: 8 }}>
-            <span className="section-title">{t('حالة التخزين', 'Storage status')}</span>
+            <div className="section-head">
+              <span className="section-title">{t('حالة التخزين', 'Storage status')}</span>
+              {storage ? (
+                <span className={`badge ${storage.persisted ? 'accent' : ''}`}>
+                  <Icon name={storage.persisted ? 'shield' : storage.supported ? 'alert' : 'info'} size={11} />
+                  {storage.persisted
+                    ? t('تخزين دائم', 'Persistent')
+                    : storage.supported
+                      ? t('غير محمي من الحذف', 'Not protected')
+                      : t('غير متاح', 'Unavailable')}
+                </span>
+              ) : null}
+            </div>
             <div className="grid-2">
               <div className="stat-card">
                 <b style={{ fontSize: 17 }}>{storageUsed}</b>
@@ -554,6 +732,42 @@ export function SettingsScreen() {
                 {t('لا يمكن قراءة تقدير التخزين على هذا المتصفح.', 'Storage estimates are not available in this browser.')}
               </p>
             )}
+            {storagePercent !== null ? (
+              <div
+                aria-hidden="true"
+                style={{
+                  height: 8,
+                  borderRadius: 999,
+                  background: 'var(--glass-2)',
+                  border: '1px solid var(--line)',
+                  overflow: 'hidden'
+                }}
+              >
+                <div
+                  style={{
+                    width: `${storagePercent}%`,
+                    height: '100%',
+                    borderRadius: 999,
+                    background: storagePercent >= 80 ? 'var(--danger)' : 'var(--accent)',
+                    transition: 'width 0.25s ease'
+                  }}
+                />
+              </div>
+            ) : null}
+            {storage && storage.supported && !storage.persisted ? (
+              <Button variant="soft" size="sm" loading={storageBusy} onClick={() => void protectStorage()}>
+                <Icon name="shield" size={15} />
+                {t('حماية التخزين', 'Protect storage')}
+              </Button>
+            ) : null}
+            {storagePercent !== null && storagePercent >= 80 ? (
+              <HintCard icon="alert">
+                {t(
+                  'المساحة المتاحة للتطبيق تقترب من الامتلاء. امسح البيانات غير الضرورية أو صدّر نسخة احتياطية.',
+                  'Storage available to the app is almost full. Remove unneeded data or export a backup.'
+                )}
+              </HintCard>
+            ) : null}
           </div>
 
           <div className="divider" />
@@ -620,12 +834,46 @@ export function SettingsScreen() {
             'Privacy first: all data lives locally in IndexedDB on your device. No server, no tracking, and no data is sent to third parties.'
           )}
         </HintCard>
-        <div className="row-between">
+        <div className="col" style={{ gap: 2 }}>
           <span className="text-muted" style={{ fontSize: 12 }}>
             {t('المطوّر', 'Developer')}
           </span>
-          <span style={{ fontWeight: 800 }}>ADMH - احمد زياد | جميع الحقوق محفوظة 2026</span>
+          <a
+            href="https://wa.me/9647723064622"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t('مراسلة المطوّر على واتساب', 'Message the developer on WhatsApp')}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              minHeight: 44,
+              color: 'var(--accent-text)',
+              fontWeight: 800,
+              fontSize: 14.5,
+              textDecoration: 'none'
+            }}
+          >
+            <Icon name="whatsapp" size={17} />
+            <span>ADMH - احمد زياد</span>
+            <Icon name="arrowUpRight" size={14} />
+          </a>
+          <span className="text-muted" style={{ fontSize: 12 }}>
+            {t('جميع الحقوق محفوظة 2026', 'All rights reserved 2026')}
+          </span>
         </div>
+
+        <div className="divider" />
+
+        <Button variant="soft" block onClick={() => void shareApp()}>
+          <Icon name="share" size={16} />
+          {t('شارك التطبيق', 'Share app')}
+        </Button>
+
+        <Button variant="ghost" block onClick={restartTour}>
+          <Icon name="sparkles" size={16} />
+          {t('إعادة الجولة التعريفية', 'Replay the intro tour')}
+        </Button>
       </section>
 
       {/* ------------------------------------------------------------- sheets */}

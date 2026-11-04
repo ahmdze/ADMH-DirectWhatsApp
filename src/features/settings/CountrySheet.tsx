@@ -13,7 +13,7 @@ interface CountrySheetProps {
 
 /** Searchable list of `COUNTRIES` used to pick the default country. */
 export function CountrySheet({ open, selected, onSelect, onClose }: CountrySheetProps) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export function CountrySheet({ open, selected, onSelect, onClose }: CountrySheet
         (country) =>
           country.ar.includes(query.trim()) ||
           country.en.toLowerCase().includes(term) ||
+          t(country.ar, country.en).toLowerCase().includes(term) ||
           country.iso.toLowerCase().includes(term) ||
           country.dial.includes(term)
       )
@@ -39,10 +40,7 @@ export function CountrySheet({ open, selected, onSelect, onClose }: CountrySheet
       title={t('الدولة الافتراضية', 'Default country')}
       subtitle={
         current
-          ? t(
-              `الدولة الحالية: ${locale === 'en' ? current.en : current.ar}`,
-              `Current country: ${locale === 'en' ? current.en : current.ar}`
-            )
+          ? `${t('الدولة الحالية', 'Current country')}: ${t(current.ar, current.en)}`
           : t('اختر الدولة الافتراضية للأرقام المحلية.', 'Choose the default country for local numbers.')
       }
     >
@@ -79,7 +77,7 @@ export function CountrySheet({ open, selected, onSelect, onClose }: CountrySheet
                   {country.flag}
                 </span>
                 <span className="list-main">
-                  <span className="list-title">{locale === 'en' ? country.en : country.ar}</span>
+                  <span className="list-title">{t(country.ar, country.en)}</span>
                   <span className="list-sub" dir="ltr">
                     +{country.dial}
                   </span>

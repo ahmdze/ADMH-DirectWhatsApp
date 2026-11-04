@@ -25,7 +25,7 @@ function parseTags(value: string): string[] {
 
 /** Create or edit a saved destination. */
 export function DestinationSheet({ open, onClose, workspaceId, destination }: DestinationSheetProps) {
-  const { t, n, rel, locale, phoneError } = useI18n();
+  const { t, n, rel, phoneError } = useI18n();
   const settings = useSettings();
   const country = countryByIso(settings.defaultCountry) ?? COUNTRIES[0];
 
@@ -143,7 +143,7 @@ export function DestinationSheet({ open, onClose, workspaceId, destination }: De
         label={type === 'phone' ? t('رقم الهاتف', 'Phone number') : t('اسم المستخدم', 'Username')}
         hint={
           type === 'phone'
-            ? `${t('الدولة الافتراضية', 'Default country')}: ${locale === 'en' ? country.en : country.ar} +${country.dial}`
+            ? `${t('الدولة الافتراضية', 'Default country')}: ${t(country.ar, country.en)} +${country.dial}`
             : t('٣–٦٤ حرفاً: حروف، أرقام، . _ -', '3–64 chars: letters, digits, . _ -')
         }
         error={error ?? undefined}

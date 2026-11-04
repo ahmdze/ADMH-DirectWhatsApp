@@ -22,6 +22,7 @@ export const ACCENTS: AccentChoice[] = [
 ];
 
 const THEMES: ThemeMode[] = ['dark', 'light', 'auto'];
+const LOCALES: Locale[] = ['ar', 'en', 'ckb'];
 
 function detectLocale(): Locale {
   // Arabic-first product: Arabic is the default; users can switch to English
@@ -41,6 +42,9 @@ function defaults(): Settings {
     activeWorkspaceId: 'personal',
     lock: { enabled: false, method: 'pin', hash: undefined, salt: undefined, credentialId: null },
     installBannerDismissed: false,
+    notifications: false,
+    onboarded: false,
+    lastSeenVersion: '',
     updatedAt: Date.now()
   };
 }
@@ -53,7 +57,7 @@ function normalize(raw: unknown): Settings {
     ...base,
     theme: THEMES.includes(value.theme as ThemeMode) ? (value.theme as ThemeMode) : base.theme,
     accent: typeof value.accent === 'string' && /^#[0-9a-f]{6}$/i.test(value.accent) ? value.accent : base.accent,
-    locale: value.locale === 'en' ? 'en' : 'ar',
+    locale: LOCALES.includes(value.locale as Locale) ? (value.locale as Locale) : 'ar',
     defaultCountry: typeof value.defaultCountry === 'string' && /^[A-Z]{2}$/.test(value.defaultCountry) ? value.defaultCountry : base.defaultCountry,
     haptics: typeof value.haptics === 'boolean' ? value.haptics : base.haptics,
     hideNumbers: typeof value.hideNumbers === 'boolean' ? value.hideNumbers : base.hideNumbers,
@@ -66,6 +70,11 @@ function normalize(raw: unknown): Settings {
       credentialId: typeof value.lock?.credentialId === 'string' ? value.lock.credentialId : null
     },
     installBannerDismissed: Boolean(value.installBannerDismissed),
+    notifications: typeof value.notifications === 'boolean' ? value.notifications : base.notifications,
+    // Existing users (they have a stored settings object) should not see the
+    // first-run tour again after this update.
+    onboarded: typeof value.onboarded === 'boolean' ? value.onboarded : true,
+    lastSeenVersion: typeof value.lastSeenVersion === 'string' ? value.lastSeenVersion : '',
     version: SETTINGS_VERSION,
     updatedAt: typeof value.updatedAt === 'number' ? value.updatedAt : base.updatedAt
   };
@@ -126,7 +135,7 @@ export function applyAppearance(settings: Settings): void {
   root.dataset.theme = theme;
   root.dataset.accent = settings.accent;
   root.lang = settings.locale;
-  root.dir = settings.locale === 'ar' ? 'rtl' : 'ltr';
+  root.dir = settings.locale === 'ar' || settings.locale === 'ckb' ? 'rtl' : 'ltr';
   root.style.setProperty('--accent', settings.accent);
   root.classList.toggle('hide-numbers', settings.hideNumbers);
   root.classList.toggle('is-ios', isIos());

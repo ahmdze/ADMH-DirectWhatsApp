@@ -14,6 +14,14 @@ import { usePwaState } from './lib/pwa';
 import { consumeLaunchParams, setDraft } from './lib/launch';
 import { updateReminder } from './lib/db';
 import { hapticSuccess } from './lib/haptics';
+import { parseTarget } from './lib/phone';
+import { takeSharedImage } from './lib/sharedImage';
+import { getStorageInfo } from './lib/storage';
+import { notificationPermission, notifyDueReminders } from './lib/notifications';
+import { APP_VERSION } from './lib/changelog';
+import { toast } from './lib/toast';
+import { Onboarding } from './components/Onboarding';
+import { WhatsNew } from './components/WhatsNew';
 import { LockScreen } from './features/settings/LockScreen';
 
 const ComposeScreen = lazy(() => import('./features/compose/ComposeScreen').then((module) => ({ default: module.ComposeScreen })));
@@ -124,7 +132,7 @@ function WorkspaceSheet({ open, onClose }: { open: boolean; onClose: () => void 
 }
 
 function DueRemindersSheet({ open, onClose, workspaceId }: { open: boolean; onClose: () => void; workspaceId: string | undefined }) {
-  const { t, locale, rel } = useI18n();
+  const { t, rel } = useI18n();
   const due = useDueReminders(workspaceId);
   return (
     <Sheet
@@ -158,7 +166,7 @@ function DueRemindersSheet({ open, onClose, workspaceId }: { open: boolean; onCl
                 hapticSuccess();
               }}
             >
-              {locale === 'en' ? 'Done' : 'إنجاز'}
+              {t('إنجاز', 'Done')}
             </Button>
           </div>
         ))}
@@ -210,7 +218,7 @@ function renderRoute(path: string[]) {
 }
 
 export default function App() {
-  const { t, locale } = useI18n();
+  const { t, locale, phoneError } = useI18n();
   const settings = useSettings();
   const path = useRoute();
   const workspace = useActiveWorkspace();
@@ -218,6 +226,8 @@ export default function App() {
   const { needRefresh } = usePwaState();
   const [workspaceSheet, setWorkspaceSheet] = useState(false);
   const [dueOpen, setDueOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+  const [whatsNewClosed, setWhatsNewClosed] = useState(false);
   const [unlocked, setUnlocked] = useState(() => !settings.lock.enabled || isSessionUnlocked());
 
   const first = path[0] || 'compose';
@@ -225,6 +235,8 @@ export default function App() {
   const tab: TabKey = (isTab ? first : 'compose') as TabKey;
   const workspaceName = workspace ? (locale === 'en' ? workspace.nameEn : workspace.name) : t('شخصي', 'Personal');
   const due = useDueReminders(workspace?.id);
+  const showOnboarding = !settings.onboarded && !introDone;
+  const showWhatsNew = settings.onboarded && settings.lastSeenVersion !== APP_VERSION && !whatsNewClosed;
 
   useEffect(() => {
     applyAppearance(settings);
@@ -235,13 +247,58 @@ export default function App() {
   useEffect(() => {
     const info = consumeLaunchParams();
     if (info.draft) setDraft(info.draft);
+    if (info.sharedImage) {
+      void (async () => {
+        const file = await takeSharedImage();
+        if (!file) {
+          toast(t('لم يتم العثور على صورة مشتركة.', 'No shared image was found.'), 'error');
+          return;
+        }
+        try {
+          const { decodeImageFile } = await import('./lib/scan');
+          const value = await decodeImageFile(file);
+          if (!value) {
+            toast(t('لم نعثر على رمز QR واضح في الصورة.', 'No clear QR code was found in the image.'), 'error');
+            navigate('/tools/scan');
+            return;
+          }
+          const parsed = parseTarget(value, { country: settings.defaultCountry });
+          if (!parsed.ok) {
+            toast(phoneError(parsed.code), 'error');
+            return;
+          }
+          setDraft({ raw: value, origin: 'share' });
+          navigate('/compose');
+          toast(t('تمت قراءة الوجهة من الصورة المشتركة.', 'Destination read from the shared image.'), 'success');
+        } catch {
+          toast(t('تعذّرت قراءة الصورة المشتركة.', 'Could not read the shared image.'), 'error');
+        }
+      })();
+    }
     if (info.action === 'scan') navigate('/tools/scan');
     else if (info.action === 'compose') navigate('/compose');
+
+    void getStorageInfo().then((info) => {
+      if (info.percent === null || info.percent < 85) return;
+      try {
+        if (sessionStorage.getItem('admh2_storage_warned')) return;
+        sessionStorage.setItem('admh2_storage_warned', '1');
+      } catch {
+        /* ignore */
+      }
+      toast(t('المساحة المتاحة للتطبيق تقترب من الامتلاء. راجع الإعدادات.', 'App storage is almost full. Check Settings.'), 'error');
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!settings.lock.enabled) setUnlocked(true);
   }, [settings.lock.enabled]);
+
+  useEffect(() => {
+    // Allow the Settings screen to re-open the tour by resetting `onboarded`.
+    if (!settings.onboarded) setIntroDone(false);
+  }, [settings.onboarded]);
 
   useEffect(() => {
     if (!due.length) return;
@@ -251,8 +308,15 @@ export default function App() {
     } catch {
       /* ignore */
     }
+    if (settings.notifications && notificationPermission() === 'granted') {
+      void notifyDueReminders(due, t('تذكير متابعة', 'Follow-up reminder')).then((shown) => {
+        if (!shown) setDueOpen(true);
+      });
+      return;
+    }
     setDueOpen(true);
-  }, [due.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [due.length, settings.notifications]);
 
   const page = useMemo(() => renderRoute(path), [path]);
 
@@ -293,6 +357,22 @@ export default function App() {
 
       <WorkspaceSheet open={workspaceSheet} onClose={() => setWorkspaceSheet(false)} />
       <DueRemindersSheet open={dueOpen} onClose={() => setDueOpen(false)} workspaceId={workspace?.id} />
+
+      {showOnboarding ? (
+        <Onboarding
+          onDone={() => {
+            updateSettings({ onboarded: true, lastSeenVersion: APP_VERSION });
+            setIntroDone(true);
+          }}
+        />
+      ) : null}
+      <WhatsNew
+        open={showWhatsNew && !showOnboarding && !dueOpen}
+        onClose={() => {
+          updateSettings({ lastSeenVersion: APP_VERSION });
+          setWhatsNewClosed(true);
+        }}
+      />
     </>
   );
 }

@@ -9,7 +9,12 @@ import { useActiveWorkspace, useDestinations, useReminders } from '../../hooks/u
 import { addReminder, deleteReminder, updateReminder } from '../../lib/db';
 import { formatPhone, parseTarget } from '../../lib/phone';
 import { initials } from '../../lib/format';
-import { useSettings } from '../../lib/settings';
+import { useSettings, updateSettings } from '../../lib/settings';
+import {
+  notificationPermission,
+  requestNotificationPermission,
+  type NotificationPermissionState
+} from '../../lib/notifications';
 import type { Destination, Reminder, TargetType } from '../../types';
 
 function pad(value: number): string {
@@ -86,6 +91,36 @@ export function RemindersScreen() {
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [permission, setPermission] = useState<NotificationPermissionState>(() => notificationPermission());
+  const [notifBusy, setNotifBusy] = useState(false);
+
+  const showNotificationsInvite = !settings.notifications || permission !== 'granted';
+
+  const enableNotifications = async () => {
+    if (notifBusy) return;
+    setNotifBusy(true);
+    const result = await requestNotificationPermission();
+    setNotifBusy(false);
+    setPermission(result);
+    if (result === 'granted') {
+      updateSettings({ notifications: true });
+      hapticSuccess();
+      toast(t('تم تفعيل إشعارات التذكير.', 'Reminder notifications enabled.'), 'success');
+      return;
+    }
+    hapticError();
+    toast(
+      result === 'denied'
+        ? t(
+            'رفض المتصفح إذن الإشعارات. يمكنك السماح به من إعدادات الموقع في المتصفح.',
+            'The browser denied notification permission. You can allow it from the browser site settings.'
+          )
+        : result === 'unsupported'
+          ? t('هذا المتصفح لا يدعم الإشعارات.', 'This browser does not support notifications.')
+          : t('لم يُمنح إذن الإشعارات.', 'Notification permission was not granted.'),
+      'error'
+    );
+  };
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 30000);
@@ -211,6 +246,59 @@ export function RemindersScreen() {
           'Reminders appear only when you open the app — background notifications are not reliable in a PWA. Open the app at the due time to see your reminders.'
         )}
       </HintCard>
+
+      {showNotificationsInvite ? (
+        <section className="glass card col" style={{ gap: 9 }}>
+          <div className="section-head">
+            <h2 className="section-title">{t('إشعارات التذكير', 'Reminder notifications')}</h2>
+            <span className={`badge ${permission === 'granted' ? 'accent' : ''}`}>
+              <Icon name={permission === 'granted' ? 'check' : 'bell'} size={11} />
+              {permission === 'granted'
+                ? t('الإذن ممنوح', 'Permission granted')
+                : permission === 'denied'
+                  ? t('الإذن مرفوض', 'Permission denied')
+                  : permission === 'unsupported'
+                    ? t('غير مدعوم', 'Unsupported')
+                    : t('الإذن غير مطلوب', 'Not requested')}
+            </span>
+          </div>
+          <p className="page-sub" style={{ margin: 0 }}>
+            {t(
+              'فعّل الإشعارات لتصلك تنبيهات التذكيرات المستحقة أثناء استخدام التطبيق.',
+              'Enable notifications to get alerted about due reminders while you use the app.'
+            )}
+          </p>
+          <Button
+            variant="soft"
+            block
+            loading={notifBusy}
+            disabled={notifBusy || permission === 'unsupported'}
+            onClick={() => void enableNotifications()}
+          >
+            <Icon name="bell" size={16} />
+            {t('تفعيل إشعارات التذكير', 'Enable reminder notifications')}
+          </Button>
+          <p className="text-muted" style={{ margin: 0, fontSize: 11, lineHeight: 1.6 }}>
+            {permission === 'unsupported'
+              ? t(
+                  'هذا المتصفح لا يدعم الإشعارات؛ ستبقى التذكيرات ظاهرة داخل التطبيق فقط.',
+                  'This browser does not support notifications; reminders stay visible inside the app only.'
+                )
+              : t(
+                  'تظهر الإشعارات عند فتح التطبيق أو استخدامه فقط؛ لا توجد إشعارات خلفية.',
+                  'Notifications appear only when the app is open or in use; there are no background notifications.'
+                )}
+          </p>
+          {permission === 'denied' ? (
+            <p className="field-error" style={{ margin: 0 }} role="status">
+              {t(
+                'الإذن مرفوض. اسمح بالإشعارات من إعدادات الموقع في المتصفح ثم أعد المحاولة.',
+                'Permission is denied. Allow notifications from the browser site settings, then try again.'
+              )}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       {reminders.length > 0 ? (
         <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>

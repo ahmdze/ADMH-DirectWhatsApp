@@ -1,21 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icon } from './icons';
 import { Button, IconButton, Sheet } from './ui';
 import { useI18n } from '../lib/i18n';
 import { useSettings, updateSettings } from '../lib/settings';
 import { promptInstall, useInstallState } from '../lib/install';
-import { isStandalone } from '../lib/format';
+import { isIos, isStandalone } from '../lib/format';
 import { toast } from '../lib/toast';
+
+function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  if (isIos()) return true;
+  return navigator.maxTouchPoints > 0 && window.matchMedia?.('(pointer: coarse)').matches === true;
+}
 
 export function InstallBanner() {
   const { t } = useI18n();
   const settings = useSettings();
   const install = useInstallState();
   const [iosSheet, setIosSheet] = useState(false);
+  const [ready, setReady] = useState(false);
   const standalone = isStandalone();
 
-  if (standalone || install.installed || settings.installBannerDismissed) return null;
+  useEffect(() => {
+    const timer = window.setTimeout(() => setReady(true), 1800);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  if (!ready || standalone || install.installed || settings.installBannerDismissed) return null;
   if (!install.canInstall && !install.ios) return null;
+  // Desktop users install from the browser menu when they want to; the banner
+  // is reserved for phones where it is genuinely useful.
+  if (!isMobileDevice()) return null;
 
   const onClick = async () => {
     if (install.canInstall) {

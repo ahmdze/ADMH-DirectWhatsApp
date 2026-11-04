@@ -7,6 +7,8 @@ import { ensureDatabase } from './lib/db';
 import { applyAppearance, getSettings, watchSystemTheme } from './lib/settings';
 import { initInstallPrompt, initOnlineWatcher } from './lib/install';
 import { initPwa } from './lib/pwa';
+import { ensurePersistentStorage } from './lib/storage';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 async function bootstrap(): Promise<void> {
   applyAppearance(getSettings());
@@ -14,6 +16,7 @@ async function bootstrap(): Promise<void> {
   initInstallPrompt();
   initOnlineWatcher();
   initPwa();
+  void ensurePersistentStorage();
 
   try {
     await ensureDatabase();
@@ -30,7 +33,9 @@ async function bootstrap(): Promise<void> {
   container.innerHTML = '';
   createRoot(container).render(
     <StrictMode>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </StrictMode>
   );
 }

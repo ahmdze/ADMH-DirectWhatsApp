@@ -2,9 +2,17 @@ import type { Draft } from '../types';
 import { extractCandidateFromText } from './phone';
 
 let pendingDraft: Draft | null = null;
+const draftListeners = new Set<() => void>();
+
+/** Fired when a draft is handed to the compose screen after async work. */
+export function subscribeDraft(listener: () => void): () => void {
+  draftListeners.add(listener);
+  return () => draftListeners.delete(listener);
+}
 
 export function setDraft(draft: Draft | null): void {
   pendingDraft = draft;
+  draftListeners.forEach((listener) => listener());
 }
 
 export function takeDraft(): Draft | null {
@@ -20,6 +28,7 @@ export function peekDraft(): Draft | null {
 export interface LaunchInfo {
   action: 'compose' | 'scan' | null;
   draft: Draft | null;
+  sharedImage: boolean;
 }
 
 /** Read PWA shortcuts / share_target query params once and clean the URL. */
@@ -30,11 +39,12 @@ export function consumeLaunchParams(): LaunchInfo {
   const title = params.get('title') || '';
   const text = params.get('text') || '';
   const url = params.get('url') || '';
-  const shared = params.get('share') ? [title, text, url].filter(Boolean).join('\n') : '';
+  const sharedImage = params.get('share') === 'image';
+  const shared = params.get('share') && !sharedImage ? [title, text, url].filter(Boolean).join('\n') : '';
   const sharedText = shared || [text, url].filter(Boolean).join('\n');
 
   let draft: Draft | null = null;
-  if (sharedText.trim() || shared) {
+  if (!sharedImage && (sharedText.trim() || shared)) {
     const candidate = extractCandidateFromText(sharedText);
     draft = candidate ? { raw: candidate, message: text && !candidate.includes(text) ? text : undefined, origin: 'share' } : { raw: '', message: text || undefined, origin: 'share' };
   }
@@ -48,7 +58,7 @@ export function consumeLaunchParams(): LaunchInfo {
     }
   }
 
-  return { action, draft };
+  return { action, draft, sharedImage };
 }
 
 export function installShortcut(action: 'compose' | 'scan'): void {

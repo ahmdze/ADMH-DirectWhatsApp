@@ -17,7 +17,7 @@ const LABELS: Record<keyof TemplateVars, { ar: string; en: string }> = {
   date: { ar: 'التاريخ', en: 'Date' }
 };
 
-function todayLabel(locale: 'ar' | 'en'): string {
+function todayLabel(locale: string): string {
   try {
     return new Date().toLocaleDateString(locale === 'en' ? 'en-GB' : 'ar-IQ');
   } catch {

@@ -1,19 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Icon } from '../../components/icons';
 import { Button, Chip, Field, HintCard, IconButton } from '../../components/ui';
-import { useActiveWorkspace, useHistory, useTemplates } from '../../hooks/useData';
+import { useActiveWorkspace, useDestinations, useHistory, useTemplates } from '../../hooks/useData';
 import { readClipboardText, writeClipboardText } from '../../lib/clipboard';
 import { recordTargetUse } from '../../lib/db';
 import { hapticError, hapticSuccess, hapticTap } from '../../lib/haptics';
 import { useI18n } from '../../lib/i18n';
-import { takeDraft } from '../../lib/launch';
-import { COUNTRIES, countryByIso, extractCandidateFromText, formatPhone, parseTarget } from '../../lib/phone';
+import { takeDraft, subscribeDraft } from '../../lib/launch';
+import { COUNTRIES, countryByIso, extractCandidateFromText, formatPhone, normalizeDigits, parseTarget } from '../../lib/phone';
+import { initials } from '../../lib/format';
 import { navigate } from '../../lib/router';
 import { updateSettings, useSettings } from '../../lib/settings';
 import { hasVariables, previewTemplate } from '../../lib/template';
 import { toast } from '../../lib/toast';
 import { buildChatUrl, openChat } from '../../lib/whatsapp';
-import type { Target } from '../../types';
+import type { Draft, Target } from '../../types';
 import { CountryPicker } from './CountryPicker';
 import { QrPreviewSheet } from './QrPreviewSheet';
 import { SaveTargetSheet } from './SaveTargetSheet';
@@ -27,6 +28,7 @@ export function ComposeScreen() {
   const workspace = useActiveWorkspace();
   const templates = useTemplates(workspace?.id);
   const history = useHistory(workspace?.id, 8);
+  const destinations = useDestinations(workspace?.id);
 
   const [country, setCountry] = useState(settings.defaultCountry);
   const [raw, setRaw] = useState('');
@@ -39,29 +41,47 @@ export function ComposeScreen() {
   const [qrUrl, setQrUrl] = useState('');
   const [actionTarget, setActionTarget] = useState<Target | null>(null);
   const [clipSuggestion, setClipSuggestion] = useState<string | null>(null);
+  const [hideSuggestions, setHideSuggestions] = useState(false);
+
+  const query = raw.trim().toLowerCase();
+  const queryDigits = normalizeDigits(query).replace(/\D/g, '');
+  const suggestions = useMemo(() => {
+    if (hideSuggestions || !query || query.length < 1) return [];
+    const nameQuery = query.replace(/^@/, '');
+    return destinations
+      .filter((destination) => {
+        if (destination.label.toLowerCase().includes(query)) return true;
+        if (destination.phone && queryDigits.length >= 2 && destination.phone.includes(queryDigits)) return true;
+        if (destination.username && destination.username.toLowerCase().includes(nameQuery)) return true;
+        return false;
+      })
+      .slice(0, 5);
+  }, [destinations, query, queryDigits, hideSuggestions]);
 
   const countryInfo = countryByIso(country) ?? COUNTRIES[0];
   const preview = useMemo(() => (raw.trim() ? parseTarget(raw, { country }) : null), [raw, country]);
   const validTarget = preview && preview.ok ? preview.target : null;
 
-  // Drafts handed over by templates, the share target, or a QR scan.
-  // Parent effects (launch params) run after child effects, so re-check once
-  // after the commit instead of trusting a single read.
+  // Drafts handed over by templates, the share target, a QR scan, or a shared
+  // image decoded asynchronously. Subscribe so late drafts still fill the form.
   useEffect(() => {
-    const applyDraft = () => {
-      const draft = takeDraft();
-      if (!draft) return false;
+    const apply = (draft: Draft) => {
       if (draft.raw) setRaw(draft.raw);
       if (draft.message) setMessage(draft.message.slice(0, MESSAGE_LIMIT));
       if (draft.origin === 'share') toast(t('تم استلام الوجهة من المشاركة', 'Destination received from the share'), 'success');
       else if (draft.origin === 'scan') toast(t('تم استلام الوجهة من مسح QR', 'Destination received from the QR scan'), 'success');
-      return true;
     };
-    if (applyDraft()) return;
-    const timer = window.setTimeout(() => {
-      applyDraft();
-    }, 0);
-    return () => window.clearTimeout(timer);
+    const consume = () => {
+      const draft = takeDraft();
+      if (draft) apply(draft);
+    };
+    consume();
+    const timer = window.setTimeout(consume, 0);
+    const unsubscribe = subscribeDraft(consume);
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
   }, [t]);
 
   // Offer (never auto-fill) a target found in the clipboard on first open.
@@ -268,6 +288,7 @@ export function ComposeScreen() {
                 value={raw}
                 onChange={(event) => {
                   setRaw(event.target.value);
+                  setHideSuggestions(false);
                   if (error) setError(null);
                 }}
                 onKeyDown={(event) => {
@@ -276,12 +297,59 @@ export function ComposeScreen() {
                     void handleSend();
                   }
                 }}
+                aria-expanded={suggestions.length > 0}
                 placeholder="0770 000 0000 · @name"
                 aria-label={t('رقم الهاتف أو اسم المستخدم', 'Phone number or username')}
                 style={{ paddingInlineEnd: 52 }}
               />
             </div>
           </div>
+          {suggestions.length ? (
+            <div
+              className="list"
+              role="listbox"
+              aria-label={t('الوجهات المحفوظة', 'Saved destinations')}
+              style={{
+                background: 'var(--glass)',
+                border: '1px solid var(--line)',
+                borderRadius: 14,
+                overflow: 'hidden',
+                marginTop: 2
+              }}
+            >
+              {suggestions.map((destination) => {
+                const display = destination.type === 'phone' ? formatPhone(destination.phone || '') : '@' + (destination.username || '');
+                return (
+                  <button
+                    key={destination.id}
+                    type="button"
+                    role="option"
+                    aria-selected={false}
+                    className="list-row"
+                    style={{ padding: '8px 10px', textAlign: 'start', borderRadius: 10 }}
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => {
+                      setRaw(destination.type === 'phone' ? destination.phone || '' : '@' + (destination.username || ''));
+                      setError(null);
+                      setHideSuggestions(true);
+                      hapticTap();
+                    }}
+                  >
+                    <span className="avatar" style={{ width: 32, height: 32, borderRadius: 11, fontSize: 11 }}>
+                      {initials(destination.label)}
+                    </span>
+                    <span className="list-main">
+                      <span className="list-title">{destination.label}</span>
+                      <span className="list-sub" dir="ltr">
+                        {display}
+                      </span>
+                    </span>
+                    {destination.favorite ? <Icon name="star" size={14} /> : null}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
           {validTarget ? (
             <p className="list-sub" style={{ margin: 0 }}>
               {t('سيفتح', 'Will open')}:{' '}

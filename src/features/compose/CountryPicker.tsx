@@ -13,7 +13,7 @@ export interface CountryPickerProps {
 
 /** Bottom sheet with a searchable country list. */
 export function CountryPicker({ open, selected, onClose, onSelect }: CountryPickerProps) {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
 
   const results = useMemo(() => {
@@ -21,15 +21,16 @@ export function CountryPicker({ open, selected, onClose, onSelect }: CountryPick
     if (!term) return COUNTRIES;
     const dial = term.replace(/^\+/, '');
     return COUNTRIES.filter((country) => {
-      const name = locale === 'en' ? country.en.toLowerCase() : country.ar;
+      const name = t(country.ar, country.en).toLowerCase();
       return (
         name.includes(term) ||
+        country.ar.includes(term) ||
         country.en.toLowerCase().includes(term) ||
         country.iso.toLowerCase().includes(term) ||
         country.dial.startsWith(dial)
       );
     });
-  }, [query, locale]);
+  }, [query, t]);
 
   const current = countryByIso(selected) ?? COUNTRIES[0];
 
@@ -38,7 +39,7 @@ export function CountryPicker({ open, selected, onClose, onSelect }: CountryPick
       open={open}
       onClose={onClose}
       title={t('اختر الدولة', 'Choose country')}
-      subtitle={`${t('الدولة الحالية', 'Current')}: ${locale === 'en' ? current.en : current.ar} · +${current.dial}`}
+      subtitle={`${t('الدولة الحالية', 'Current')}: ${t(current.ar, current.en)} · +${current.dial}`}
     >
       <input
         className="control"
@@ -66,7 +67,7 @@ export function CountryPicker({ open, selected, onClose, onSelect }: CountryPick
                 {country.flag}
               </span>
               <span className="list-main">
-                <span className="list-title">{locale === 'en' ? country.en : country.ar}</span>
+                <span className="list-title">{t(country.ar, country.en)}</span>
                 <span className="list-sub" dir="ltr">
                   +{country.dial}
                 </span>

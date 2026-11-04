@@ -11,6 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/monochrome.svg'],
       manifest: {
         id: './v2',
@@ -27,6 +30,24 @@ export default defineConfig({
         background_color: '#06110f',
         theme_color: '#0b2b2b',
         categories: ['utilities', 'productivity', 'social'],
+        launch_handler: { client_mode: ['navigate-existing', 'auto'] },
+        handle_links: 'preferred',
+        screenshots: [
+          {
+            src: 'screenshots/home-narrow.png',
+            sizes: '390x844',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'شاشة الإرسال — واتساب المباشر'
+          },
+          {
+            src: 'screenshots/home-wide.png',
+            sizes: '1280x720',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'واتساب المباشر على سطح المكتب'
+          }
+        ],
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
@@ -50,16 +71,19 @@ export default defineConfig({
           }
         ],
         share_target: {
-          action: './?share=1',
-          method: 'GET',
-          enctype: 'application/x-www-form-urlencoded',
-          params: { title: 'title', text: 'text', url: 'url' }
+          action: './share-target',
+          method: 'POST',
+          enctype: 'multipart/form-data',
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url',
+            files: [{ name: 'image', accept: ['image/png', 'image/jpeg', 'image/webp', 'image/gif'] }]
+          }
         }
       },
-      workbox: {
+      injectManifest: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,webmanifest}'],
-        navigateFallback: 'index.html',
-        cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
       },
       devOptions: { enabled: false }

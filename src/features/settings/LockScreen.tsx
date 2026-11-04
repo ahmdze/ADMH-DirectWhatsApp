@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { AppLogo, Icon } from '../../components/icons';
 import { Button, HintCard, Sheet } from '../../components/ui';
 import { useI18n } from '../../lib/i18n';
@@ -102,6 +102,7 @@ export function LockScreen({ onUnlocked }: LockScreenProps) {
   const [forgotOpen, setForgotOpen] = useState(false);
   const dotsRef = useRef<HTMLDivElement>(null);
   const unlockedRef = useRef(false);
+  const autoBiometricTriedRef = useRef(false);
 
   const hasPin = Boolean(lock.hash && lock.salt);
 
@@ -182,6 +183,17 @@ export function LockScreen({ onUnlocked }: LockScreenProps) {
     shake();
   };
 
+  // When biometrics is the primary method, try it once on mount. The PIN
+  // keypad stays available the whole time, so a failed/cancelled prompt never
+  // blocks the user.
+  useEffect(() => {
+    if (autoBiometricTriedRef.current || unlockedRef.current) return;
+    if (lock.method !== 'biometric' || !lock.credentialId) return;
+    autoBiometricTriedRef.current = true;
+    void biometricUnlock();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lock.method, lock.credentialId]);
+
   const handleDigit = (digit: string) => {
     if (checking || !hasPin) return;
     setError(null);
@@ -232,7 +244,9 @@ export function LockScreen({ onUnlocked }: LockScreenProps) {
             {t('التطبيق مقفل', 'App locked')}
           </h1>
           <p className="page-sub" style={{ margin: 0 }}>
-            {t('أدخل رمز PIN للمتابعة', 'Enter your PIN to continue')}
+            {lock.credentialId
+              ? t('أدخل رمز PIN أو استخدم البصمة للمتابعة', 'Enter your PIN or use biometrics to continue')
+              : t('أدخل رمز PIN للمتابعة', 'Enter your PIN to continue')}
           </p>
         </div>
 
@@ -287,6 +301,14 @@ export function LockScreen({ onUnlocked }: LockScreenProps) {
             {!bioBusy ? <Icon name="user" size={18} /> : null}
             {t('فتح بالبصمة', 'Unlock with biometrics')}
           </Button>
+        ) : null}
+
+        {lock.method === 'biometric' && lock.credentialId ? (
+          <p className="page-sub" style={{ margin: 0, textAlign: 'center', fontSize: 11 }} aria-live="polite">
+            {bioBusy
+              ? t('جارٍ التحقق بالبصمة…', 'Verifying with biometrics…')
+              : t('البصمة هي الطريقة الأساسية، ورمز PIN بديل دائم.', 'Biometrics is the primary method; your PIN always works as a fallback.')}
+          </p>
         ) : null}
 
         <button

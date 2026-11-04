@@ -1,4 +1,4 @@
-export type Locale = 'ar' | 'en';
+export type Locale = 'ar' | 'en' | 'ckb';
 export type ThemeMode = 'dark' | 'light' | 'auto';
 export type TargetType = 'phone' | 'username';
 export type CampaignItemStatus = 'pending' | 'sent' | 'skipped';
@@ -103,6 +103,9 @@ export interface Settings {
   activeWorkspaceId: string;
   lock: LockSettings;
   installBannerDismissed: boolean;
+  notifications: boolean;
+  onboarded: boolean;
+  lastSeenVersion: string;
   updatedAt: number;
 }
 
