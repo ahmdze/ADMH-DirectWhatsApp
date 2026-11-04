@@ -31,6 +31,7 @@ jobs:
           for file in /tmp/inline-*.js; do node --check "$file"; done
       - name: Validate manifest JSON
         run: python3 -m json.tool manifest.json >/dev/null
+          grep -q 'admh-direct-whatsapp-v2' manifest.json
       - name: Verify local PWA assets
         run: |
           test -f index.html
@@ -42,4 +43,4 @@ jobs:
           test -f pwa-update.js
           grep -q 'enhancements.js' index.html
           grep -q 'pwa-update.js' index.html
-          grep -q 'admh-direct-whatsapp-v4' sw.js
+          grep -q 'admh-direct-whatsapp-v5' sw.js
