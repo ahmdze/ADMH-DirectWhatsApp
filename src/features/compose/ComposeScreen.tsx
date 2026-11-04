@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '../../components/icons';
 import { Button, Chip, Field, HintCard, IconButton } from '../../components/ui';
 import { useActiveWorkspace, useDestinations, useHistory, useTemplates } from '../../hooks/useData';
@@ -15,10 +15,18 @@ import { updateSettings, useSettings } from '../../lib/settings';
 import { hasVariables, localizedTemplate, previewTemplate } from '../../lib/template';
 import { toast } from '../../lib/toast';
 import { buildChatUrl, openChat } from '../../lib/whatsapp';
+import { buildVCard } from '../../lib/vcard';
+import { canShareFiles, downloadBlob, shareFiles } from '../../lib/image';
+import { prepareMediaFile, releaseMedia, type MediaAttachment } from '../../lib/media';
 import type { Draft, Target } from '../../types';
 import { CountryPicker } from './CountryPicker';
+import { ComposeMedia } from './ComposeMedia';
+import { ComposePreview } from './ComposePreview';
+import { PreviewSheet } from './PreviewSheet';
 import { QrPreviewSheet } from './QrPreviewSheet';
 import { SaveTargetSheet } from './SaveTargetSheet';
+import { ReminderEditorSheet } from '../tools/ReminderEditorSheet';
+import { workspaceDisplayName } from '../../lib/workspace';
 
 const MESSAGE_LIMIT = 2000;
 
@@ -43,6 +51,18 @@ export function ComposeScreen() {
   const [actionTarget, setActionTarget] = useState<Target | null>(null);
   const [clipSuggestion, setClipSuggestion] = useState<string | null>(null);
   const [hideSuggestions, setHideSuggestions] = useState(false);
+  const [media, setMedia] = useState<MediaAttachment[]>([]);
+  const [mediaBusy, setMediaBusy] = useState(false);
+  const [mediaError, setMediaError] = useState<string | null>(null);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [schedulePreset, setSchedulePreset] = useState<{
+    workspaceId: string;
+    label: string;
+    display: string;
+    message?: string;
+  } | null>(null);
+  const mediaRef = useRef<MediaAttachment[]>([]);
 
   const query = raw.trim().toLowerCase();
   const queryDigits = normalizeDigits(query).replace(/\D/g, '');
@@ -88,6 +108,14 @@ export function ComposeScreen() {
     };
   }, [t, settings.activeWorkspaceId]);
 
+  useEffect(() => {
+    mediaRef.current = media;
+  }, [media]);
+
+  useEffect(() => {
+    return () => releaseMedia(mediaRef.current);
+  }, []);
+
   // Offer (never auto-fill) a target found in the clipboard on first open.
   useEffect(() => {
     let cancelled = false;
@@ -123,6 +151,92 @@ export function ComposeScreen() {
     return parsed.target;
   };
 
+  const addPreparedMedia = async (file: File) => {
+    const prepared = await prepareMediaFile(file);
+    setMedia((current) => [...current, prepared].slice(0, 5));
+  };
+
+  const handleFiles = async (files: FileList) => {
+    setMediaError(null);
+    setMediaBusy(true);
+    try {
+      for (const file of Array.from(files)) {
+        try {
+          await addPreparedMedia(file);
+        } catch (error) {
+          const code = (error as Error)?.message;
+          setMediaError(
+            code === 'too-large'
+              ? t('الملف أكبر من الحد المسموح.', 'The file is larger than the allowed limit.')
+              : code === 'unsupported'
+                ? t('نوع الملف غير مدعوم.', 'This file type is not supported.')
+                : t('تعذّر تجهيز الملف.', 'Could not prepare this file.')
+          );
+        }
+      }
+    } finally {
+      setMediaBusy(false);
+    }
+  };
+
+  const addContactCard = async () => {
+    const target = validTarget;
+    if (!target) {
+      toast(t('حدّد وجهة أولاً لإرفاق جهة الاتصال.', 'Choose a destination first to attach a contact.'), 'error');
+      return;
+    }
+    const safe = target.display.replace(/[^\p{L}\p{N}_-]+/gu, '-').slice(0, 40) || 'contact';
+    const file = new File(
+      [
+        buildVCard({
+          name: target.display,
+          phone: target.type === 'phone' ? target.value : undefined,
+          url: target.type === 'username' ? `https://wa.me/${target.value}` : undefined
+        })
+      ],
+      `${safe}.vcf`,
+      { type: 'text/vcard' }
+    );
+    await addPreparedMedia(file);
+    hapticSuccess();
+  };
+
+  const addLocation = () => {
+    if (!navigator.geolocation) {
+      toast(t('الموقع غير مدعوم على هذا الجهاز.', 'Location is not supported on this device.'), 'error');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const url = `https://maps.google.com/?q=${position.coords.latitude.toFixed(6)},${position.coords.longitude.toFixed(6)}`;
+        setMessage((current) => [current, url].filter(Boolean).join('\n').slice(0, MESSAGE_LIMIT));
+        hapticSuccess();
+      },
+      () => toast(t('تعذّر الحصول على الموقع.', 'Could not get the location.'), 'error'),
+      { timeout: 10000 }
+    );
+  };
+
+  const removeMedia = (id: string) => {
+    setMedia((current) => {
+      const item = current.find((entry) => entry.id === id);
+      if (item) releaseMedia([item]);
+      return current.filter((entry) => entry.id !== id);
+    });
+  };
+
+  const openSchedule = () => {
+    const target = resolveTarget();
+    if (!target) return;
+    setSchedulePreset({
+      workspaceId: workspace?.id || 'personal',
+      label: target.display,
+      display: target.display,
+      message: message.trim() || undefined
+    });
+    setScheduleOpen(true);
+  };
+
   const handleSend = async () => {
     const target = resolveTarget();
     if (!target) return;
@@ -132,6 +246,29 @@ export function ComposeScreen() {
     } catch {
       /* history is best-effort — the chat still opens */
     }
+
+    if (media.length) {
+      const shared = canShareFiles() && (await shareFiles(media.map((item) => item.file), {
+        title: t('واتساب المباشر', 'Direct WhatsApp'),
+        text: message || undefined
+      }));
+      setBusy(false);
+      if (shared) {
+        hapticSuccess();
+        toast(t('اختر واتساب والمحادثة في نافذة المشاركة.', 'Pick WhatsApp and the chat in the share sheet.'), 'success');
+        return;
+      }
+      for (const item of media) downloadBlob(item.file, item.name);
+      const copied = await writeClipboardText([message, buildChatUrl(target)].filter(Boolean).join('\n'));
+      toast(
+        copied
+          ? t('تعذّرت المشاركة؛ نُزّلت المرفقات ونُسخ الرابط.', 'Sharing failed; attachments were downloaded and the link copied.')
+          : t('تعذّرت المشاركة؛ نُزّلت المرفقات.', 'Sharing failed; attachments were downloaded.'),
+        copied ? 'success' : 'error'
+      );
+      return;
+    }
+
     openChat(target, message);
     hapticSuccess();
     toast(t('تم فتح واتساب', 'WhatsApp opened'), 'success');
@@ -380,6 +517,22 @@ export function ComposeScreen() {
           />
         </Field>
 
+        <ComposeMedia
+          items={media}
+          busy={mediaBusy}
+          error={mediaError}
+          onFiles={(files) => void handleFiles(files)}
+          onContact={() => void addContactCard()}
+          onLocation={addLocation}
+          onRemove={removeMedia}
+        />
+
+        <ComposePreview target={validTarget} message={message} media={media} />
+        <Button variant="ghost" size="sm" block onClick={() => setPreviewOpen(true)}>
+          <Icon name="eye" size={15} />
+          {t('معاينة البطاقة والملصق', 'Preview card and label')}
+        </Button>
+
         {templates.length ? (
           <div className="col" style={{ gap: 8 }}>
             <div className="section-head">
@@ -410,9 +563,28 @@ export function ComposeScreen() {
             void handleSend();
           }}
         >
-          <Icon name="whatsapp" size={19} />
-          {t('مراسلة عبر واتساب', 'Message on WhatsApp')}
+          <Icon name={media.length ? 'share' : 'whatsapp'} size={19} />
+          {media.length
+            ? t('مشاركة المرفقات عبر واتساب', 'Share attachments via WhatsApp')
+            : t('مراسلة عبر واتساب', 'Message on WhatsApp')}
         </Button>
+
+        {media.length ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            block
+            onClick={() => {
+              const target = resolveTarget();
+              if (!target) return;
+              openChat(target, message);
+              toast(t('فُتحت المحادثة — أرفق الملفات من داخل واتساب.', 'Chat opened — attach the files inside WhatsApp.'), 'success');
+            }}
+          >
+            <Icon name="whatsapp" size={15} />
+            {t('فتح المحادثة فقط', 'Open chat only')}
+          </Button>
+        ) : null}
 
         <div className="grid-3">
           <Button variant="soft" size="sm" onClick={openQr}>
@@ -449,6 +621,10 @@ export function ComposeScreen() {
           <Button variant="ghost" size="sm" className="grow" onClick={() => navigate('/tools/scan')}>
             <Icon name="scan" size={16} />
             {t('مسح QR', 'Scan QR')}
+          </Button>
+          <Button variant="ghost" size="sm" className="grow" onClick={openSchedule}>
+            <Icon name="calendar" size={16} />
+            {t('جدولة', 'Schedule')}
           </Button>
         </div>
       </section>
@@ -514,6 +690,21 @@ export function ComposeScreen() {
       />
       <SaveTargetSheet open={saveOpen} onClose={() => setSaveOpen(false)} workspaceId={workspace?.id ?? null} target={actionTarget} />
       <QrPreviewSheet open={qrOpen} onClose={() => setQrOpen(false)} url={qrUrl} title={actionTarget?.display ?? ''} />
+      <ReminderEditorSheet
+        open={scheduleOpen}
+        defaultWorkspaceId={workspace?.id || 'personal'}
+        preset={schedulePreset ?? undefined}
+        onClose={() => setScheduleOpen(false)}
+        onSaved={() => setScheduleOpen(false)}
+      />
+      <PreviewSheet
+        open={previewOpen}
+        target={validTarget}
+        message={message}
+        media={media}
+        workspaceName={workspace ? workspaceDisplayName(workspace, t, locale) : ''}
+        onClose={() => setPreviewOpen(false)}
+      />
     </div>
   );
 }

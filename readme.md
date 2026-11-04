@@ -10,7 +10,7 @@
 </p>
 
 <p>
-<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/latest"><img src="docs/badges/version-2.3.5.svg" height="30" alt="الإصدار 2.3.5" /></a>
+<a href="https://github.com/ahmdze/ADMH-DirectWhatsApp/releases/tag/v2.4.0-beta.2"><img src="docs/badges/version-2.4.0-beta.2.svg" height="30" alt="الإصدار 2.4.0-beta.2" /></a>
 &nbsp;
 <img src="docs/badges/app-langs.svg" height="30" alt="أربع لغات: العربية، الإنجليزية، الكردية، الفارسية" />
 &nbsp;
@@ -19,7 +19,13 @@
 
 <p>
 <a href="https://github.com/ahmdze"><strong>ADMH - Ahmed Zeyad</strong></a><br />
-<sub>تم التطوير باستخدام <strong>Deepseek-V4.1-Flash 1017</strong> in <strong>Deepseek HARNESS</strong></sub>
+<sub>
+تم التطوير باستخدام<br />
+<strong>Deepseek-V4.1-Flash 1017 in Deepseek HARNESS</strong><br />
+<strong>Deepseek-V4.1-Pro in Deepseek HARNESS</strong><br />
+المراجعة التقنية والفنية بواسطة<br />
+<strong>Qwen 3.8-Max</strong>
+</sub>
 </p>
 
 <p><strong>هذا الملف متوفر بأربع لغات:</strong></p>
@@ -57,7 +63,7 @@
 - يعمل بالكامل دون اتصال بعد أول تحميل، وبياناته في IndexedDB على جهازك.
 
 > [!IMPORTANT]
-> أحدث إصدار هو **2.3.5**. تطبيق Android يُثبَّت مباشرة بملف APK موقّع، وليس عبر متجر.
+> أحدث إصدار هو **2.4.0-beta.2** (Beta داخلية للتجريب). تطبيق Android يُثبَّت مباشرة بملف APK موقّع، وليس عبر متجر.
 > من ثبّت نسخة v1 القديمة يحتاج حذفها وتثبيت v2 مرة واحدة؛ بيانات v1 تُرحَّل تلقائياً.
 
 > [!NOTE]
@@ -95,6 +101,9 @@
 - خط تلقائي مناسب لكل لغة: Cairo للعربية، Vazirmatn للفارسية، Noto Naskh للكردية، مع إمكانية تثبيت خط يدوياً. <img src="docs/badges/v2.2.0.svg" alt="v2.2.0" height="19" />
 - لصق ذكي من الحافظة الأصلية في Android، واستخراج رقم من نص ملصوق. <img src="docs/badges/v2.3.3.svg" alt="v2.3.3" height="19" />
 - زر «شارك التطبيق» بخيارين: مشاركة تطبيق PWA أو رابط تنزيل APK. <img src="docs/badges/v2.3.4.svg" alt="v2.3.4" height="19" />
+- **مرفقات جلسة محلية**: صور وملفات وvCard تُشارك عبر نافذة النظام ولا تُخزَّن في التطبيق، مع ضغط صور WebP وبديل تنزيل. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **معاينة قبل الإرسال** بنمط واتساب، وبطاقة مشاركة، وملصق QR — كلها محلياً ودون جلب روابط. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **جدولة سريعة** لتذكير من Compose بالوجهة والرسالة الحالية. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 
 ### تجربة الهاتف (PWA)
 
@@ -112,7 +121,8 @@
 - طلب تخزين دائم وتنبيه عند اقتراب نفاد المساحة. <img src="docs/badges/v2.1.0.svg" alt="v2.1.0" height="19" />
 - نسخ احتياطي/استعادة JSON، وتصدير CSV. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - نقل البيانات بين جهازين عبر ملف أو QR، وفحص وإصلاح البيانات، وتشخيص الجهاز. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
-- زر **«فحص التحديثات»** يدوي في الإعدادات: يستخدم Service Worker على الويب وGitHub Releases داخل Android. <img src="docs/badges/v2.3.5.svg" alt="v2.3.5" height="19" />
+- زر **«فحص التحديثات»** يدوي فقط في الإعدادات: لا يوجد فحص تلقائي في الخلفية، حفاظاً على الخصوصية وتقليل الطلبات. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **زر التذكيرات** في شريط التنقل السفلي للوصول بضغطة واحدة. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 
 ### الأدوات والبيانات
 
@@ -121,6 +131,8 @@
 - مساحات عمل (شخصي/عمل) مع فصل كامل للبيانات. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - حملات قائمة أرقام: فتح المحادثات بالتتابع مع متابعة يدوية «أُرسلت/تخطيت» — **لا إرسال تلقائي**. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - تذكيرات متابعة تظهر عند فتح التطبيق. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
+- **تذكيرات متكررة** (يومي/أسبوعي/شهري) مع إشعارات محلية وجدولة في Android، وفتح Compose من الإشعار. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
+- **نسخة احتياطية تلقائية قبل الترقية**، قابلة للتنزيل من الإعدادات. <img src="docs/badges/v2.4.0.svg" alt="v2.4.0" height="19" />
 - استيراد جهات من CSV/vCard أو Contact Picker. <img src="docs/badges/v2.0.0.svg" alt="v2.0.0" height="19" />
 - **نقل البيانات** بين جهازين عبر ملف أو رمز QR، بدون خادم. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
 - **فحص وإصلاح البيانات** المحلية (تكرارات، أرقام تالفة، سجلات يتيمة) مع معاينة قبل الإصلاح. <img src="docs/badges/v2.3.0.svg" alt="v2.3.0" height="19" />
@@ -274,6 +286,7 @@ android/                  # مشروع Capacitor Android
 
 | الإصدار | أبرز ما أضافه |
 |---|---|
+| **2.4.0-beta.2** | تذكيرات متكررة وإشعارات محلية، مرفقات ومعاينة بطاقة/ملصق، Quick Schedule، زر التذكيرات، وفحص تحديثات يدوي فقط (Beta داخلية) |
 | **2.3.5** | زر «فحص التحديثات» يدوي في الإعدادات على الويب وAndroid |
 | **2.3.4** | زر «شارك التطبيق»: خيار مشاركة PWA وخيار رابط تنزيل APK |
 | **2.3.3** | لصق/حافظة أصلية، حالة تخزين دائم صحيحة، إرسال التقرير للمطوّر عبر واتساب، وتنزيل APK بشريط تقدم وزر تثبيت |

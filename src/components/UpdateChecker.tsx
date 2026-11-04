@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon } from './icons';
 import { Button, HintCard, IconButton, Sheet } from './ui';
 import {
-  checkForAppUpdate,
   dismissUpdateVersion,
   getDismissedUpdateVersion,
   isUpdateCheckSupported,
@@ -18,9 +17,7 @@ import { hapticError, hapticSuccess, hapticTap } from '../lib/haptics';
 import { useI18n } from '../lib/i18n';
 import { toast } from '../lib/toast';
 
-/** Wait a moment after launch so the first screen stays fast. */
-const FIRST_CHECK_DELAY_MS = 4000;
-
+/** Manual checks only: no network request is made on launch or on reconnect. */
 function formatDownloadSize(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 MB';
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
@@ -42,7 +39,6 @@ export function UpdateChecker() {
   const [downloaded, setDownloaded] = useState<DownloadedUpdate | null>(null);
   const [error, setError] = useState<string | null>(null);
   const mounted = useRef(true);
-  const inFlight = useRef(false);
 
   useEffect(() => {
     mounted.current = true;
@@ -51,39 +47,18 @@ export function UpdateChecker() {
     };
   }, []);
 
-  const check = useCallback(async (force: boolean) => {
-    if (!isUpdateCheckSupported() || inFlight.current) return;
-    inFlight.current = true;
-    try {
-      const next = await checkForAppUpdate({ force });
-      if (mounted.current) setInfo(next);
-    } finally {
-      inFlight.current = false;
-    }
-  }, []);
-
   useEffect(() => {
-    if (!isUpdateCheckSupported()) return;
-    const timer = window.setTimeout(() => {
-      void check(false);
-    }, FIRST_CHECK_DELAY_MS);
-    const onOnline = () => {
-      void check(false);
-    };
     const onManualCheck = (event: Event) => {
       const detail = (event as CustomEvent<AppUpdateInfo>).detail;
       if (!detail) return;
       setDismissedVersion(null);
       setInfo(detail);
     };
-    window.addEventListener('online', onOnline);
     window.addEventListener('admh-update-available', onManualCheck);
     return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener('online', onOnline);
       window.removeEventListener('admh-update-available', onManualCheck);
     };
-  }, [check]);
+  }, []);
 
   const openExternal = async (url: string) => {
     try {

@@ -19,6 +19,7 @@ interface ReminderEditorSheetProps {
   open: boolean;
   reminder?: Reminder | null;
   defaultWorkspaceId: string;
+  preset?: { workspaceId: string; label: string; display: string; message?: string };
   onClose: () => void;
   onSaved: () => void;
   onDelete?: () => void;
@@ -59,6 +60,7 @@ export function ReminderEditorSheet({
   open,
   reminder,
   defaultWorkspaceId,
+  preset,
   onClose,
   onSaved,
   onDelete
@@ -90,13 +92,13 @@ export function ReminderEditorSheet({
   // Initialise on open / when switching the reminder being edited.
   useEffect(() => {
     if (!open) return;
-    const nextWorkspace = reminder?.workspaceId || defaultWorkspaceId;
+    const nextWorkspace = reminder?.workspaceId || preset?.workspaceId || defaultWorkspaceId;
     const initialDue = reminder?.dueAt || defaultsDue();
     setWorkspaceId(nextWorkspace);
-    setLabel(reminder?.label || '');
+    setLabel(reminder?.label || preset?.label || '');
     setDueDate(dateInput(initialDue));
     setDueTime(timeInput(initialDue));
-    setMessage(reminder?.message || '');
+    setMessage(reminder?.message || preset?.message || '');
     setTemplateId(reminder?.templateId || '');
     setKind(reminder?.recurrence?.kind || 'none');
     setUntilDate('');
@@ -104,6 +106,10 @@ export function ReminderEditorSheet({
     setSource('saved');
     setSelectedId(null);
     setManualInput('');
+    if (!reminder && preset) {
+      setSource('manual');
+      setManualInput(preset.display);
+    }
     if (reminder?.recurrence?.kind === 'daily') setDailyInterval(Math.max(1, reminder.recurrence.interval || 1));
     else setDailyInterval(1);
     if (reminder?.recurrence?.kind === 'weekly') setWeekdays(reminder.recurrence.weekdays);
@@ -112,11 +118,16 @@ export function ReminderEditorSheet({
     else setMonthlyDay(1);
     if (reminder?.recurrence?.until) setUntilDate(dateInput(reminder.recurrence.until));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, reminder?.id, defaultWorkspaceId]);
+  }, [open, reminder?.id, defaultWorkspaceId, preset?.display]);
 
   // Resolve the saved destination once the workspace rows are available.
   useEffect(() => {
     if (!open) return;
+    if (preset && !reminder) {
+      setSource('manual');
+      setManualInput(preset.display);
+      return;
+    }
     if (reminder) {
       const matched = destinations.find((item) => fingerprintOf(item) === reminder.fingerprint);
       if (matched) {
