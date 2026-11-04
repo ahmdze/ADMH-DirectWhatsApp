@@ -4,6 +4,7 @@ import { Button, Field, HintCard, ScreenHeader } from '../../components/ui';
 import { useActiveWorkspace } from '../../hooks/useData';
 import { useI18n } from '../../lib/i18n';
 import { useSettings } from '../../lib/settings';
+import { workspaceDisplayName } from '../../lib/workspace';
 import { goBack } from '../../lib/router';
 import { qrDataUrl } from '../../lib/qr';
 import { buildChatUrl } from '../../lib/whatsapp';
@@ -32,7 +33,7 @@ export function VCardScreen() {
 
   useEffect(() => {
     if (nameEdited.current || name.trim() || !workspace) return;
-    setName(locale === 'en' ? workspace.nameEn : workspace.name);
+    setName(workspaceDisplayName(workspace, t, locale));
   }, [workspace, locale, name]);
 
   const parsed = useMemo(

@@ -19,6 +19,7 @@ import { takeSharedImage } from './lib/sharedImage';
 import { getStorageInfo } from './lib/storage';
 import { notificationPermission, notifyDueReminders } from './lib/notifications';
 import { APP_VERSION } from './lib/changelog';
+import { workspaceDisplayName } from './lib/workspace';
 import { toast } from './lib/toast';
 import { Onboarding } from './components/Onboarding';
 import { WhatsNew } from './components/WhatsNew';
@@ -121,7 +122,7 @@ function WorkspaceSheet({ open, onClose }: { open: boolean; onClose: () => void 
               <Icon name="briefcase" size={18} />
             </span>
             <span className="list-main">
-              <span className="list-title">{locale === 'en' ? workspace.nameEn : workspace.name}</span>
+              <span className="list-title">{workspaceDisplayName(workspace, t, locale)}</span>
             </span>
             {settings.activeWorkspaceId === workspace.id ? <Icon name="check" size={18} /> : null}
           </button>
@@ -233,7 +234,7 @@ export default function App() {
   const first = path[0] || 'compose';
   const isTab = path.length === 1 && (first === 'compose' || first === 'targets' || first === 'templates' || first === 'tools');
   const tab: TabKey = (isTab ? first : 'compose') as TabKey;
-  const workspaceName = workspace ? (locale === 'en' ? workspace.nameEn : workspace.name) : t('شخصي', 'Personal');
+  const workspaceName = workspaceDisplayName(workspace, t, locale);
   const due = useDueReminders(workspace?.id);
   const showOnboarding = !settings.onboarded && !introDone;
   const showWhatsNew = settings.onboarded && settings.lastSeenVersion !== APP_VERSION && !whatsNewClosed;

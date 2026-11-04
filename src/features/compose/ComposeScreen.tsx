@@ -11,7 +11,7 @@ import { COUNTRIES, countryByIso, extractCandidateFromText, formatPhone, normali
 import { initials } from '../../lib/format';
 import { navigate } from '../../lib/router';
 import { updateSettings, useSettings } from '../../lib/settings';
-import { hasVariables, previewTemplate } from '../../lib/template';
+import { hasVariables, localizedTemplate, previewTemplate } from '../../lib/template';
 import { toast } from '../../lib/toast';
 import { buildChatUrl, openChat } from '../../lib/whatsapp';
 import type { Draft, Target } from '../../types';
@@ -381,15 +381,14 @@ export function ComposeScreen() {
               </Button>
             </div>
             <div className="chip-row">
-              {templates.slice(0, 12).map((template) => (
-                <Chip
-                  key={template.id}
-                  title={template.title}
-                  onClick={() => insertTemplate(locale === 'en' && template.bodyEn ? template.bodyEn : template.body)}
-                >
-                  {locale === 'en' ? template.titleEn || template.title : template.title}
-                </Chip>
-              ))}
+              {templates.slice(0, 12).map((template) => {
+                const localized = localizedTemplate(template, t);
+                return (
+                  <Chip key={template.id} title={localized.title} onClick={() => insertTemplate(localized.body)}>
+                    {localized.title}
+                  </Chip>
+                );
+              })}
             </div>
           </div>
         ) : null}

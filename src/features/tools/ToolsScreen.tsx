@@ -3,6 +3,7 @@ import { HintCard, ScreenHeader } from '../../components/ui';
 import { useActiveWorkspace, useDestinations } from '../../hooks/useData';
 import { useI18n } from '../../lib/i18n';
 import { navigate } from '../../lib/router';
+import { workspaceDisplayName } from '../../lib/workspace';
 
 interface ToolEntry {
   path: string;
@@ -121,7 +122,7 @@ export function ToolsScreen() {
   const { t, n, locale, isRTL } = useI18n();
   const workspace = useActiveWorkspace();
   const destinations = useDestinations(workspace?.id);
-  const workspaceName = workspace ? (locale === 'en' ? workspace.nameEn : workspace.name) : t('شخصي', 'Personal');
+  const workspaceName = workspaceDisplayName(workspace, t, locale);
 
   return (
     <div className="screen">

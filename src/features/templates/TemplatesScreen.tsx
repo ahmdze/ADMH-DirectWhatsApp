@@ -7,7 +7,7 @@ import { hapticError, hapticSuccess } from '../../lib/haptics';
 import { useI18n } from '../../lib/i18n';
 import { setDraft } from '../../lib/launch';
 import { navigate } from '../../lib/router';
-import { templateVariables } from '../../lib/template';
+import { localizedTemplate, templateVariables } from '../../lib/template';
 import { toast } from '../../lib/toast';
 import type { Template } from '../../types';
 import { TemplateSheet } from './TemplateSheet';
@@ -21,7 +21,7 @@ function clampLines(lines: number): CSSProperties {
 
 /** Ready-made message templates with variables. */
 export function TemplatesScreen() {
-  const { t, locale, rel } = useI18n();
+  const { t, rel } = useI18n();
   const workspace = useActiveWorkspace();
   const templates = useTemplates(workspace?.id);
 
@@ -33,8 +33,8 @@ export function TemplatesScreen() {
   const [varsFor, setVarsFor] = useState<Template | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Template | null>(null);
 
-  const titleOf = (template: Template) => (locale === 'en' ? template.titleEn || template.title : template.title);
-  const bodyOf = (template: Template) => (locale === 'en' ? template.bodyEn || template.body : template.body);
+  const titleOf = (template: Template) => localizedTemplate(template, t).title;
+  const bodyOf = (template: Template) => localizedTemplate(template, t).body;
 
   const tags = useMemo(() => {
     const found = new Set<string>();
@@ -50,11 +50,11 @@ export function TemplatesScreen() {
     return templates.filter((template) => {
       if (activeTag && !(template.tags || []).includes(activeTag)) return false;
       if (!term) return true;
-      const title = locale === 'en' ? template.titleEn || template.title : template.title;
-      const body = locale === 'en' ? template.bodyEn || template.body : template.body;
+      const title = localizedTemplate(template, t).title;
+      const body = localizedTemplate(template, t).body;
       return [title, body, ...(template.tags || [])].some((value) => value.toLowerCase().includes(term));
     });
-  }, [templates, activeTag, term, locale]);
+  }, [templates, activeTag, term, t]);
 
   const openNew = () => {
     setEditing(null);

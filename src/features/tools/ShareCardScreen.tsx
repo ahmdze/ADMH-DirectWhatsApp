@@ -4,6 +4,7 @@ import { Button, EmptyState, Field, HintCard, IconButton, ScreenHeader, Spinner 
 import { useActiveWorkspace } from '../../hooks/useData';
 import { useI18n } from '../../lib/i18n';
 import { useSettings, fontFamily, resolveFont } from '../../lib/settings';
+import { workspaceDisplayName } from '../../lib/workspace';
 import { goBack } from '../../lib/router';
 import { loadImage, qrDataUrl } from '../../lib/qr';
 import { buildChatUrl } from '../../lib/whatsapp';
@@ -306,7 +307,7 @@ export function ShareCardScreen() {
 
   useEffect(() => {
     if (nameEdited.current || name.trim() || !workspace) return;
-    setName(locale === 'en' ? workspace.nameEn : workspace.name);
+    setName(workspaceDisplayName(workspace, t, locale));
   }, [workspace, locale, name]);
 
   const resolvedFont = fontFamily(resolveFont(locale, settings.font));

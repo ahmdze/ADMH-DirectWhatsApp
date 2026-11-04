@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Field, Sheet } from '../../components/ui';
 import { useI18n } from '../../lib/i18n';
-import { applyTemplate, previewTemplate, templateVariables, type TemplateVars } from '../../lib/template';
+import { applyTemplate, localizedTemplate, previewTemplate, templateVariables, type TemplateVars } from '../../lib/template';
 import type { Template } from '../../types';
 
 export interface TemplateVarsSheetProps {
@@ -37,7 +37,7 @@ export function TemplateVarsSheet({ open, onClose, template, onApply }: Template
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, template?.id, locale]);
 
-  const body = template ? (locale === 'en' && template.bodyEn ? template.bodyEn : template.body) : '';
+  const body = template ? localizedTemplate(template, t).body : '';
   const keys = templateVariables(body);
   const preview = previewTemplate(body, vars, locale);
 

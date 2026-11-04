@@ -4,6 +4,7 @@ import { Button, EmptyState, Field, HintCard, ScreenHeader, Segmented, Spinner }
 import { useActiveWorkspace, useDestinations } from '../../hooks/useData';
 import { useI18n } from '../../lib/i18n';
 import { useSettings, fontFamily, resolveFont } from '../../lib/settings';
+import { workspaceDisplayName } from '../../lib/workspace';
 import { goBack, navigate } from '../../lib/router';
 import { qrDataUrl } from '../../lib/qr';
 import { parseTarget } from '../../lib/phone';
@@ -240,7 +241,7 @@ export function LabelsScreen() {
 
       const html = buildPrintDocument(rows, grid === '3x8' ? 3 : 2, {
         title: t('ملصقات واتساب', 'WhatsApp labels'),
-        subtitle: workspace ? (locale === 'en' ? workspace.nameEn : workspace.name) : t('ADMH', 'ADMH'),
+        subtitle: workspaceDisplayName(workspace, t, locale),
         footer: 'ADMH · WhatsApp Direct',
         dir: isRTL ? 'rtl' : 'ltr',
         fontFamily: fontFamily(resolveFont(locale, settings.font))

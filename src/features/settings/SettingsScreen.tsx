@@ -21,6 +21,7 @@ import {
   type NotificationPermissionState
 } from '../../lib/notifications';
 import { writeClipboardText } from '../../lib/clipboard';
+import { workspaceDisplayName } from '../../lib/workspace';
 import { CountrySheet } from './CountrySheet';
 import { WorkspaceSheet } from './WorkspaceSheet';
 import { PinSheet, type PinSheetMode } from './PinSheet';
@@ -566,7 +567,7 @@ export function SettingsScreen() {
             {workspaces.map((workspace) => {
               const isActive = workspace.id === activeWorkspace?.id;
               const iconName = WORKSPACE_ICONS[workspace.icon] ?? 'briefcase';
-              const localName = locale === 'en' ? workspace.nameEn || workspace.name : workspace.name;
+              const localName = workspaceDisplayName(workspace, t, locale);
               return (
                 <div key={workspace.id} className="list-row">
                   <span
