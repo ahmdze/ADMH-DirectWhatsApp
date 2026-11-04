@@ -18,7 +18,7 @@
   });
   async function init(){
     try{
-      registration=await navigator.serviceWorker.getRegistration('./');
+      registration=await navigator.serviceWorker.register('./sw.js');
       if(!registration)return;
       if(registration.waiting&&navigator.serviceWorker.controller)show();
       registration.addEventListener('updatefound',()=>{
