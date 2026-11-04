@@ -4,13 +4,14 @@ import { getSettings, replaceSettingsFromBackup } from './settings';
 import { downloadBlob } from './image';
 
 export async function buildBackup(includeSettings = true): Promise<BackupFile> {
-  const [workspaces, destinations, templates, history, campaigns, reminders] = await Promise.all([
+  const [workspaces, destinations, templates, history, campaigns, reminders, trash] = await Promise.all([
     db.workspaces.toArray(),
     db.destinations.toArray(),
     db.templates.toArray(),
     db.history.toArray(),
     db.campaigns.toArray(),
-    db.reminders.toArray()
+    db.reminders.toArray(),
+    db.trash.toArray()
   ]);
   return {
     app: 'admh-direct-whatsapp',
@@ -22,6 +23,7 @@ export async function buildBackup(includeSettings = true): Promise<BackupFile> {
     history,
     campaigns,
     reminders,
+    trash,
     settings: includeSettings ? getSettings() : undefined
   };
 }

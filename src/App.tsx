@@ -22,6 +22,7 @@ import { notificationPermission, notifyDueReminders } from './lib/notifications'
 import { APP_VERSION } from './lib/changelog';
 import { workspaceDisplayName } from './lib/workspace';
 import { toast } from './lib/toast';
+import { consumePreMigrationBackupNotice } from './lib/preMigrationBackup';
 import { Onboarding } from './components/Onboarding';
 import { WhatsNew } from './components/WhatsNew';
 import { LockScreen } from './features/settings/LockScreen';
@@ -254,6 +255,17 @@ export default function App() {
     const unwatch = watchSystemTheme();
     return unwatch;
   }, [settings]);
+
+  useEffect(() => {
+    if (!consumePreMigrationBackupNotice()) return;
+    toast(
+      t(
+        'تم إنشاء نسخة احتياطية تلقائية قبل الترقية. يمكنك تنزيلها من الإعدادات.',
+        'A pre-upgrade backup was created automatically. You can download it from Settings.'
+      ),
+      'success'
+    );
+  }, [t]);
 
   useEffect(() => {
     const info = consumeLaunchParams();
