@@ -25,10 +25,20 @@
 - **License:** Apache-2.0
 - **Usage:** QR decoding fallback when the browser lacks `BarcodeDetector`.
 
+## Capacitor (core, CLI, Android) and plugins
+- **Source:** https://github.com/ionic-team/capacitor and https://capacitorjs.com
+- **License:** MIT
+- **Usage:** native Android shell (`@capacitor/core`, `@capacitor/android`, `@capacitor/app`, `@capacitor/browser`, `@capacitor/camera`, `@capacitor/filesystem`, `@capacitor/haptics`, `@capacitor/local-notifications`, `@capacitor/share`).
+
+## @capgo/capacitor-native-biometric
+- **Source:** https://github.com/Cap-go/capacitor-native-biometric
+- **License:** MPL-2.0
+- **Usage:** native fingerprint/face unlock prompt for the Android app lock (PIN remains the fallback).
+
 ## React, Dexie, Vite, Tailwind CSS, vite-plugin-pwa
 - **Licenses:** MIT / Apache-2.0 (see their repositories).
 - **Usage:** application framework and build tooling.
 
 ## ADMH Direct WhatsApp
 - **Author:** Ahmad Ziad · ADMH © 2026
-- No analytics, no tracking, no external network requests at runtime.
+- No analytics, no tracking, and no user data leaves the device. The Android build contacts GitHub Releases only to check for app updates.

@@ -182,14 +182,14 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 ## Building the Android app (APK)
 
-- Locally (requires JDK 21 + Android SDK): `pnpm android:sync`, then open `android/` in Android Studio and build an APK, or run `cd android && ./gradlew assembleDebug`.
-- Automatically: every push to `main` runs `.github/workflows/android.yml`, builds `app-debug.apk`, and uploads it as an artifact — **with no store or account**.
-- The current APK is a **Debug** build for testing/direct distribution; for long-term updates a stable keystore will be created later (not committed to the repository).
+- Locally (requires JDK 21 + Android SDK): `pnpm android:sync`, then open `android/` in Android Studio and build an APK, or run `cd android && ./gradlew assembleRelease` with the keystore environment variables.
+- Automatically: every push to `main` runs `.github/workflows/android.yml`, builds a signed `app-release.apk`, and uploads it as an artifact — **with no store or account**.
+- The current APK is a **Release build signed with a stable key** (kept outside the repository); updates install over the current version without removing data.
 - Android data is separate from the PWA; use the **Data transfer** screen or a backup.
 
 ## Privacy
 
-- No server, no account, no analytics, and no network requests after loading.
+- No server, no account, no analytics, and no user data leaves the device. The Android build contacts GitHub Releases only to check for app updates.
 - Numbers, messages, templates, and generated images stay on your device.
 - The camera only runs after an explicit request and stops when you leave the screen.
 - No number or image is sent to an external QR service.
