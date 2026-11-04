@@ -9,7 +9,7 @@
     const raw=$('phoneNumber').value.trim(); if(!raw)return null;
     if(raw.startsWith('@'))return /^[A-Za-z0-9._-]{3,64}$/.test(raw.slice(1))?{type:'username',value:raw.slice(1),display:raw}:null;
     let digits=raw.replace(/[\s().-]/g,'');let country=$('countryCode').value;
-    if(digits.startsWith('+'))digits=digits.slice(1);else if(digits.startsWith('00'))digits=digits.slice(2);else{if(digits.startsWith('0'))digits=digits.slice(1);digits=country+digits;}
+    if(digits.startsWith('+'))digits=digits.slice(1);else if(digits.startsWith('00'))digits=digits.slice(2);else if(!digits.startsWith(country)){if(digits.startsWith('0'))digits=digits.slice(1);digits=country+digits;}
     if(!/^\d{8,15}$/.test(digits))return null;return{type:'number',value:digits,display:'+'+digits};
   };
   const setTarget=item=>{$('phoneNumber').value=item.type==='username'?'@'+item.value:'+'+item.value;$('phoneNumber').focus();notify('تم تحميل الوجهة في الحقل');};
