@@ -83,7 +83,13 @@ async function setupNative(): Promise<void> {
     try {
       const { LocalNotifications } = await import('@capacitor/local-notifications');
       await LocalNotifications.addListener('localNotificationActionPerformed', (action) => {
-        const extra = action.notification.extra as { source?: string } | undefined;
+        const extra = action.notification.extra as { source?: string; reminderId?: string } | undefined;
+        if (extra?.reminderId && (extra.source === 'admh-reminder' || extra.source === 'admh-due')) {
+          void import('./reminderActions')
+            .then(({ openReminderInCompose }) => openReminderInCompose(extra.reminderId as string))
+            .catch(() => navigate('/tools/reminders'));
+          return;
+        }
         if (extra?.source === 'admh-reminder' || extra?.source === 'admh-due') navigate('/tools/reminders');
       });
     } catch {

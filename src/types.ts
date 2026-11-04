@@ -92,6 +92,7 @@ export interface Reminder {
   notificationIds?: number[];
   lastScheduledAt?: number;
   lastNotifiedAt?: number;
+  lastOpenedAt?: number;
   missedAt?: number;
   missedCount?: number;
 }

@@ -1,6 +1,8 @@
 import type { Reminder } from '../types';
 import { getSettings, subscribeSettings } from './settings';
 import { initNative, isNative } from './native';
+import { buildReminderSchedule, type ScheduledReminder } from './reminderSchedule';
+import { nextOccurrence } from './recurrence';
 
 export type NotificationPermissionState = NotificationPermission | 'unsupported';
 
@@ -14,7 +16,6 @@ type NativePermissionState = 'granted' | 'denied' | 'prompt' | 'prompt-with-rati
 const REMINDER_CHANNEL_ID = 'admh-reminders';
 const REMINDER_SOURCE = 'admh-reminder';
 const MAX_SCHEDULED_REMINDERS = 100;
-
 let nativePermission: NativePermissionState = 'prompt';
 let channelReady = false;
 let watcherStarted = false;
@@ -99,12 +100,9 @@ export async function syncNativeReminders(reminders?: Reminder[]): Promise<void>
 
     const rows = reminders ?? (await loadReminders());
     const now = Date.now();
-    const desired = new Map<number, { reminder: Reminder; at: number }>();
-    [...rows]
-      .filter((reminder) => !reminder.done && reminder.dueAt > now + 1000)
-      .sort((left, right) => left.dueAt - right.dueAt)
-      .slice(0, MAX_SCHEDULED_REMINDERS)
-      .forEach((reminder) => desired.set(notificationId(reminder.id), { reminder, at: reminder.dueAt }));
+    const planned = buildReminderSchedule(rows, now, MAX_SCHEDULED_REMINDERS);
+    const desired = new Map<number, ScheduledReminder>();
+    for (const entry of planned) desired.set(notificationId(entry.key), entry);
 
     const pending = await LocalNotifications.getPending();
     const pendingReminders = pending.notifications.filter(
@@ -116,20 +114,24 @@ export async function syncNativeReminders(reminders?: Reminder[]): Promise<void>
     for (const [id, entry] of desired) {
       const pendingItem = pendingById.get(id);
       const pendingAt = (pendingItem?.extra as { dueAt?: number } | undefined)?.dueAt;
-      const body = entry.reminder.note || entry.reminder.display;
       const unchanged =
         pendingItem &&
         typeof pendingAt === 'number' &&
         Math.abs(pendingAt - entry.at) < 1000 &&
-        pendingItem.title === entry.reminder.label &&
-        pendingItem.body === body;
+        pendingItem.title === entry.title &&
+        pendingItem.body === entry.body;
       if (unchanged) continue;
       notifications.push({
         id,
-        title: entry.reminder.label,
-        body,
+        title: entry.title,
+        body: entry.body,
         channelId: REMINDER_CHANNEL_ID,
-        extra: { source: REMINDER_SOURCE, reminderId: entry.reminder.id, dueAt: entry.at },
+        extra: {
+          source: REMINDER_SOURCE,
+          reminderId: entry.reminderId,
+          dueAt: entry.at,
+          occurrenceAt: entry.at
+        },
         schedule: { at: new Date(entry.at), allowWhileIdle: true }
       });
     }
@@ -252,12 +254,31 @@ export async function showReminderNotification(reminder: Reminder, title: string
 
 export async function notifyDueReminders(reminders: Reminder[], title: string): Promise<number> {
   let shown = 0;
+  const advanced: Reminder[] = [];
   for (const reminder of reminders) {
     const ok = await showReminderNotification(reminder, title, reminder.note || reminder.display);
-    if (ok) shown += 1;
+    if (ok) {
+      shown += 1;
+      if (reminder.recurrence) advanced.push(reminder);
+    }
   }
   // Keep the scheduled set in sync (past reminders are dropped, future ones kept).
   if (isNative()) void syncNativeReminders();
+  if (advanced.length) {
+    // Web fallback: move recurring reminders to their next occurrence after
+    // the notification/sheet was shown, otherwise they stay "due" forever.
+    const { updateReminder } = await import('./db');
+    const now = Date.now();
+    for (const reminder of advanced) {
+      const next = nextOccurrence(reminder, now);
+      await updateReminder(reminder.id, {
+        lastNotifiedAt: now,
+        missedAt: reminder.dueAt,
+        missedCount: (reminder.missedCount ?? 0) + 1,
+        ...(next === null ? { done: true } : { dueAt: next })
+      });
+    }
+  }
   return shown;
 }
 
