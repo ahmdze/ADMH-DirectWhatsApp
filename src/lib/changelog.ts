@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.3.2';
+export const APP_VERSION = '2.3.3';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,16 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.3.3',
+    date: '2026-11-04',
+    items: [
+      { ar: 'اللصق وقراءة الحافظة يعملان في تطبيق Android عبر حافظة النظام الأصلية.', en: 'Paste and clipboard reading now work in the Android app through the native clipboard.' },
+      { ar: 'حالة التخزين الدائم أصبحت صحيحة في تطبيق Android (بيانات التطبيق محمية تلقائياً).', en: 'Persistent-storage status is now correct in the Android app (app-private data is protected automatically).' },
+      { ar: 'زر «إرسال إلى المطوّر» في التشخيص يفتح واتساب مع التقرير الكامل.', en: 'A “Send to developer” button in Diagnostics opens WhatsApp with the full report.' },
+      { ar: 'تنزيل تحديث APK داخل التطبيق بشريط تقدم، ثم زر تثبيت بموافقة المستخدم.', en: 'Download APK updates inside the app with a progress bar, then install with the user’s approval.' }
+    ]
+  },
   {
     version: '2.3.2',
     date: '2026-11-04',

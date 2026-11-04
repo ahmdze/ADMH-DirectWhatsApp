@@ -1,7 +1,7 @@
 {
   "name": "admh-direct-whatsapp",
   "private": true,
-  "version": "2.3.2",
+  "version": "2.3.3",
   "type": "module",
   "description": "واتساب المباشر — PWA عربية لفتح محادثة واتساب دون حفظ الرقم",
   "scripts": {
@@ -18,11 +18,14 @@
     "@capacitor/app": "8.1.2",
     "@capacitor/browser": "8.0.0",
     "@capacitor/camera": "8.2.6",
+    "@capacitor/clipboard": "8.0.1",
     "@capacitor/core": "8.6.0",
+    "@capacitor/file-transfer": "2.0.6",
     "@capacitor/filesystem": "8.1.5",
     "@capacitor/haptics": "8.0.2",
     "@capacitor/local-notifications": "8.3.1",
     "@capacitor/share": "8.0.3",
+    "@capawesome-team/capacitor-file-opener": "8.1.1",
     "@capgo/capacitor-native-biometric": "8.9.1",
     "@fontsource-variable/noto-naskh-arabic": "^5.3.0",
     "@fontsource-variable/noto-sans-arabic": "^5.3.0",

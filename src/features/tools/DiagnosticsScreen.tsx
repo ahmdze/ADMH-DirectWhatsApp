@@ -751,6 +751,24 @@ export function DiagnosticsScreen() {
     toast(t('تم تنزيل تقرير نصي', 'A text report was downloaded'), 'success');
   };
 
+  const sendReportToDeveloper = async () => {
+    if (!data) return;
+    const report = buildReportText(data);
+    const intro = t(
+      'مرحباً أحمد، هذا تقرير تشخيص من تطبيق واتساب المباشر وأحتاج مساعدتك.',
+      'Hi Ahmed, this is a diagnostics report from the Direct WhatsApp app and I need help.'
+    );
+    const url = `https://wa.me/9647723064622?text=${encodeURIComponent(`${intro}\n\n${report}`)}`;
+    hapticSuccess();
+    try {
+      const { Browser } = await import('@capacitor/browser');
+      await Browser.open({ url });
+    } catch {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+    toast(t('فُتح واتساب مع التقرير — اضغط إرسال.', 'WhatsApp opened with the report — tap send.'), 'success');
+  };
+
   const copyUserAgent = async () => {
     if (!data) return;
     const copied = await writeClipboardText(data.userAgent);
@@ -863,10 +881,15 @@ export function DiagnosticsScreen() {
             </Button>
           </div>
 
+          <Button variant="soft" block onClick={() => void sendReportToDeveloper()}>
+            <Icon name="send" size={16} />
+            {t('إرسال إلى المطوّر', 'Send to developer')}
+          </Button>
+
           <HintCard icon="shield">
             {t(
-              'التقرير يحتوي معلومات تقنية فقط — لا أرقام ولا رسائل، ولا يُرسل تلقائياً إلى أي مكان. انسخه أو صدّره بنفسك عند الحاجة.',
-              'The report contains technical information only — no numbers and no messages, and it is never sent anywhere automatically. Copy or export it yourself when needed.'
+              'التقرير يحتوي معلومات تقنية فقط — لا أرقام ولا رسائل. زر «إرسال إلى المطوّر» يفتح واتساب مع التقرير، وأنت من يضغط إرسال.',
+              'The report contains technical information only — no numbers and no messages. “Send to developer” opens WhatsApp with the report; you tap send.'
             )}
           </HintCard>
         </>

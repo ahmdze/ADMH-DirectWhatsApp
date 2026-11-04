@@ -17,9 +17,15 @@ importers:
       '@capacitor/camera':
         specifier: 8.2.6
         version: 8.2.6(@capacitor/core@8.6.0)
+      '@capacitor/clipboard':
+        specifier: 8.0.1
+        version: 8.0.1(@capacitor/core@8.6.0)
       '@capacitor/core':
         specifier: 8.6.0
         version: 8.6.0
+      '@capacitor/file-transfer':
+        specifier: 2.0.6
+        version: 2.0.6(@capacitor/core@8.6.0)
       '@capacitor/filesystem':
         specifier: 8.1.5
         version: 8.1.5(@capacitor/core@8.6.0)
@@ -32,6 +38,9 @@ importers:
       '@capacitor/share':
         specifier: 8.0.3
         version: 8.0.3(@capacitor/core@8.6.0)
+      '@capawesome-team/capacitor-file-opener':
+        specifier: 8.1.1
+        version: 8.1.1(@capacitor/core@8.6.0)
       '@capgo/capacitor-native-biometric':
         specifier: 8.9.1
         version: 8.9.1(@capacitor/core@8.6.0)
@@ -683,8 +692,18 @@ packages:
     engines: {node: '>=22.0.0'}
     hasBin: true
 
+  '@capacitor/clipboard@8.0.1':
+    resolution: {integrity: sha512-iOlbTi8MojKyLnYE+M27priXid7vHd0PlDwyHohPzkuQ8Rkp6q7ykwZmPEUD+OnU/Ink7Qw/pUOfKgraKmA6Eg==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
   '@capacitor/core@8.6.0':
     resolution: {integrity: sha512-9F2zzuGYTJu+wqmQSEmqnFBfGrhC/njjMCfmxbvg9mq8xJT4wNh5pxbMFZxvW/yDhYJWPEBFQxeqzfo1gKrvxg==}
+
+  '@capacitor/file-transfer@2.0.6':
+    resolution: {integrity: sha512-1KBmDqhz8iFCzJyuxp+0Xm2VlUzhq7Hy0png3Nl0H6659P2qd04nYISb1BdnnkdmiQwyLq7R86QYgrQOwVSrEQ==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   '@capacitor/filesystem@8.1.5':
     resolution: {integrity: sha512-m1RkI8L83NJeppEKyRWioK3MDp2vjlA+QfUQcF8/xRlcXNC2HYxqoyYJ+K4M0EcVovy+g+4F24S05+bhK4Vgdg==}
@@ -708,6 +727,11 @@ packages:
 
   '@capacitor/synapse@1.0.4':
     resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
+
+  '@capawesome-team/capacitor-file-opener@8.1.1':
+    resolution: {integrity: sha512-EEkKcaL6VeFOcypoyLGP3/03pLdQUfoheGkZ49gHoN8mQ7HjfZ5jHilCC2ZAm2DdXMut5USvuoS3FSlJKMURhA==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   '@capgo/capacitor-native-biometric@8.9.1':
     resolution: {integrity: sha512-19WZZ5dqykGgRFGgf+4hhJXyB0w6d+Pybj/mmXphIab1x4DsxadVQi8ooMl0qNfU9Jy1fwJk6Ulrg9ZjKBIWUA==}
@@ -3974,9 +3998,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@capacitor/clipboard@8.0.1(@capacitor/core@8.6.0)':
+    dependencies:
+      '@capacitor/core': 8.6.0
+
   '@capacitor/core@8.6.0':
     dependencies:
       tslib: 2.9.1
+
+  '@capacitor/file-transfer@2.0.6(@capacitor/core@8.6.0)':
+    dependencies:
+      '@capacitor/core': 8.6.0
+      '@capacitor/synapse': 1.0.4
 
   '@capacitor/filesystem@8.1.5(@capacitor/core@8.6.0)':
     dependencies:
@@ -3996,6 +4029,10 @@ snapshots:
       '@capacitor/core': 8.6.0
 
   '@capacitor/synapse@1.0.4': {}
+
+  '@capawesome-team/capacitor-file-opener@8.1.1(@capacitor/core@8.6.0)':
+    dependencies:
+      '@capacitor/core': 8.6.0
 
   '@capgo/capacitor-native-biometric@8.9.1(@capacitor/core@8.6.0)':
     dependencies:

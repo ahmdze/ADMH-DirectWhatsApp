@@ -4,7 +4,8 @@
 
 An Arabic (RTL), mobile-first PWA: it opens a WhatsApp chat directly **without saving the number**, with saved destinations, message templates, QR codes, share cards, and printable stickers — all locally on your device, with no server and no account.
 
-> **Version 2.3.2** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> **Version 2.3.3** — adds cross-device data transfer via file/QR, data check and repair, a device diagnostics screen and device test matrix, and a **native Android app (APK)** built with Capacitor.
+> New in 2.3.3: native clipboard/paste in the APK, correct persistent-storage status, a **Send to developer** button in Diagnostics, and in-app APK updates with a progress bar and an Install button.
 > New in 2.3.2: **native biometric app lock** on Android with PIN fallback, and an **in-app update checker** reading GitHub Releases.
 > 2.3.1 fixes: native Android diagnostics, native system sharing, and stable APK signing for future updates.
 > The app uses a **PWA install identity** (`id: ./v2`), so anyone who installed the old version (v1) must uninstall it and install v2 once. v1 data is not lost: it migrates automatically on first launch.
@@ -189,7 +190,7 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 ## Privacy
 
-- No server, no account, no analytics, and no user data leaves the device. The Android build contacts GitHub Releases only to check for app updates.
+- No server, no account, no analytics, and no user data leaves the device. The Android build contacts GitHub Releases only to check for and download app updates when you approve.
 - Numbers, messages, templates, and generated images stay on your device.
 - The camera only runs after an explicit request and stops when you leave the screen.
 - No number or image is sent to an external QR service.
@@ -204,6 +205,7 @@ The project uses `base: './'` and hash routes, so it works under a repository pa
 
 | Version | Highlights |
 |---|---|
+| **2.3.3** | Native clipboard/paste, correct persistent storage, send report to developer via WhatsApp, and APK download with progress + install |
 | **2.3.2** | Native Android biometric lock with PIN fallback, and in-app APK update checker |
 | **2.3.1** | Android fixes: native app diagnostics, native sharing, and stable APK signing |
 | **2.3.0** | Data transfer via file/QR, data check and repair, diagnostics and device test matrix, Android APK app (Capacitor) |

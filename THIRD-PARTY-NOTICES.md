@@ -28,7 +28,7 @@
 ## Capacitor (core, CLI, Android) and plugins
 - **Source:** https://github.com/ionic-team/capacitor and https://capacitorjs.com
 - **License:** MIT
-- **Usage:** native Android shell (`@capacitor/core`, `@capacitor/android`, `@capacitor/app`, `@capacitor/browser`, `@capacitor/camera`, `@capacitor/filesystem`, `@capacitor/haptics`, `@capacitor/local-notifications`, `@capacitor/share`).
+- **Usage:** native Android shell (`@capacitor/core`, `@capacitor/android`, `@capacitor/app`, `@capacitor/browser`, `@capacitor/camera`, `@capacitor/clipboard`, `@capacitor/file-transfer`, `@capacitor/filesystem`, `@capacitor/haptics`, `@capacitor/local-notifications`, `@capacitor/share`) and `@capawesome-team/capacitor-file-opener` (APK installer hand-off).
 
 ## @capgo/capacitor-native-biometric
 - **Source:** https://github.com/Cap-go/capacitor-native-biometric
