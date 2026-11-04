@@ -1,11 +1,11 @@
 {
-  "id": "./",
+  "id": "./?app=admh-direct-whatsapp-v2",
   "name": "واتساب المباشر - ADMH Direct WhatsApp",
   "short_name": "واتساب المباشر",
   "description": "افتح محادثة واتساب مباشرة دون حفظ رقم الهاتف.",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "./",
+  "start_url": "./?source=pwa-v2",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f7f6",
@@ -16,7 +16,7 @@
       "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
