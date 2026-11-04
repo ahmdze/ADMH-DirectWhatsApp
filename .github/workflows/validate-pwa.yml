@@ -1,0 +1,45 @@
+name: Validate PWA
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, feature/full-pwa-ux-upgrade]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check sw.js
+          node --check enhancements.js
+          node --check pwa-update.js
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("index.html").read_text(encoding="utf-8")
+          scripts = re.findall('<script(?![^>]*src=)[^>]*>(.*?)</script>', html, re.I | re.S)
+          if not scripts:
+              raise SystemExit("No inline JavaScript found")
+          for i, script in enumerate(scripts):
+              Path(f"/tmp/inline-{i}.js").write_text(script, encoding="utf-8")
+          print(f"Extracted {len(scripts)} inline script(s)")
+          PY
+          for file in /tmp/inline-*.js; do node --check "$file"; done
+      - name: Validate manifest JSON
+        run: python3 -m json.tool manifest.json >/dev/null
+      - name: Verify local PWA assets
+        run: |
+          test -f index.html
+          test -f sw.js
+          test -f manifest.json
+          test -f icon.svg
+          test -f vendor/qrcode.min.js
+          test -f enhancements.js
+          test -f pwa-update.js
+          grep -q 'enhancements.js' index.html
+          grep -q 'pwa-update.js' index.html
+          grep -q 'admh-direct-whatsapp-v4' sw.js
