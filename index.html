@@ -208,11 +208,15 @@
   });
   $('hideQr').addEventListener('click', () => $('qrPanel').hidden=true);
   $('downloadQr').addEventListener('click', () => {
-    const svg=$('qrCode').querySelector('svg');
-    if(!svg) { notify('أنشئ رمز QR أولاً'); return; }
-    const clone=svg.cloneNode(true);
-    clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
-    const blob=new Blob([new XMLSerializer().serializeToString(clone)],{type:'image/svg+xml;charset=utf-8'});
+    const matrix=qrInstance && qrInstance._oQRCode;
+    if(!matrix) { notify('أنشئ رمز QR أولاً'); return; }
+    const count=matrix.getModuleCount(), quiet=4, size=count+quiet*2;
+    let path='';
+    for(let row=0;row<count;row++) for(let col=0;col<count;col++) {
+      if(matrix.isDark(row,col)) path += 'M'+(col+quiet)+' '+(row+quiet)+'h1v1h-1z';
+    }
+    const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+size+' '+size+'" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="'+path+'" fill="#10201c"/></svg>';
+    const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const link=document.createElement('a'); link.href=url; link.download='admh-whatsapp-qr.svg'; link.click();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
