@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.1';
+export const APP_VERSION = '2.4.2';
 
 export interface ChangelogItem {
   ar: string;
@@ -12,6 +12,13 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '2.4.2',
+    date: '2026-11-05',
+    items: [
+      { ar: 'زر الموقع يعمل عبر Capacitor Geolocation مع طلب إذن Android، رسائل خطأ دقيقة، وبديل لفتح Google Maps.', en: 'The Location button now uses Capacitor Geolocation with Android permission prompts, precise errors, and a Google Maps fallback.' }
+    ]
+  },
   {
     version: '2.4.1',
     date: '2026-11-05',

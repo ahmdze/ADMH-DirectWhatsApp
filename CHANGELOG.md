@@ -2,6 +2,15 @@
 
 All notable changes to **ADMH Direct WhatsApp** are documented here. The app is local-first: no server, no account, no telemetry, and no automatic sending.
 
+## v2.4.2 — Location fix (2026-11-05)
+
+### Fixed
+
+- The **Location** action now works in the Android app through `@capacitor/geolocation`, with explicit Android location permissions and runtime permission prompts.
+- Added precise error messages for denied permission, disabled GPS, timeout and unsupported devices.
+- Added a fallback panel that opens Google Maps so the user can copy a location link manually.
+- Location remains a Google Maps link in the message; nothing is stored and no automatic sending occurs.
+
 ## v2.4.1 — Maintenance (2026-11-05)
 
 ### Fixed

@@ -72,6 +72,12 @@
          inexact alarm instead of failing. -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
+    <!-- Optional location link for Compose. Coarse is enough for a map pin;
+         fine is requested when the plugin asks for high accuracy. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!-- A camera is useful but not required (image import is a fallback). -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.location" android:required="false" />
 </manifest>

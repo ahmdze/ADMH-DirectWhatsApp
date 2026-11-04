@@ -9,6 +9,7 @@ interface ComposeMediaProps {
   items: MediaAttachment[];
   busy: boolean;
   error: string | null;
+  locationBusy: boolean;
   onFiles: (files: FileList) => void;
   onContact: () => void;
   onLocation: () => void;
@@ -16,7 +17,7 @@ interface ComposeMediaProps {
 }
 
 /** Session-only attachment tray shown inside Compose. */
-export function ComposeMedia({ items, busy, error, onFiles, onContact, onLocation, onRemove }: ComposeMediaProps) {
+export function ComposeMedia({ items, busy, error, locationBusy, onFiles, onContact, onLocation, onRemove }: ComposeMediaProps) {
   const { t } = useI18n();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,9 +43,9 @@ export function ComposeMedia({ items, busy, error, onFiles, onContact, onLocatio
           <Icon name="contact" size={16} />
           {t('جهة اتصال', 'Contact')}
         </Button>
-        <Button variant="soft" size="sm" onClick={onLocation}>
+        <Button variant="soft" size="sm" loading={locationBusy} onClick={onLocation}>
           <Icon name="link" size={16} />
-          {t('الموقع', 'Location')}
+          {locationBusy ? t('جارٍ تحديد الموقع…', 'Locating…') : t('الموقع', 'Location')}
         </Button>
       </div>
 

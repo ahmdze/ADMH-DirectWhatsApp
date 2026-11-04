@@ -18,6 +18,7 @@ import { buildChatUrl, openChat } from '../../lib/whatsapp';
 import { buildVCard } from '../../lib/vcard';
 import { canShareFiles, downloadBlob, shareFiles } from '../../lib/image';
 import { prepareMediaFile, releaseMedia, type MediaAttachment } from '../../lib/media';
+import { getCurrentLocation, mapsUrl, type LocationError } from '../../lib/geolocation';
 import type { Draft, Target } from '../../types';
 import { CountryPicker } from './CountryPicker';
 import { ComposeMedia } from './ComposeMedia';
@@ -54,6 +55,8 @@ export function ComposeScreen() {
   const [media, setMedia] = useState<MediaAttachment[]>([]);
   const [mediaBusy, setMediaBusy] = useState(false);
   const [mediaError, setMediaError] = useState<string | null>(null);
+  const [locationBusy, setLocationBusy] = useState(false);
+  const [locationHelp, setLocationHelp] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [schedulePreset, setSchedulePreset] = useState<{
@@ -201,20 +204,39 @@ export function ComposeScreen() {
     hapticSuccess();
   };
 
-  const addLocation = () => {
-    if (!navigator.geolocation) {
-      toast(t('الموقع غير مدعوم على هذا الجهاز.', 'Location is not supported on this device.'), 'error');
+  const addLocation = async () => {
+    if (locationBusy) return;
+    setLocationBusy(true);
+    const result = await getCurrentLocation();
+    setLocationBusy(false);
+    if (result.ok) {
+      setMessage((current) =>
+        [current, mapsUrl(result.point.latitude, result.point.longitude)].filter(Boolean).join('\n').slice(0, MESSAGE_LIMIT)
+      );
+      setLocationHelp(false);
+      hapticSuccess();
+      toast(t('تمت إضافة رابط موقعك إلى الرسالة.', 'Your location link was added to the message.'), 'success');
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const url = `https://maps.google.com/?q=${position.coords.latitude.toFixed(6)},${position.coords.longitude.toFixed(6)}`;
-        setMessage((current) => [current, url].filter(Boolean).join('\n').slice(0, MESSAGE_LIMIT));
-        hapticSuccess();
-      },
-      () => toast(t('تعذّر الحصول على الموقع.', 'Could not get the location.'), 'error'),
-      { timeout: 10000 }
-    );
+    setLocationHelp(true);
+    hapticError();
+    const messages: Record<LocationError, string> = {
+      unsupported: t('الموقع غير مدعوم على هذا الجهاز.', 'Location is not supported on this device.'),
+      denied: t('تم رفض إذن الموقع. اسمح به من إعدادات التطبيق.', 'Location permission was denied. Allow it in the app settings.'),
+      unavailable: t('خدمة الموقع غير متاحة. تأكد من تشغيل GPS.', 'Location is unavailable. Make sure GPS is enabled.'),
+      timeout: t('انتهت مهلة تحديد الموقع. جرّب في مكان مفتوح.', 'Locating timed out. Try in an open area.')
+    };
+    toast(messages[result.error], 'error');
+  };
+
+  const openMapsFallback = async () => {
+    const url = 'https://maps.google.com';
+    try {
+      const { Browser } = await import('@capacitor/browser');
+      await Browser.open({ url });
+    } catch {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const removeMedia = (id: string) => {
@@ -521,11 +543,31 @@ export function ComposeScreen() {
           items={media}
           busy={mediaBusy}
           error={mediaError}
+          locationBusy={locationBusy}
           onFiles={(files) => void handleFiles(files)}
           onContact={() => void addContactCard()}
-          onLocation={addLocation}
+          onLocation={() => void addLocation()}
           onRemove={removeMedia}
         />
+
+        {locationHelp ? (
+          <div className="glass-soft" style={{ padding: 12, borderRadius: 14 }}>
+            <p className="page-sub" style={{ margin: '0 0 8px', fontSize: 11.5 }}>
+              {t(
+                'تعذّر تحديد موقعك. يمكنك فتح خرائط Google ونسخ رابط الموقع يدوياً.',
+                'Could not locate you. You can open Google Maps and paste the location link manually.'
+              )}
+            </p>
+            <div className="row" style={{ gap: 7 }}>
+              <Button size="sm" variant="soft" onClick={() => void openMapsFallback()}>
+                {t('فتح خرائط Google', 'Open Google Maps')}
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setLocationHelp(false)}>
+                {t('إغلاق', 'Close')}
+              </Button>
+            </div>
+          </div>
+        ) : null}
 
         <ComposePreview target={validTarget} message={message} media={media} />
         <Button variant="ghost" size="sm" block onClick={() => setPreviewOpen(true)}>
