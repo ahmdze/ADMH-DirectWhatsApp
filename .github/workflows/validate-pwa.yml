@@ -67,5 +67,5 @@ jobs:
           test -f pwa-update.js
           grep -q 'enhancements.js' index.html
           grep -q 'pwa-update.js' index.html
-          grep -q 'admh-direct-whatsapp-v6' sw.js
+          grep -q 'admh-direct-whatsapp-v7' sw.js
           grep -q 'icon-192.png' index.html
