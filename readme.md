@@ -277,7 +277,7 @@ docs/                     # الوثائق واللقطات
 <img src="docs/logos/deepseek-harness.svg" height="30" alt="DeepSeek HARNESS" /><br />
 <strong>Qwen 3.8-Max</strong><br />
 <img src="docs/logos/qwen.svg" height="30" alt="Qwen" /><br />
-<a href="docs/screenshots/usage-dashboard.jpg"><strong>Usage and Cost</strong></a>
+<a href="https://raw.githubusercontent.com/ahmdze/ADMH-DirectWhatsApp/main/docs/screenshots/usage-dashboard.jpg"><strong>Usage and Cost</strong></a>
 </sub>
 
 </div>
